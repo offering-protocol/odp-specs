@@ -1,0 +1,39 @@
+{
+  "odp_version": "0.1",
+  "id": "https://travel.example/offerings/flights/IF123-2026-09-14-SFO-JFK",
+  "name": "InFlow Air 123 from San Francisco to New York",
+  "description": "A nonstop scheduled flight offered in economy cabin.",
+  "href": "https://travel.example/odp/offerings/IF123-2026-09-14-SFO-JFK",
+  "web_url": "https://travel.example/flights/IF123-2026-09-14-SFO-JFK",
+  "schema": {
+    "url": "https://travel.example/schemas/flight-itinerary-1.json",
+    "media_type": "application/schema+json",
+    "version": "1.0"
+  },
+  "attributes": {
+    "operating_carrier": "IF",
+    "flight_number": "123",
+    "departure": {
+      "airport": "SFO",
+      "scheduled_at": "2026-09-14T08:30:00-07:00",
+      "terminal": "1"
+    },
+    "arrival": {
+      "airport": "JFK",
+      "scheduled_at": "2026-09-14T17:05:00-04:00",
+      "terminal": "5"
+    },
+    "cabin": "economy",
+    "included_checked_bags": 1,
+    "refundable": false
+  },
+  "actions": [
+    {
+      "rel": "quote",
+      "href": "https://travel.example/quotes",
+      "method": "POST",
+      "description": "Request current traveler-specific availability, fare, taxes, and conditions.",
+      "input_schema": "https://travel.example/schemas/flight-quote-request-1.json"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "items": [
+    {
+      "id": "https://market.example/offerings/walnut-standing-desk-4821",
+      "name": "Handmade walnut standing desk",
+      "description": "Height-adjustable desk made to order by a verified workshop.",
+      "href": "https://market.example/odp/offerings/walnut-standing-desk-4821",
+      "web_url": "https://market.example/listing/walnut-standing-desk-4821"
+    },
+    {
+      "id": "https://market.example/offerings/brass-task-lamp-9938",
+      "name": "Restored brass task lamp",
+      "description": "A rewired vintage desk lamp with an adjustable arm.",
+      "href": "https://market.example/odp/offerings/brass-task-lamp-9938",
+      "web_url": "https://market.example/listing/brass-task-lamp-9938"
+    }
+  ],
+  "refinements": [
+    {
+      "filter_id": "material",
+      "values": [
+        {
+          "value": "wood",
+          "count": 18420
+        },
+        {
+          "value": "metal",
+          "count": 12681
+        }
+      ]
+    },
+    {
+      "filter_id": "made_to_order",
+      "values": [
+        {
+          "value": true,
+          "count": 9372
+        },
+        {
+          "value": false,
+          "count": 27811
+        }
+      ]
+    }
+  ],
+  "next": "https://market.example/odp/collections/home-office/offerings?cursor=b2ZmZXJpbmdzMg"
+}

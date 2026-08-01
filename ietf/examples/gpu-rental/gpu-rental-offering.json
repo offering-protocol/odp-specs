@@ -1,0 +1,55 @@
+{
+  "odp_version": "0.1",
+  "id": "https://compute.example/offerings/a100-80gb-us-west",
+  "name": "Dedicated NVIDIA A100 80 GB rental",
+  "description": "One dedicated A100 accelerator in the us-west-2 region, rented in one-minute increments.",
+  "href": "https://compute.example/odp/offerings/a100-80gb-us-west",
+  "web_url": "https://compute.example/gpu/a100-80gb-us-west",
+  "schema": {
+    "url": "https://compute.example/schemas/gpu-rental-1.json",
+    "media_type": "application/schema+json",
+    "version": "1.0"
+  },
+  "attributes": {
+    "accelerator": {
+      "manufacturer": "NVIDIA",
+      "model": "A100",
+      "count": 1,
+      "memory_per_device_gib": 80
+    },
+    "region": "us-west-2",
+    "rental": {
+      "minimum_duration_seconds": 600,
+      "billing_increment_seconds": 60
+    },
+    "network_egress_gbps": 25
+  },
+  "actions": [
+    {
+      "rel": "quote",
+      "href": "https://compute.example/quotes",
+      "method": "POST",
+      "description": "Request current capacity and price for a requested rental interval.",
+      "input_schema": "https://compute.example/schemas/gpu-quote-request-1.json",
+      "access": {
+        "mode": "protected",
+        "steps": [
+          {
+            "protocol": "aep"
+          },
+          {
+            "one_of": [
+              {
+                "protocol": "mpp"
+              },
+              {
+                "protocol": "x402"
+              }
+            ]
+          }
+        ],
+        "authoritative": "live-http-challenges"
+      }
+    }
+  ]
+}

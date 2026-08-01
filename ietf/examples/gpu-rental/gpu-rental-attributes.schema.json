@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://compute.example/schemas/gpu-rental-1.json",
+  "title": "GPU rental attributes",
+  "description": "Service-defined attributes for rentable accelerator capacity.",
+  "type": "object",
+  "required": [
+    "accelerator",
+    "region",
+    "rental"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "accelerator": {
+      "type": "object",
+      "required": [
+        "manufacturer",
+        "model",
+        "count",
+        "memory_per_device_gib"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "manufacturer": {
+          "type": "string",
+          "title": "Accelerator manufacturer",
+          "x-odp-comparison": "exact"
+        },
+        "model": {
+          "type": "string",
+          "title": "Accelerator model",
+          "x-odp-comparison": "exact"
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1,
+          "title": "Accelerator count",
+          "x-odp-unit": {
+            "code": "device"
+          },
+          "x-odp-comparison": "numeric"
+        },
+        "memory_per_device_gib": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "title": "Memory per accelerator",
+          "description": "Usable gibibytes of memory on each accelerator device.",
+          "x-odp-unit": {
+            "code": "GiBy"
+          },
+          "x-odp-comparison": "numeric"
+        }
+      }
+    },
+    "region": {
+      "type": "string",
+      "title": "Region",
+      "description": "Service-defined deployment region identifier.",
+      "x-odp-comparison": "exact"
+    },
+    "rental": {
+      "type": "object",
+      "required": [
+        "minimum_duration_seconds",
+        "billing_increment_seconds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "minimum_duration_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "title": "Minimum rental duration",
+          "x-odp-unit": {
+            "code": "s"
+          },
+          "x-odp-comparison": "numeric"
+        },
+        "billing_increment_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "title": "Billing increment",
+          "x-odp-unit": {
+            "code": "s"
+          },
+          "x-odp-comparison": "numeric"
+        }
+      }
+    },
+    "network_egress_gbps": {
+      "type": "number",
+      "minimum": 0,
+      "title": "Maximum network egress",
+      "x-odp-unit": {
+        "code": "Gbit/s"
+      },
+      "x-odp-comparison": "numeric"
+    }
+  }
+}

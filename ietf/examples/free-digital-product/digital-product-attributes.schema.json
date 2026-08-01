@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://downloads.example/schemas/digital-artifact-2.json",
+  "title": "Digital artifact attributes",
+  "description": "Service-defined attributes for a downloadable digital artifact.",
+  "type": "object",
+  "required": [
+    "version",
+    "license",
+    "files"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "title": "Version",
+      "description": "Publisher-assigned release version.",
+      "x-odp-comparison": "exact"
+    },
+    "license": {
+      "type": "string",
+      "title": "License",
+      "description": "SPDX license expression governing use of the artifact.",
+      "examples": [
+        "Apache-2.0"
+      ],
+      "x-odp-comparison": "exact"
+    },
+    "languages": {
+      "type": "array",
+      "title": "Languages",
+      "description": "BCP 47 language tags for languages represented in the content.",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      },
+      "x-odp-comparison": "set"
+    },
+    "files": {
+      "type": "array",
+      "title": "Files",
+      "description": "Downloadable representations included in this release.",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/file"
+      }
+    }
+  },
+  "$defs": {
+    "file": {
+      "type": "object",
+      "required": [
+        "media_type",
+        "byte_size",
+        "sha256"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "media_type": {
+          "type": "string",
+          "title": "Media type",
+          "description": "Internet media type of the file.",
+          "x-odp-comparison": "exact"
+        },
+        "byte_size": {
+          "type": "integer",
+          "title": "File size",
+          "description": "Exact file size in bytes.",
+          "minimum": 0,
+          "x-odp-unit": {
+            "code": "By"
+          },
+          "x-odp-comparison": "numeric"
+        },
+        "sha256": {
+          "type": "string",
+          "title": "SHA-256 digest",
+          "description": "Lowercase hexadecimal SHA-256 digest of the file bytes.",
+          "pattern": "^[a-f0-9]{64}$",
+          "x-odp-comparison": "exact"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "id": "made_to_order",
+      "title": "Made to order",
+      "description": "Whether production begins after an order is placed.",
+      "type": "boolean",
+      "operators": [
+        "eq"
+      ],
+      "sortable": false
+    },
+    {
+      "id": "processing_days",
+      "title": "Processing time",
+      "description": "Number of days before the item is ready to ship or collect.",
+      "type": "integer",
+      "unit": {
+        "code": "d"
+      },
+      "operators": [
+        "gte",
+        "lte"
+      ],
+      "sortable": true
+    }
+  ]
+}
