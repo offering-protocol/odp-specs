@@ -1,0 +1,56 @@
+{
+  "id": "extension-handling",
+  "title": "Additive Extension and unknown-value handling",
+  "description": "Unknown additive data remains compatible while required or security-sensitive unknown behavior fails closed at the narrowest scope.",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "versioning",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "profile": "core-versioning",
+  "subject": "extension-handling",
+  "cases": [
+    {
+      "name": "unknown-additive-member",
+      "condition": "unknown-member",
+      "expected": "ignore-member"
+    },
+    {
+      "name": "unsupported-optional-extension",
+      "condition": "unsupported-optional-extension",
+      "expected": "ignore-extension"
+    },
+    {
+      "name": "unsupported-required-resource-extension",
+      "condition": "unsupported-required-extension",
+      "scope": "resource",
+      "expected": "resource-unsupported"
+    },
+    {
+      "name": "unsupported-required-operation-extension",
+      "condition": "unsupported-required-extension",
+      "scope": "operation",
+      "expected": "operation-unsupported"
+    },
+    {
+      "name": "unknown-enum-value",
+      "condition": "unknown-enum",
+      "scope": "capability",
+      "expected": "capability-unsupported"
+    },
+    {
+      "name": "unknown-payment-semantics",
+      "condition": "security-sensitive-unknown",
+      "scope": "operation",
+      "expected": "do-not-execute"
+    },
+    {
+      "name": "extension-redefines-core",
+      "condition": "core-redefinition",
+      "expected": "invalid-extension"
+    }
+  ]
+}

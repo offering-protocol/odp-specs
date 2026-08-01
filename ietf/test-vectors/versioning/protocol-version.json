@@ -1,0 +1,66 @@
+{
+  "id": "protocol-version",
+  "title": "ODP protocol version syntax and compatibility",
+  "description": "Versions use major.minor syntax and compatibility is determined by the major version.",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "versioning",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "profile": "core-versioning",
+  "subject": "protocol-version",
+  "cases": [
+    {
+      "name": "initial-version",
+      "supported": "1.0",
+      "received": "1.0",
+      "valid": true,
+      "compatible": true
+    },
+    {
+      "name": "newer-compatible-minor",
+      "supported": "1.0",
+      "received": "1.7",
+      "valid": true,
+      "compatible": true
+    },
+    {
+      "name": "older-compatible-minor",
+      "supported": "1.7",
+      "received": "1.0",
+      "valid": true,
+      "compatible": true
+    },
+    {
+      "name": "unsupported-major",
+      "supported": "1.7",
+      "received": "2.0",
+      "valid": true,
+      "compatible": false
+    },
+    {
+      "name": "missing-minor",
+      "supported": "1.0",
+      "received": "1",
+      "valid": false,
+      "compatible": false
+    },
+    {
+      "name": "leading-zero",
+      "supported": "1.0",
+      "received": "01.0",
+      "valid": false,
+      "compatible": false
+    },
+    {
+      "name": "semantic-version",
+      "supported": "1.0",
+      "received": "1.0.0",
+      "valid": false,
+      "compatible": false
+    }
+  ]
+}

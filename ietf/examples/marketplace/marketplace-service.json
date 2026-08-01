@@ -1,5 +1,5 @@
 {
-  "odp_version": "0.1",
+  "odp_version": "1.0",
   "name": "Market Example",
   "description": "A marketplace with millions of independent listings across a large taxonomy.",
   "keywords": [

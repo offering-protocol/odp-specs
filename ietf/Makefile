@@ -6,9 +6,9 @@ MARKDOWN_FILES := $(shell find .. -type f -name '*.md' \
 	-not -path '../ietf/.venv/*' | sort)
 DRAFTS := $(shell find specs -type f -name 'draft-*.md' | sort)
 
-.PHONY: check check-drafts check-formatter check-format check-json check-examples check-identity format
+.PHONY: check check-drafts check-formatter check-format check-json check-examples check-identity check-versioning format
 
-check: check-drafts check-formatter check-format check-json check-examples check-identity
+check: check-drafts check-formatter check-format check-json check-examples check-identity check-versioning
 
 check-drafts:
 	$(RUBY) scripts/check_drafts.rb $(DRAFTS)
@@ -27,6 +27,9 @@ check-examples:
 
 check-identity:
 	$(RUBY) scripts/check_identity_vectors.rb
+
+check-versioning:
+	$(RUBY) scripts/check_versioning_vectors.rb
 
 format:
 	$(RUBY) scripts/format_markdown.rb $(MARKDOWN_FILES)

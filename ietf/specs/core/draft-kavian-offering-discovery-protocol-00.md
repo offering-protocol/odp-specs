@@ -18,6 +18,8 @@ author:
 normative:
   RFC3986:
   RFC6454:
+  RFC6838:
+  RFC6839:
   RFC2119:
   RFC8174:
   RFC8259:
@@ -159,6 +161,14 @@ Resource Reference
 : An origin-relative absolute-path reference or an absolute URL that locates an ODP resource or a
   browser representation. A Resource Reference does not define Resource Identity.
 
+Top-Level Document
+: The outermost JSON object carried by one ODP request or response body. Objects nested within that
+  object, including terse result items, are not Top-Level Documents.
+
+Extension
+: An additive protocol capability identified by an absolute URI and defined outside the core ODP
+  contract.
+
 Subsequent Operation
 : An operation linked from an ODP resource whose semantics can be defined by ODP, AEP, MPP, x402, or
   another protocol.
@@ -273,6 +283,71 @@ Following a cross-origin reference does not change the Service Origin or Resourc
 referring ODP resource. An Agent MUST apply origin and credential policy independently to the
 resolved target as required by the Security Considerations.
 
+# Versioning and Compatibility
+
+## Version Syntax
+
+Every Top-Level Document MUST contain `odp_version`. Its value is a JSON string in `MAJOR.MINOR`
+form. `MAJOR` and `MINOR` are unsigned decimal integers without leading zeroes except for the value
+`0`. The protocol version defined by this document is `1.0`.
+
+Nested objects MUST NOT repeat `odp_version` unless a specification explicitly defines the nested
+object as an independently processable Top-Level Document. Terse items in a list or search response
+inherit the version of their containing Top-Level Document.
+
+## Compatibility Rules
+
+The major version identifies the compatibility family. An implementation MUST reject a Top-Level
+Document whose major version it does not support. Minor versions within one major version are
+backward compatible.
+
+A minor-version revision MAY add optional fields, optional enum values, optional capabilities, or
+clarifications that preserve existing wire behavior. It MUST NOT remove or redefine an existing
+field, value, operation, error, or requirement. It MUST NOT make a new field or capability mandatory
+for implementations of an earlier minor version in the same major-version family.
+
+An implementation supporting a major version MUST process Top-Level Documents carrying any minor
+version in that major-version family according to the unknown-field, unknown-value, and Extension
+rules in this document. Implementations MUST NOT infer support for an Extension or optional
+capability from a higher minor version.
+
+Each request and response Top-Level Document declares the version governing that document. The
+version is not inherited across HTTP exchanges. A Service receiving a supported major version MUST
+apply same-major compatibility rules even when its preferred minor version differs.
+
+# HTTP Media Types and Negotiation
+
+## ODP JSON Media Type
+
+The media type for ODP request and response documents is `application/odp+json` and uses the JSON
+structured syntax suffix defined by {{RFC6839}}. The media type has no required or optional
+parameters. Parameters do not select or modify the ODP protocol version. The `odp_version` member is
+the sole protocol-version authority.
+
+An Agent SHOULD send `Accept: application/odp+json` when requesting an ODP resource. A Service MAY
+return an ODP representation when `Accept` is absent, permits `*/*`, or permits
+`application/odp+json`. If the request's `Accept` field excludes `application/odp+json`, the Service
+MUST respond with `406 Not Acceptable`.
+
+A request carrying an ODP Top-Level Document MUST use a `Content-Type` whose media-type essence is
+`application/odp+json`. A Service MUST respond with `415 Unsupported Media Type` when a request body
+intended for an ODP operation has a missing, malformed, or different media type.
+
+A successful response carrying an ODP Top-Level Document MUST use a `Content-Type` whose media-type
+essence is `application/odp+json`. An Agent MUST reject a successful ODP response with a missing,
+malformed, or different media type.
+
+Media-type essence comparison is case-insensitive. Receivers MUST ignore syntactically valid media
+type parameters and MUST NOT interpret a `version` parameter or any other parameter as an ODP
+version declaration. HTTP Problem Details responses use `application/problem+json`. Attribute Schema
+documents use `application/schema+json`.
+
+## No Separate Version Negotiation
+
+Implementations MUST NOT negotiate the ODP version through a media-type parameter or a separate ODP
+version header. An Agent determines whether it can process a received Top-Level Document from
+`odp_version` and the compatibility rules in this document.
+
 # Discovery Architecture
 
 ## Service Discovery
@@ -306,6 +381,47 @@ browser representation is informative for Agent operation and does not replace t
 ODP resource.
 
 # Extensibility Model
+
+## Core Evolution
+
+Agents MUST ignore additive JSON object members they do not understand unless another rule in this
+document requires the containing object or capability to be rejected. Services MUST NOT use an
+unknown member to change the semantics of a core member.
+
+An Agent encountering an unknown enum or discriminator value MUST NOT substitute a known value or
+invent fallback semantics. It MUST treat the smallest capability, resource, or operation whose
+interpretation depends on that value as unsupported. Unrelated resources and operations remain
+usable.
+
+Security-sensitive behavior fails closed. An Agent MUST NOT execute an operation when an unknown
+field, value, or Extension prevents it from determining the operation's identity, authorization,
+payment, request semantics, or security consequences.
+
+## Extension Identifiers and Requirements
+
+An Extension identifier MUST be an absolute URI. The publisher that controls the URI defines the
+Extension. An Extension specification MUST define its identifier, discovery and requirement scope,
+added fields or operations, error behavior, compatibility rules, and security and privacy
+considerations.
+
+Extensions are additive. An Extension MUST NOT remove or redefine core fields, enum values,
+operations, errors, or requirements. Two Extensions MUST NOT assign conflicting semantics to the
+same field or operation within one representation.
+
+The Service Document advertises Extension identifiers supported by the Service. A resource or
+operation can declare that an Extension is required for its interpretation or execution. The
+containing representation defines the placement and scope of that declaration.
+
+An Agent MAY ignore an unsupported optional Extension. When a resource or operation declares an
+unsupported required Extension, the Agent MUST treat that resource or operation as unsupported and
+MUST NOT execute it. The unsupported requirement does not invalidate unrelated resources or
+operations.
+
+An implementation MUST NOT infer Extension support from an unknown field, a protocol minor version,
+or another Extension. It supports an Extension only when it implements the specification identified
+by that Extension URI.
+
+## Service-Defined Offering Data
 
 ODP defines stable envelope fields needed for discovery and link traversal. Domain-specific Offering
 data belongs in a Service-defined `attributes` value. The applicable Attribute Schema MUST identify
@@ -354,6 +470,32 @@ Directory behavior is outside ODP conformance. Examples, guides, schemas, regist
 vectors support implementation and testing; they do not override normative Internet-Draft prose.
 
 # IANA Considerations
+
+## Media Type Registration
+
+This document requests registration of the following media type in the Media Types registry
+according to {{RFC6838}}:
+
+| Field                                            | Value                                                                  |
+| ------------------------------------------------ | ---------------------------------------------------------------------- |
+| Type name                                        | `application`                                                          |
+| Subtype name                                     | `odp+json`                                                             |
+| Required parameters                              | None                                                                   |
+| Optional parameters                              | None                                                                   |
+| Encoding considerations                          | Binary; the representation is a JSON document encoded in UTF-8.        |
+| Security considerations                          | See the Security Considerations section of this document.              |
+| Interoperability considerations                  | The `odp_version` member identifies the protocol compatibility family. |
+| Published specification                          | This document.                                                         |
+| Applications that use this media type            | Agents and Services implementing ODP.                                  |
+| Fragment identifier considerations               | None; ODP Resource References prohibit fragments.                      |
+| Additional information                           | None.                                                                  |
+| Person and email address for further information | IETF, `iesg@ietf.org`.                                                 |
+| Intended usage                                   | COMMON                                                                 |
+| Restrictions on usage                            | None.                                                                  |
+| Author                                           | IETF                                                                   |
+| Change controller                                | IETF                                                                   |
+
+## Well-Known URI Registration
 
 This document requests the following registration in the Well-Known URIs registry defined by
 {{RFC8615}}:

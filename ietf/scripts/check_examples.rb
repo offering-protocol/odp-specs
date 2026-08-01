@@ -5,6 +5,7 @@ require "json"
 require "pathname"
 require "uri"
 require_relative "odp_identity"
+require_relative "odp_versioning"
 
 root = Pathname.new(__dir__).join("..", "examples").expand_path
 errors = []
@@ -44,6 +45,10 @@ end
 Dir[root.join("**/*.json")].sort.each do |name|
   path = Pathname.new(name)
   document = load_json(path, errors)
+  unless path.basename.to_s.end_with?(".schema.json")
+    version = document.is_a?(Hash) && document["odp_version"]
+    errors << "#{path.relative_path_from(root)}: odp_version must be 1.0" unless version == "1.0" && OdpVersioning.parse(version)
+  end
   validate_references(document, path.relative_path_from(root), errors) if document
 end
 

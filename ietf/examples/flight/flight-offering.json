@@ -1,5 +1,5 @@
 {
-  "odp_version": "0.1",
+  "odp_version": "1.0",
   "id": "IF123-2026-09-14-SFO-JFK",
   "name": "InFlow Air 123 from San Francisco to New York",
   "description": "A nonstop scheduled flight offered in economy cabin.",

@@ -15,6 +15,9 @@ the Service origin and resource type; the URL is not the resource identity. Same
 `web_url` values use origin-relative absolute paths. `actions` links to subsequent operations
 without making enrollment, payment, checkout, or fulfillment part of ODP.
 
+Every top-level ODP document carries `odp_version` once. Nested terse items inherit the version of
+their containing list or search response instead of repeating it per item.
+
 Schema annotations such as `x-odp-unit` and `x-odp-comparison` are exploratory presentation and
 comparison hints. They do not identify protocol-owned compute, flight, retail, or digital terms.
 

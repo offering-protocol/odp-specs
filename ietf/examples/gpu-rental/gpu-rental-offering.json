@@ -1,5 +1,5 @@
 {
-  "odp_version": "0.1",
+  "odp_version": "1.0",
   "id": "a100-80gb-us-west",
   "name": "Dedicated NVIDIA A100 80 GB rental",
   "description": "One dedicated A100 accelerator in the us-west-2 region, rented in one-minute increments.",

@@ -13,6 +13,8 @@ required_sections = [
   "# Terminology",
   "# Roles",
   "# Resource Identity and References",
+  "# Versioning and Compatibility",
+  "# HTTP Media Types and Negotiation",
   "# Discovery Architecture",
   "# Extensibility Model",
   "# Composition Boundaries",
