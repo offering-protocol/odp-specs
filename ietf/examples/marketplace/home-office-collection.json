@@ -4,7 +4,6 @@
   "name": "Home office",
   "description": "Furniture, lighting, and accessories for home workspaces.",
   "web_url": "/c/home-office",
-  "offerings": {},
   "filter_capabilities": {
     "linked": {
       "href": "/odp/collections/home-office/filters?limit=2",

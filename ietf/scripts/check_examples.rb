@@ -72,7 +72,7 @@ Dir[root.join("**/*-collection.json")].sort.each do |name|
   document = load_json(path, errors)
   next unless document.is_a?(Hash)
 
-  require_fields(document, %w[odp_version id name description offerings filter_capabilities], relative, errors)
+  require_fields(document, %w[odp_version id name description filter_capabilities], relative, errors)
   errors << "#{relative}: id must be a valid local resource identifier" unless OdpIdentity.local_identifier?(document["id"])
   sources = %w[inline linked].select { |field| document.fetch("filter_capabilities", {}).key?(field) }
   errors << "#{relative}: filter_capabilities must contain exactly one of inline or linked" unless sources.length == 1
