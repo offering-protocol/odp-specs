@@ -7,8 +7,8 @@ material, and publication tooling that support the Offering Discovery Protocol (
 
 - `main` is the protected stable branch.
 - Use a focused feature branch and pull request for each protocol concern.
-- Open an issue or discussion before changing a public wire shape, protocol boundary, registry, or
-  conformance rule.
+- Open an issue or discussion before changing a public wire shape, protocol boundary, or conformance
+  rule.
 - Describe the concrete agent and Service interaction, alternatives, compatibility impact,
   security/privacy impact, and executable evidence.
 

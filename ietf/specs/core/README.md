@@ -7,5 +7,4 @@ and Services.
 | ----------------------------------------------------------------------------------- | ---------------------- |
 | [The Offering Discovery Protocol](./draft-kavian-offering-discovery-protocol-00.md) | The ODP core protocol. |
 
-Separately versioned documents define optional extensions and transport bindings that do not belong
-in the core protocol.
+Separately versioned documents define transport bindings that do not belong in the core protocol.

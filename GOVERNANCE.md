@@ -6,7 +6,7 @@ text. Published Internet-Draft documents are authoritative for protocol requirem
 ## Scope
 
 This repository maintains Internet-Draft sources, implementation guides, examples, JSON Schemas,
-test vectors, conformance profiles, registries, and the generated specification website.
+test vectors, conformance profiles, and the generated specification website.
 
 ## Change Classes
 
@@ -16,13 +16,12 @@ test vectors, conformance profiles, registries, and the generated specification 
 | Support artifact  | Examples, guides, schemas, vectors, harness checks                                     | Verify alignment with normative prose and run repository checks.             |
 | Clarification     | Resolves ambiguous requirements without changing intended behavior                     | Review compatibility and all affected artifacts.                             |
 | Protocol behavior | Wire fields, link relations, errors, algorithms, security, or conformance requirements | Design review, compatibility analysis, implementation evidence, and vectors. |
-| Extension         | Optional capability outside the core contract                                          | Extension and registry review plus independent implementation evidence.      |
 
 ## Authority and Compatibility
 
-Normative Internet-Draft prose takes precedence over schemas, examples, registries, vectors, guides,
-and generated pages. A conflict is repaired in every affected artifact. Compatibility is evaluated
-from observable wire behavior, not repository file history.
+Normative Internet-Draft prose takes precedence over schemas, examples, vectors, guides, and
+generated pages. A conflict is repaired in every affected artifact. Compatibility is evaluated from
+observable wire behavior, not repository file history.
 
 Behavior-changing work identifies affected agents and Services, security/privacy consequences,
 versioning impact, migration behavior, and conformance changes. Existing vectors are changed only to
@@ -44,9 +43,8 @@ checked for drift.
 
 ## IETF Relationship
 
-The IETF process controls standardization of submitted drafts. IETF working-group decisions,
-designated-expert processes, IETF Trust terms, and applicable IETF policies take precedence for the
-affected document or registry.
+The IETF process controls standardization of submitted drafts. IETF working-group decisions, IETF
+Trust terms, and applicable IETF policies take precedence for the affected document.
 
 ## Maintainers and Contact
 

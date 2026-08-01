@@ -7,9 +7,7 @@ artifacts.
 | --------------- | --------------------------------------------------------------------------- |
 | `conformance/`  | Profiles, capability manifests, and the language-neutral harness contract.  |
 | `examples/`     | Reviewed, non-normative examples that explain complete discovery scenarios. |
-| `governance/`   | Extension and registration procedures.                                      |
 | `guides/`       | Non-normative implementer and author guidance.                              |
-| `registry/`     | ODP-owned registry entries and their validation schema.                     |
 | `schemas/`      | Source JSON Schemas for stable wire objects.                                |
 | `scripts/`      | Validation, formatting, rendering, and publication tooling.                 |
 | `specs/`        | Normative Internet-Draft Markdown sources organized by document family.     |

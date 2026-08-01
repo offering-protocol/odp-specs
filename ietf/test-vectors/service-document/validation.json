@@ -1,0 +1,149 @@
+{
+  "id": "service-document-validation",
+  "title": "Service Document validation",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "service-document",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "profile": "core",
+  "subject": "service-document",
+  "cases": [
+    {
+      "name": "minimal-valid-document",
+      "valid": true,
+      "document": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "en",
+        "localizations": [
+          "en"
+        ],
+        "operations": {
+          "supported": [
+            "search-offerings",
+            "get-offering"
+          ]
+        },
+        "http": {
+          "endpoint_base": "/odp/"
+        }
+      }
+    },
+    {
+      "name": "localized-valid-document",
+      "valid": true,
+      "document": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "ja",
+        "localizations": [
+          "en",
+          "ja"
+        ],
+        "keywords": [
+          "compute",
+          "rental"
+        ],
+        "operations": {
+          "supported": [
+            "list-collections"
+          ]
+        },
+        "http": {
+          "endpoint_base": "/catalog/odp"
+        }
+      }
+    },
+    {
+      "name": "language-missing-from-localizations",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "ja",
+        "localizations": [
+          "en"
+        ],
+        "operations": {
+          "supported": [
+            "list-offerings"
+          ]
+        },
+        "http": {
+          "endpoint_base": "/odp/"
+        }
+      }
+    },
+    {
+      "name": "unknown-operation",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "en",
+        "localizations": [
+          "en"
+        ],
+        "operations": {
+          "supported": [
+            "buy-offering"
+          ]
+        },
+        "http": {
+          "endpoint_base": "/odp/"
+        }
+      }
+    },
+    {
+      "name": "endpoint-base-with-query",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "en",
+        "localizations": [
+          "en"
+        ],
+        "operations": {
+          "supported": [
+            "get-offering"
+          ]
+        },
+        "http": {
+          "endpoint_base": "/odp/?tenant=1"
+        }
+      }
+    },
+    {
+      "name": "service-web-url-is-prohibited",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "en",
+        "localizations": [
+          "en"
+        ],
+        "operations": {
+          "supported": [
+            "get-offering"
+          ]
+        },
+        "http": {
+          "endpoint_base": "/odp/"
+        },
+        "web_url": "/"
+      }
+    }
+  ]
+}

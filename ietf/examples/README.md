@@ -11,9 +11,10 @@ structured data through types, constraints, titles, descriptions, and examples. 
 those property names and definitions.
 
 Each Collection and Offering uses a Service-created local `id`. An Agent combines that value with
-the Service origin and resource type; the URL is not the resource identity. Same-origin `href` and
-`web_url` values use origin-relative absolute paths. `actions` links to subsequent operations
-without making enrollment, payment, checkout, or fulfillment part of ODP.
+the Service origin and resource type; the URL is not the resource identity. Core Collection and
+Offering URLs are constructed from the advertised endpoint base, fixed operation path, and path-safe
+identifier. Same-origin `web_url` values use origin-relative absolute paths. `actions` links to
+subsequent operations without making enrollment, payment, checkout, or fulfillment part of ODP.
 
 Every top-level ODP document carries `odp_version` once. Nested terse items inherit the version of
 their containing list or search response instead of repeating it per item.

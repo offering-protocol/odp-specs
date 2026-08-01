@@ -17,6 +17,8 @@ author:
 
 normative:
   RFC3986:
+  RFC4647:
+  RFC5646:
   RFC6454:
   RFC6838:
   RFC6839:
@@ -60,7 +62,7 @@ goods, and rented compute capacity.
 
 ODP provides a stable discovery envelope and lets each Service describe domain-specific data with
 machine-readable schemas. Discovery begins with the Service document at `/.well-known/odp` and
-continues through links advertised by that document and subsequent ODP representations.
+continues through a fixed set of operations advertised by that document.
 
 ODP representations use JSON as defined by {{RFC8259}} and HTTP semantics as defined by {{RFC9110}}.
 
@@ -80,12 +82,12 @@ capitals, as shown here.
 ODP defines:
 
 * discovery of a Service's ODP capabilities through a well-known Service document;
-* link-driven navigation and search of Collections and Offerings;
+* deterministic navigation and search of Collections and Offerings;
 * stable descriptive envelopes for Services, Collections, and Offerings;
 * Service-defined structured Offering attributes described by JSON Schema;
 * discovery of deterministic search terms, filters, and pagination capabilities;
 * terse representations for result sets and full representations for inspection;
-* links from discovery resources to browser experiences and subsequent machine operations; and
+* optional links from discovery resources to browser experiences and subsequent operations; and
 * Agent and Service conformance requirements.
 
 ODP is applicable whether access is public or subject to authentication, enrollment, payment, or
@@ -117,8 +119,8 @@ Service
   discoverable entity. A Service is not necessarily a seller.
 
 Service Document
-: The JSON representation published at `/.well-known/odp`. It describes the Service and links to the
-  ODP capabilities that the Service exposes.
+: The JSON representation published at `/.well-known/odp`. It describes the Service and advertises
+  the ODP operations that the Service exposes.
 
 Collection
 : An optional, Service-defined grouping used to navigate or constrain Offerings. Collections can be
@@ -130,8 +132,8 @@ Offering
   another Service-defined opportunity.
 
 Terse Representation
-: A result-oriented representation containing the fields needed to identify, summarize, and follow a
-  resource link.
+: A result-oriented representation containing the fields needed to identify and summarize a
+  resource.
 
 Full Representation
 : A resource representation containing the complete ODP description available to the Agent under the
@@ -158,16 +160,13 @@ Resource Identity
   tuple; a Service emits the Local Resource Identifier in the resource representation.
 
 Resource Reference
-: An origin-relative absolute-path reference or an absolute URL that locates an ODP resource or a
-  browser representation. A Resource Reference does not define Resource Identity.
+: An origin-relative absolute-path reference or an absolute URL that locates a browser
+  representation, schema, subsequent operation, or other referenced resource. A Resource Reference
+  does not define Resource Identity.
 
 Top-Level Document
 : The outermost JSON object carried by one ODP request or response body. Objects nested within that
   object, including terse result items, are not Top-Level Documents.
-
-Extension
-: An additive protocol capability identified by an absolute URI and defined outside the core ODP
-  contract.
 
 Subsequent Operation
 : An operation linked from an ODP resource whose semantics can be defined by ODP, AEP, MPP, x402, or
@@ -177,23 +176,23 @@ Subsequent Operation
 
 ## Agent Role
 
-An Agent consumes Service documents and advertised ODP resources. It selects capabilities from
-advertised links, interprets Service-defined attributes using the applicable Attribute Schema, and
-honors live HTTP authentication and payment challenges.
+An Agent consumes Service Documents and advertised ODP resources. It selects advertised operations,
+constructs their fixed paths from `http.endpoint_base`, interprets Service-defined attributes using
+the applicable Attribute Schema, and honors live HTTP authentication and payment challenges.
 
-An Agent MUST NOT assume that an unadvertised ODP capability exists. An Agent MUST NOT construct
-capability paths when the applicable representation provides a link. An Agent MUST treat content
-received from a directory as discovery metadata rather than authoritative Offering data.
+An Agent MUST NOT assume that an unadvertised ODP operation exists. An Agent MUST construct only the
+fixed paths defined by this document. An Agent MUST treat content received from a directory as
+discovery metadata rather than authoritative Offering data.
 
 ## Service Role
 
-A Service publishes its Service document and serves the ODP resources to which it links. The Service
-is authoritative for its Collections, Offerings, Attribute Schemas, filters, access policy, and
+A Service publishes its Service Document and serves the ODP operations it advertises. The Service is
+authoritative for its Collections, Offerings, Attribute Schemas, filters, access policy, and
 subsequent-operation links.
 
-A Service MUST NOT advertise an ODP capability that it does not support. A Service MUST keep links
-and capability metadata consistent with the behavior available to the Agent under the applicable
-access policy.
+A Service MUST NOT advertise an ODP operation that it does not support. A Service MUST keep
+operation metadata consistent with the behavior available to the Agent under the applicable access
+policy.
 
 ## Directory Relationship
 
@@ -223,21 +222,21 @@ identifier. Changing the Service Origin changes the Service identity.
 ## Local Resource Identifiers
 
 Every Collection and Offering representation MUST contain `id`, a Local Resource Identifier created
-and managed by the Service. ODP does not prescribe the Service's identifier-generation algorithm. A
-Service MAY use an existing database key, UUID, SKU, URI-shaped value, or another identifier that
-satisfies this section.
+and managed by the Service. ODP does not prescribe the Service's identifier-generation algorithm.
 
-A Local Resource Identifier MUST contain between 1 and 255 Unicode code points. It MUST NOT contain
-a control character or an unpaired surrogate. A Service MUST keep the identifier stable for the
+A Local Resource Identifier MUST contain between 1 and 128 ASCII characters. Every character MUST be
+an ASCII letter, decimal digit, hyphen (`-`), period (`.`), underscore (`_`), or tilde (`~`). The
+complete identifier MUST NOT be `.` or `..`. A Service MUST keep the identifier stable for the
 resource's lifetime and MUST NOT assign it to another resource in the same resource-type namespace.
+Services SHOULD use UUIDs where practical. A Service whose internal identifier does not satisfy this
+syntax MUST map it to a stable public ODP identifier.
 
 Collections and Offerings have separate identifier namespaces. The same Local Resource Identifier
 MAY identify one Collection and one Offering at a Service. It MUST NOT identify two Collections or
 two Offerings at that Service.
 
-Agents MUST treat a Local Resource Identifier as opaque. Comparison is exact and case-sensitive
-after JSON string decoding. Agents MUST NOT trim, case fold, Unicode-normalize, URL-decode, parse,
-or infer semantics from an identifier.
+Agents MUST treat a Local Resource Identifier as opaque. Comparison is exact and case-sensitive.
+Agents MUST NOT trim, case fold, URL-decode, parse, or infer semantics from an identifier.
 
 ## Complete Resource Identity
 
@@ -261,7 +260,8 @@ itself change Resource Identity.
 
 ## Resource References
 
-Fields defined as Resource References, including `href` and `web_url`, MUST contain one of:
+Fields defined as Resource References, including `web_url` and subsequent-operation `href` values,
+MUST contain one of:
 
 * an origin-relative absolute-path reference beginning with exactly one `/`, resolved against the
   Service Origin according to {{RFC3986}}; or
@@ -276,8 +276,7 @@ A same-origin reference SHOULD use the origin-relative form. A cross-origin refe
 absolute URL. Non-ASCII URL components MUST be percent-encoded before serialization.
 
 An Agent MUST resolve an origin-relative Resource Reference against the Service Origin, not against
-the path of the representation containing it. This rule makes `/odp/offerings/123` resolve to the
-same URL whether it appears in a Service Document, Collection, search result, or Offering.
+the path of the representation containing it.
 
 Following a cross-origin reference does not change the Service Origin or Resource Identity of the
 referring ODP resource. An Agent MUST apply origin and credential policy independently to the
@@ -307,9 +306,9 @@ field, value, operation, error, or requirement. It MUST NOT make a new field or 
 for implementations of an earlier minor version in the same major-version family.
 
 An implementation supporting a major version MUST process Top-Level Documents carrying any minor
-version in that major-version family according to the unknown-field, unknown-value, and Extension
-rules in this document. Implementations MUST NOT infer support for an Extension or optional
-capability from a higher minor version.
+version in that major-version family according to the unknown-field and unknown-value rules in this
+document. Implementations MUST NOT infer support for an optional capability from a higher minor
+version.
 
 Each request and response Top-Level Document declares the version governing that document. The
 version is not inherited across HTTP exchanges. A Service receiving a supported major version MUST
@@ -358,13 +357,91 @@ Services. The result is not a cross-Service Offering search result.
 
 ## Service Inspection
 
-An Agent retrieves the Service document from `/.well-known/odp` at the Service origin. The Service
-document advertises the ODP operations available to that Agent. The Agent follows those advertised
-links to search or list Collections, search or list Offerings, retrieve full representations, and
-obtain supporting definitions.
+An Agent retrieves the Service Document from `/.well-known/odp` at the Service origin. The Service
+Document advertises the ODP operations available to the Agent. The Agent constructs only advertised
+operations using the endpoint rules in this document.
 
-The well-known location establishes only the Service document location. Other ODP paths are not
-fixed by this document and MUST be discovered from links.
+# Service Document
+
+## Retrieval and Access
+
+The Service Document is the response to `GET /.well-known/odp`. This request MUST be available
+without enrollment, authentication, or payment. A Service can enforce access policy on catalog
+operations advertised by the document.
+
+The successful response MUST be an ODP JSON Top-Level Document. The Service Document MUST be a flat
+JSON object and MUST contain `odp_version`, `name`, `description`, `language`, `localizations`,
+`operations`, and `http`. It MAY contain `keywords`. It MUST NOT contain a self-asserted Service
+identifier or `web_url`.
+
+`name` is a non-empty string of at most 128 Unicode code points. `description` is a non-empty string
+of at most 1024 Unicode code points. `keywords` is an array of at most 32 non-empty freeform
+strings, each at most 64 Unicode code points and collectively at most 1024 Unicode code points. A
+Service SHOULD omit `keywords` when it has none. Keywords do not draw from a protocol-defined
+vocabulary.
+
+## Language Selection
+
+`language` MUST be the {{RFC5646}} language tag of the representation. `localizations` MUST be a
+non-empty array of no more than 16 unique RFC 5646 language tags available for the Service metadata.
+It MUST include `language`. These fields describe the Service Document metadata and do not assert
+which localizations are available for Collections or Offerings.
+
+An Agent requests a preferred representation using `Accept-Language`. A Service supporting multiple
+representations MUST select a language using the Lookup scheme in {{RFC4647}}. If no requested range
+matches, it MUST return its default representation rather than `406 Not Acceptable`. A localized
+response MUST include `Content-Language` and `Vary: Accept-Language`. Entity tags MUST distinguish
+representation variants. ODP does not define a language query parameter.
+
+## HTTP Endpoint Base
+
+`http` MUST be an object containing exactly one core member, `endpoint_base`. Its value MUST be an
+origin-relative absolute-path reference beginning with exactly one `/`, MUST NOT contain a query or
+fragment, and MUST contain no more than 2048 ASCII characters. The value MAY end in `/`.
+
+An Agent constructs an operation URL by removing any trailing slash from `endpoint_base`, appending
+one `/`, and appending the fixed path from the following table. Identifier placeholders are replaced
+verbatim with valid Local Resource Identifiers; percent-encoding or decoding is not performed.
+
+| Operation identifier        | Method | Fixed path                              |
+| --------------------------- | ------ | --------------------------------------- |
+| `list-collections`          | `GET`  | `collections`                           |
+| `search-collections`        | `POST` | `collections/search`                    |
+| `get-collection`            | `GET`  | `collections/{collection_id}`           |
+| `list-collection-offerings` | `GET`  | `collections/{collection_id}/offerings` |
+| `list-offerings`            | `GET`  | `offerings`                             |
+| `search-offerings`          | `POST` | `offerings/search`                      |
+| `get-offering`              | `GET`  | `offerings/{offering_id}`               |
+
+Query parameters can modify a request where an operation defines them. They are not part of Resource
+Identity and MUST NOT be used to carry Collection or Offering identifiers.
+
+## Operation Advertisement
+
+`operations` MUST be an object containing `supported`. `supported` MUST be a non-empty array of no
+more than 32 unique operation identifiers from the preceding table. An Agent MUST NOT invoke an ODP
+operation that the Service Document does not advertise.
+
+## Processing Limits
+
+The decoded UTF-8 Service Document MUST NOT exceed 65,536 bytes or a JSON nesting depth of 8. String
+and array limits in this section are measured after JSON decoding. A Service MUST produce a document
+within every limit. An Agent MUST reject the entire document if a required member is missing, a
+limit is exceeded, or the document is otherwise invalid; it MUST NOT act on a partially parsed
+Service Document.
+
+An Agent MUST follow no more than five redirects while retrieving the Service Document. Every
+redirect target MUST have the same scheme, host, and effective port as the preceding request. The
+Agent MUST reject cross-origin redirects, transport-security downgrades, and redirect loops.
+
+# HTTP Caching
+
+HTTP cache directives and validators are authoritative. When a response supplies no freshness
+information, an SDK SHOULD use configurable fallback freshness lifetimes of four hours for Service
+Documents, one hour for Collections, five minutes for Offerings, zero seconds for search responses,
+one hour for Filter Definitions, and 24 hours for Attribute Schemas. Each resource class MUST be
+configurable independently. A fallback does not override `Cache-Control`, `Expires`, validators, or
+other HTTP caching semantics.
 
 ## Catalog Discovery
 
@@ -373,8 +450,8 @@ Collections, Collection search without a hierarchy, or both. An Offering can bel
 multiple Collections.
 
 List and search operations SHOULD return Terse Representations. Resource retrieval SHOULD return a
-Full Representation. A Terse Representation MUST contain a link through which the Agent can obtain
-the corresponding Full Representation when one is available.
+Full Representation. An Agent obtains the Full Representation by applying the terse item's `id` to
+the applicable fixed retrieval operation.
 
 Collections and Offerings MAY include a `web_url` link for a human-facing browser experience. The
 browser representation is informative for Agent operation and does not replace the machine-readable
@@ -394,32 +471,8 @@ interpretation depends on that value as unsupported. Unrelated resources and ope
 usable.
 
 Security-sensitive behavior fails closed. An Agent MUST NOT execute an operation when an unknown
-field, value, or Extension prevents it from determining the operation's identity, authorization,
-payment, request semantics, or security consequences.
-
-## Extension Identifiers and Requirements
-
-An Extension identifier MUST be an absolute URI. The publisher that controls the URI defines the
-Extension. An Extension specification MUST define its identifier, discovery and requirement scope,
-added fields or operations, error behavior, compatibility rules, and security and privacy
-considerations.
-
-Extensions are additive. An Extension MUST NOT remove or redefine core fields, enum values,
-operations, errors, or requirements. Two Extensions MUST NOT assign conflicting semantics to the
-same field or operation within one representation.
-
-The Service Document advertises Extension identifiers supported by the Service. A resource or
-operation can declare that an Extension is required for its interpretation or execution. The
-containing representation defines the placement and scope of that declaration.
-
-An Agent MAY ignore an unsupported optional Extension. When a resource or operation declares an
-unsupported required Extension, the Agent MUST treat that resource or operation as unsupported and
-MUST NOT execute it. The unsupported requirement does not invalidate unrelated resources or
-operations.
-
-An implementation MUST NOT infer Extension support from an unknown field, a protocol minor version,
-or another Extension. It supports an Extension only when it implements the specification identified
-by that Extension URI.
+field or value prevents it from determining the operation's identity, authorization, payment,
+request semantics, or security consequences.
 
 ## Service-Defined Offering Data
 
@@ -436,13 +489,13 @@ embed Filter Definitions in an ODP representation. A large Service MAY link to a
 filter-definition resource. An Agent MUST interpret a filter identifier using the definition
 advertised for the operation and scope in which the filter is used.
 
-A Service Document SHOULD contain only Service-level discovery metadata and capability links.
+A Service Document SHOULD contain only Service-level discovery metadata and operation advertisement.
 Collection-specific or high-cardinality definitions SHOULD be linked from the narrowest applicable
 Collection or operation so that a Service Document remains bounded as the catalog grows.
 
 # Composition Boundaries
 
-ODP describes resources and the links that lead to subsequent operations. It does not duplicate the
+ODP describes resources and references that lead to subsequent operations. It does not duplicate the
 semantics of those operations.
 
 A Service MAY make ODP resources public, require AEP enrollment before some or all ODP operations,

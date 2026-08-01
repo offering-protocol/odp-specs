@@ -20,14 +20,14 @@ Directory search ──────▶ /.well-known/odp ─────▶ Colle
 | Resource or operation | What the agent learns                                                                                                   |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | Directory search      | Which Services may satisfy the agent's goal, using deterministic search, keywords, facets, suggestions, and pagination. |
-| Service document      | Service identity, description, keywords, ODP capabilities, and links to Service-owned catalog operations.               |
+| Service document      | Service identity, description, keywords, supported operations, and the HTTP endpoint base.                              |
 | Collections           | Navigational groupings, relationships, Offering membership, and contextual filter capabilities.                         |
-| Offerings             | Stable descriptive fields, browser and machine links, Service-defined structured attributes, and subsequent actions.    |
+| Offerings             | Stable descriptive fields, optional browser links, Service-defined structured attributes, and subsequent actions.       |
 | Attribute schema      | JSON Schema definitions that explain a Service's domain-specific Offering data.                                         |
 
 Directory discovery and catalog discovery are separate. The canonical directory indexes public
 Service metadata; it does not ingest complete Offering catalogs. Agents search for Services and then
-query each relevant Service through the links in its ODP document.
+query each relevant Service through the operations in its ODP document.
 
 ## Extensible Offering Data
 
@@ -68,13 +68,12 @@ This repository connects normative documents to implementation-support artifacts
 | [`ietf/conformance`](./ietf/conformance/)   | Conformance profiles, capability manifests, and harness documentation. |
 | [`ietf/examples`](./ietf/examples/)         | Reviewed protocol examples spanning small Services and marketplaces.   |
 | [`ietf/guides`](./ietf/guides/)             | Non-normative implementation and authoring guidance.                   |
-| [`ietf/registry`](./ietf/registry/)         | ODP-owned registries and extension entries.                            |
 | [`ietf/schemas`](./ietf/schemas/)           | JSON Schemas for stable ODP wire objects.                              |
 | [`ietf/specs`](./ietf/specs/)               | Internet-Draft Markdown sources.                                       |
 | [`ietf/test-vectors`](./ietf/test-vectors/) | Positive and negative conformance inputs and expected outcomes.        |
 
-Internet-Draft prose is normative. Schemas, examples, registries, and test vectors support
-implementations and do not replace the specification.
+Internet-Draft prose is normative. Schemas, examples, and test vectors support implementations and
+do not replace the specification.
 
 ## Read the Specification
 
@@ -89,11 +88,9 @@ odp-specs/
 ├── artifacts/          # local rendered drafts; generated and ignored
 ├── docs/               # published website and generated support artifacts
 └── ietf/
-    ├── governance/     # extension registration guidance
     ├── conformance/    # profiles and harness contract
     ├── examples/       # reviewed protocol examples and transcripts
     ├── guides/         # non-normative implementation guidance
-    ├── registry/       # ODP-owned registry entries
     ├── schemas/        # source JSON Schemas
     ├── specs/          # Internet-Draft Markdown sources
     └── test-vectors/   # conformance inputs and expected outcomes
@@ -113,8 +110,8 @@ Format Markdown tables and wrap prose to 100 columns:
 make -C ietf format
 ```
 
-The IETF workspace also provides rendering, formatting, schema publication, registry, conformance,
-and idnits targets as described in [`ietf/README.md`](./ietf/README.md).
+The IETF workspace also provides rendering, formatting, schema publication, conformance, and idnits
+targets as described in [`ietf/README.md`](./ietf/README.md).
 
 ## Reference Implementations
 

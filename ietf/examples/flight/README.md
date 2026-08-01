@@ -5,7 +5,8 @@ airline-specific fields to the core protocol.
 
 [`flight-offering.json`](./flight-offering.json) illustrates:
 
-- a stable Offering envelope with separate machine-facing `href` and human-facing `web_url`;
+- a stable Offering envelope with a human-facing `web_url`; the fixed `get-offering` operation and
+  path-safe `id` locate the machine representation;
 - nested departure and arrival structures with timezone-aware scheduled times;
 - Service-owned carrier, flight, cabin, baggage, and refundability attributes; and
 - a `quote` action because availability, traveler-specific fare, taxes, and conditions must be

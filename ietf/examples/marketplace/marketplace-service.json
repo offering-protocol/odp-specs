@@ -2,44 +2,28 @@
   "odp_version": "1.0",
   "name": "Market Example",
   "description": "A marketplace with millions of independent listings across a large taxonomy.",
+  "language": "en",
+  "localizations": [
+    "en",
+    "ja"
+  ],
   "keywords": [
     "marketplace",
     "handmade",
     "vintage",
     "retail"
   ],
-  "links": [
-    {
-      "rel": "collections",
-      "href": "/odp/collections"
-    },
-    {
-      "rel": "search-collections",
-      "href": "/odp/collections/search",
-      "method": "POST"
-    },
-    {
-      "rel": "search-offerings",
-      "href": "/odp/offerings/search",
-      "method": "POST"
-    }
-  ],
-  "filter_capabilities": {
-    "inline": [
-      {
-        "id": "price",
-        "title": "Price",
-        "description": "Advertised amount before buyer-specific tax and shipping.",
-        "type": "number",
-        "unit": {
-          "code": "USD"
-        },
-        "operators": [
-          "gte",
-          "lte"
-        ],
-        "sortable": true
-      }
+  "operations": {
+    "supported": [
+      "list-collections",
+      "search-collections",
+      "get-collection",
+      "list-collection-offerings",
+      "search-offerings",
+      "get-offering"
     ]
+  },
+  "http": {
+    "endpoint_base": "/odp/"
   }
 }

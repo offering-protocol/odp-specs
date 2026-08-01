@@ -1,9 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://offeringprotocol.org/schemas/extension-identifier.schema.json",
-  "title": "ODP Extension identifier",
-  "description": "An absolute URI controlled by the publisher of an additive ODP Extension.",
-  "type": "string",
-  "format": "uri",
-  "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:.+$"
-}

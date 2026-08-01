@@ -8,7 +8,8 @@ module OdpIdentity
   LOOPBACK_HOSTS = ["localhost", "127.0.0.1", "::1"].freeze
 
   def local_identifier?(value)
-    value.is_a?(String) && value.valid_encoding? && value.length.between?(1, 255) && !value.match?(/\p{Cc}/)
+    value.is_a?(String) && value.valid_encoding? &&
+      value.match?(/\A(?!\.{1,2}\z)[A-Za-z0-9._~-]{1,128}\z/)
   end
 
   def canonical_origin?(value)

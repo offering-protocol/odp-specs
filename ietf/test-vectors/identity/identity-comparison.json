@@ -67,22 +67,6 @@
         "id": "abc"
       },
       "same_identity": false
-    },
-    {
-      "name": "link-change-does-not-change-identity",
-      "left": {
-        "service": "https://market.example",
-        "type": "offering",
-        "id": "123",
-        "href": "/odp/offerings/123"
-      },
-      "right": {
-        "service": "https://market.example",
-        "type": "offering",
-        "id": "123",
-        "href": "/catalog/offerings/123"
-      },
-      "same_identity": true
     }
   ]
 }

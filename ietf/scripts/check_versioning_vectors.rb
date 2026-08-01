@@ -17,14 +17,6 @@ def expected_media_result(test_case)
   nil
 end
 
-extension_results = {
-  "unknown-member" => "ignore-member",
-  "unsupported-optional-extension" => "ignore-extension",
-  "unknown-enum" => "capability-unsupported",
-  "security-sensitive-unknown" => "do-not-execute",
-  "core-redefinition" => "invalid-extension"
-}.freeze
-
 root = Pathname.new(__dir__).join("..", "test-vectors", "versioning").expand_path
 errors = []
 
@@ -52,13 +44,6 @@ Dir[root.join("*.json")].sort.each do |path|
       if test_case.key?("effective_odp_version")
         errors << "#{path}: #{test_case.fetch('name')} body version must be authoritative" unless test_case["effective_odp_version"] == test_case["body_odp_version"]
       end
-    when "extension-handling"
-      actual = if test_case["condition"] == "unsupported-required-extension"
-                 "#{test_case.fetch('scope')}-unsupported"
-               else
-                 extension_results[test_case.fetch("condition")]
-               end
-      errors << "#{path}: #{test_case.fetch('name')} extension outcome mismatch" unless actual == test_case.fetch("expected")
     else
       errors << "#{path}: unknown subject #{vector['subject']}"
     end

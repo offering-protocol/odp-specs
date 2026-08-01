@@ -3,7 +3,6 @@
 This directory contains ODP Internet-Draft Markdown sources:
 
 * [`core`](./core/) contains the protocol shared by conforming Agents and Services;
-* `extensions` contains separately versioned optional capabilities; and
 * `transports` contains bindings when a transport needs an independent specification.
 
 The core document defines scope, terminology, roles, architecture, wire representations, operations,
