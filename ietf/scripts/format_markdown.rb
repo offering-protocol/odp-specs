@@ -112,7 +112,7 @@ def format_markdown(text)
     if frontmatter
       output << line
       index += 1
-      frontmatter = false if index > 1 && line == "---"
+      frontmatter = false if index > 1 && ["---", "..."].include?(line)
       next
     end
 

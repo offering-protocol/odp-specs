@@ -1,9 +1,13 @@
 # Specifications
 
-This directory contains ODP Internet-Draft Markdown sources. The core document defines Service
-inspection, Collections, Offerings, search, filtering, links, errors, security, privacy, and HTTP
-behavior. Separately versioned extension documents define optional capabilities that do not belong
-in the core.
+This directory contains ODP Internet-Draft Markdown sources:
+
+* [`core`](./core/) contains the protocol shared by conforming Agents and Services;
+* `extensions` contains separately versioned optional capabilities; and
+* `transports` contains bindings when a transport needs an independent specification.
+
+The core document defines scope, terminology, roles, architecture, wire representations, operations,
+extensibility, composition boundaries, security, privacy, and conformance.
 
 Each draft carries author name, organization, and email in its document header and uses the IETF
 Trust intellectual-property declaration required for submission.

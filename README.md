@@ -76,6 +76,12 @@ This repository connects normative documents to implementation-support artifacts
 Internet-Draft prose is normative. Schemas, examples, registries, and test vectors support
 implementations and do not replace the specification.
 
+## Read the Specification
+
+| Document                                                                                            | Scope                  |
+| --------------------------------------------------------------------------------------------------- | ---------------------- |
+| [The Offering Discovery Protocol](./ietf/specs/core/draft-kavian-offering-discovery-protocol-00.md) | The ODP core protocol. |
+
 ## Repository Map
 
 ```text

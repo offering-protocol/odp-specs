@@ -32,13 +32,25 @@ assert_equal(expected_table, format_markdown(table), "table alignment")
 protected = <<~MARKDOWN
   ---
   title: "#{'x' * 120}"
-  ---
+  ...
 
   ```text
   #{'y' * 120}
   ```
 MARKDOWN
 assert_equal(protected, format_markdown(protected), "protected blocks")
+
+ietf_source = <<~MARKDOWN
+  ---
+  title: "#{'x' * 120}"
+  ...
+
+  #{long_prose}
+MARKDOWN
+formatted_ietf_source = format_markdown(ietf_source)
+abort "IETF front matter termination failed" unless formatted_ietf_source.lines.last(2).all? do |line|
+  line.chomp.length <= LINE_WIDTH
+end
 
 list = "- #{Array.new(30, 'word').join(' ')}\n"
 formatted_list = format_markdown(list)

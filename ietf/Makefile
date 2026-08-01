@@ -4,10 +4,14 @@ MARKDOWN_FILES := $(shell find .. -type f -name '*.md' \
 	-not -path '../artifacts/*' \
 	-not -path '../ietf/vendor/*' \
 	-not -path '../ietf/.venv/*' | sort)
+DRAFTS := $(shell find specs -type f -name 'draft-*.md' | sort)
 
-.PHONY: check check-formatter check-format check-json check-examples format
+.PHONY: check check-drafts check-formatter check-format check-json check-examples format
 
-check: check-formatter check-format check-json check-examples
+check: check-drafts check-formatter check-format check-json check-examples
+
+check-drafts:
+	$(RUBY) scripts/check_drafts.rb $(DRAFTS)
 
 check-formatter:
 	$(RUBY) scripts/check_markdown_formatter.rb
