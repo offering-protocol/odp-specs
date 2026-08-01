@@ -22,6 +22,7 @@ normative:
   RFC6454:
   RFC6838:
   RFC6839:
+  RFC6901:
   RFC2119:
   RFC8174:
   RFC8259:
@@ -132,12 +133,16 @@ Offering
   another Service-defined opportunity.
 
 Terse Representation
-: A result-oriented representation containing the fields needed to identify and summarize a
-  resource.
+: A partial Collection or Offering representation used for listing, search, navigation, and
+  comparison. It uses the same field names and locations as the Full Representation.
 
 Full Representation
 : A resource representation containing the complete ODP description available to the Agent under the
   current access policy.
+
+Detail Fields
+: An optional, exhaustive list of fields present in the corresponding Full Representation and
+  omitted from a Terse Representation. Entries are JSON Pointers.
 
 Attribute Schema
 : A JSON Schema document that describes Service-defined structured data carried by an Offering.
@@ -416,6 +421,32 @@ verbatim with valid Local Resource Identifiers; percent-encoding or decoding is 
 Query parameters can modify a request where an operation defines them. They are not part of Resource
 Identity and MUST NOT be used to carry Collection or Offering identifiers.
 
+## Representation Selection
+
+Every Collection and Offering operation supports the `representation` query parameter. Its value
+MUST be `terse` or `full`. An absent parameter selects the operation default in the following table.
+
+| Operation identifier        | Default representation |
+| --------------------------- | ---------------------- |
+| `list-collections`          | Terse items            |
+| `search-collections`        | Terse items            |
+| `get-collection`            | Full Collection        |
+| `list-collection-offerings` | Terse items            |
+| `list-offerings`            | Terse items            |
+| `search-offerings`          | Terse items            |
+| `get-offering`              | Full Offering          |
+
+`representation=terse` selects Terse Representations and `representation=full` selects Full
+Representations regardless of the operation default. On a list or search operation, the selection
+applies to every Collection or Offering item in the response, not to the page envelope. A request
+MUST NOT contain more than one `representation` parameter. A Service MUST reject an unsupported or
+repeated value with `400 Bad Request`.
+
+The query parameter does not change Resource Identity. HTTP caches distinguish query-target variants
+according to normal HTTP cache-key rules. Pagination and response limits apply independently of the
+selected representation. An Agent requesting Full Representations from a list or search operation
+MUST NOT assume that the Service will increase its page or response limits.
+
 ## Operation Advertisement
 
 `operations` MUST be an object containing `supported`. `supported` MUST be a non-empty array of no
@@ -449,9 +480,60 @@ Collections are optional navigation resources. A Service can expose Offering sea
 Collections, Collection search without a hierarchy, or both. An Offering can belong to zero, one, or
 multiple Collections.
 
-List and search operations SHOULD return Terse Representations. Resource retrieval SHOULD return a
-Full Representation. An Agent obtains the Full Representation by applying the terse item's `id` to
-the applicable fixed retrieval operation.
+List, search, and retrieval operations use the representation defaults and overrides defined in
+Representation Selection. An Agent obtains an individual Full Representation by applying the terse
+item's `id` to the applicable fixed retrieval operation.
+
+# Terse and Full Representations
+
+## Stable Field Placement
+
+A Terse Representation and its corresponding Full Representation describe the same Resource
+Identity. A field has the same name, location, type, and semantics in both representations. A
+Service MUST NOT move Service-defined attributes or core fields into a separate preview, summary, or
+representation-specific container.
+
+Every Terse Representation MUST contain `id` and `name`. Other fields are optional in a Terse
+Representation unless their resource contract requires them. A Service selects which optional fields
+to include according to the usefulness and cost of those fields. It MAY include every field from the
+Full Representation. A field present in both representations MUST have equivalent meaning; volatile
+values MAY differ because the representations were generated at different times.
+
+A Terse Representation omits fields or nested object members; it does not silently truncate an
+included scalar or array. An included object can omit members recursively. A field whose own
+contract explicitly defines truncation, pagination, or summary semantics follows that contract.
+
+A Full Representation MUST contain every ODP field available for that resource under the request's
+current access policy. This completeness requirement does not require inapplicable optional fields,
+fields withheld by access policy, or data that the Service does not possess.
+
+## Detail Fields
+
+A Terse Representation MAY contain `detail_fields`. A Full Representation MUST NOT contain
+`detail_fields`. The value is a non-empty array of no more than 32 unique JSON Pointer strings as
+defined by {{RFC6901}}. Each pointer MUST contain no more than 256 printable ASCII characters, MUST
+begin with `/`, and MUST NOT use the URI fragment representation of a JSON Pointer.
+
+Each pointer identifies a field present in the corresponding Full Representation and absent from the
+Terse Representation. A pointer to an omitted object or array covers its complete subtree. Top-level
+document metadata inherited by an embedded Terse Representation, including `odp_version`, is not a
+detail field.
+
+When `detail_fields` is present, it MUST exhaustively identify the minimal omitted field subtrees.
+When an exhaustive list would exceed a limit in this section, the Service MUST omit `detail_fields`
+instead of returning a partial list. Absence of `detail_fields` makes no claim about whether the
+Full Representation contains additional fields.
+
+`detail_fields` advertises only what an Agent obtains by retrieving the Full Representation. It does
+not advertise or enable field projection, grant access to the Full Representation, or override a
+live authentication or payment challenge. A Service MUST NOT disclose protected field existence
+through `detail_fields` when the current principal is not permitted to learn that information.
+
+## No Field Projection
+
+ODP version 1.0 does not define a request syntax for selecting arbitrary resource fields. An Agent
+MUST NOT infer field-projection support from `detail_fields`, an Attribute Schema, or an unknown
+query parameter. A future compatible revision can advertise and define projection independently.
 
 Collections and Offerings MAY include a `web_url` link for a human-facing browser experience. The
 browser representation is informative for Agent operation and does not replace the machine-readable
@@ -519,8 +601,8 @@ An ODP Service conforms to this document when it satisfies every requirement des
 Service, publishes a valid Service Document, and correctly implements each capability it advertises.
 A Service is not required to advertise every optional ODP capability.
 
-Directory behavior is outside ODP conformance. Examples, guides, schemas, registries, and test
-vectors support implementation and testing; they do not override normative Internet-Draft prose.
+Directory behavior is outside ODP conformance. Examples, guides, schemas, and test vectors support
+implementation and testing; they do not override normative Internet-Draft prose.
 
 # IANA Considerations
 

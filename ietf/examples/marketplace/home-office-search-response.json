@@ -5,7 +5,21 @@
       "id": "walnut-standing-desk-4821",
       "name": "Handmade walnut standing desk",
       "description": "Height-adjustable desk made to order by a verified workshop.",
-      "web_url": "/listing/walnut-standing-desk-4821"
+      "web_url": "/listing/walnut-standing-desk-4821",
+      "attributes": {
+        "category": "desk",
+        "materials": [
+          "walnut",
+          "steel"
+        ],
+        "made_to_order": true
+      },
+      "detail_fields": [
+        "/actions",
+        "/attributes/dimensions",
+        "/attributes/processing_days",
+        "/schema"
+      ]
     },
     {
       "id": "brass-task-lamp-9938",

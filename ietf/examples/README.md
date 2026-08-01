@@ -19,6 +19,11 @@ subsequent operations without making enrollment, payment, checkout, or fulfillme
 Every top-level ODP document carries `odp_version` once. Nested terse items inherit the version of
 their containing list or search response instead of repeating it per item.
 
+Terse and full resources use one stable field layout. A Service can include a useful subset of its
+normal `attributes` in terse results. Optional `detail_fields` JSON Pointers identify fields that
+are available through full retrieval but omitted from that terse item; they do not enable field
+projection.
+
 Schema annotations such as `x-odp-unit` and `x-odp-comparison` are exploratory presentation and
 comparison hints. They do not identify protocol-owned compute, flight, retail, or digital terms.
 

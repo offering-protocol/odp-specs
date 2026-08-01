@@ -8,12 +8,34 @@ root = Pathname.new(__dir__).join("..").expand_path
 paths = Dir[root.join("**/*.json")].sort
 abort "No JSON files found" if paths.empty?
 
+def canonical_json(value, depth = 0)
+  indent = "  " * depth
+  child_indent = "  " * (depth + 1)
+
+  case value
+  when Hash
+    return "{}" if value.empty?
+
+    members = value.map do |key, child|
+      "#{child_indent}#{JSON.generate(key)}: #{canonical_json(child, depth + 1)}"
+    end
+    "{\n#{members.join(",\n")}\n#{indent}}"
+  when Array
+    return "[]" if value.empty?
+
+    members = value.map { |child| "#{child_indent}#{canonical_json(child, depth + 1)}" }
+    "[\n#{members.join(",\n")}\n#{indent}]"
+  else
+    JSON.generate(value)
+  end
+end
+
 errors = []
 paths.each do |path|
   file = Pathname.new(path)
   begin
     parsed = JSON.parse(file.read)
-    formatted = "#{JSON.pretty_generate(parsed)}\n"
+    formatted = "#{canonical_json(parsed)}\n"
     errors << "#{file.relative_path_from(root)}: JSON is not canonically formatted" unless file.read == formatted
   rescue JSON::ParserError => e
     errors << "#{file.relative_path_from(root)}: invalid JSON: #{e.message}"
