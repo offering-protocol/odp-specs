@@ -1,10 +1,10 @@
 {
   "odp_version": "0.1",
-  "id": "https://market.example/offerings/walnut-standing-desk-4821",
+  "id": "walnut-standing-desk-4821",
   "name": "Handmade walnut standing desk",
   "description": "Height-adjustable desk made to order by a verified workshop.",
-  "href": "https://market.example/odp/offerings/walnut-standing-desk-4821",
-  "web_url": "https://market.example/listing/walnut-standing-desk-4821",
+  "href": "/odp/offerings/walnut-standing-desk-4821",
+  "web_url": "/listing/walnut-standing-desk-4821",
   "schema": {
     "url": "https://market.example/schemas/home-office-furniture-7.json",
     "media_type": "application/schema+json",
@@ -28,7 +28,7 @@
   "actions": [
     {
       "rel": "quote",
-      "href": "https://market.example/quotes",
+      "href": "/quotes",
       "method": "POST",
       "description": "Request current price, tax, shipping or pickup options, and production availability."
     }

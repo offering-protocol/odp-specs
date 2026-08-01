@@ -1,0 +1,62 @@
+{
+  "id": "service-origin",
+  "title": "Canonical Service origin",
+  "description": "Service identity uses canonical HTTPS origin serialization with explicit loopback development exceptions.",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "identity",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "profile": "core-identity",
+  "subject": "service-origin",
+  "cases": [
+    {
+      "name": "canonical-https-origin",
+      "value": "https://market.example",
+      "valid": true
+    },
+    {
+      "name": "canonical-non-default-port",
+      "value": "https://market.example:8443",
+      "valid": true
+    },
+    {
+      "name": "loopback-development-origin",
+      "value": "http://localhost:3000",
+      "valid": true
+    },
+    {
+      "name": "uppercase-host-is-not-canonical",
+      "value": "https://Market.Example",
+      "valid": false
+    },
+    {
+      "name": "default-port-is-not-canonical",
+      "value": "https://market.example:443",
+      "valid": false
+    },
+    {
+      "name": "trailing-slash-is-not-origin-serialization",
+      "value": "https://market.example/",
+      "valid": false
+    },
+    {
+      "name": "public-http-is-prohibited",
+      "value": "http://market.example",
+      "valid": false
+    },
+    {
+      "name": "path-is-prohibited",
+      "value": "https://market.example/odp",
+      "valid": false
+    },
+    {
+      "name": "userinfo-is-prohibited",
+      "value": "https://user@market.example",
+      "valid": false
+    }
+  ]
+}

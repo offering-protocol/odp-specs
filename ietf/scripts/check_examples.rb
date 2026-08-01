@@ -4,6 +4,7 @@
 require "json"
 require "pathname"
 require "uri"
+require_relative "odp_identity"
 
 root = Pathname.new(__dir__).join("..", "examples").expand_path
 errors = []
@@ -19,11 +20,31 @@ def require_fields(document, fields, relative, errors)
   fields.each { |field| errors << "#{relative}: missing #{field}" unless document.key?(field) }
 end
 
+def validate_references(value, relative, errors, path = "$")
+  case value
+  when Hash
+    value.each do |key, child|
+      if %w[href web_url next].include?(key) && !OdpIdentity.resource_reference?(child)
+        errors << "#{relative}: #{path}.#{key} must be a valid resource reference"
+      end
+      validate_references(child, relative, errors, "#{path}.#{key}")
+    end
+  when Array
+    value.each_with_index { |child, index| validate_references(child, relative, errors, "#{path}[#{index}]") }
+  end
+end
+
 def absolute_https?(value)
   uri = URI.parse(value.to_s)
   uri.is_a?(URI::HTTPS) && !uri.host.to_s.empty?
 rescue URI::InvalidURIError
   false
+end
+
+Dir[root.join("**/*.json")].sort.each do |name|
+  path = Pathname.new(name)
+  document = load_json(path, errors)
+  validate_references(document, path.relative_path_from(root), errors) if document
 end
 
 Dir[root.join("**/*-offering.json")].sort.each do |name|
@@ -33,12 +54,7 @@ Dir[root.join("**/*-offering.json")].sort.each do |name|
   next unless document.is_a?(Hash)
 
   require_fields(document, %w[odp_version id name description href schema attributes actions], relative, errors)
-  %w[id href].each do |field|
-    errors << "#{relative}: #{field} must be an absolute HTTPS URL" unless absolute_https?(document[field])
-  end
-  if document.key?("web_url") && !absolute_https?(document["web_url"])
-    errors << "#{relative}: web_url must be an absolute HTTPS URL"
-  end
+  errors << "#{relative}: id must be a valid local resource identifier" unless OdpIdentity.local_identifier?(document["id"])
   schema_url = document.dig("schema", "url")
   errors << "#{relative}: schema.url must be an absolute HTTPS URL" unless absolute_https?(schema_url)
   errors << "#{relative}: attributes must be an object" unless document["attributes"].is_a?(Hash)
@@ -52,6 +68,7 @@ Dir[root.join("**/*-collection.json")].sort.each do |name|
   next unless document.is_a?(Hash)
 
   require_fields(document, %w[odp_version id name description href offerings filter_capabilities], relative, errors)
+  errors << "#{relative}: id must be a valid local resource identifier" unless OdpIdentity.local_identifier?(document["id"])
   sources = %w[inline linked].select { |field| document.fetch("filter_capabilities", {}).key?(field) }
   errors << "#{relative}: filter_capabilities must contain exactly one of inline or linked" unless sources.length == 1
 end

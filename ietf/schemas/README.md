@@ -6,3 +6,10 @@ Draft 2020-12 and stable `$id` URLs under `https://offeringprotocol.org/schemas/
 Schemas validate the contract described by normative prose. A schema cannot add a requirement absent
 from the specification or relax one the specification requires. Published copies are generated and
 checked for drift.
+
+| Schema                                                                             | Contract                                             |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| [`local-resource-identifier.schema.json`](./local-resource-identifier.schema.json) | Service-created Collection and Offering identifiers. |
+| [`resource-identity.schema.json`](./resource-identity.schema.json)                 | Structured identity composed by an Agent.            |
+| [`resource-reference.schema.json`](./resource-reference.schema.json)               | Origin-relative and absolute resource references.    |
+| [`service-origin.schema.json`](./service-origin.schema.json)                       | Canonical Service-origin serialization.              |

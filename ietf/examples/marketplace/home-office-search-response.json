@@ -1,18 +1,18 @@
 {
   "items": [
     {
-      "id": "https://market.example/offerings/walnut-standing-desk-4821",
+      "id": "walnut-standing-desk-4821",
       "name": "Handmade walnut standing desk",
       "description": "Height-adjustable desk made to order by a verified workshop.",
-      "href": "https://market.example/odp/offerings/walnut-standing-desk-4821",
-      "web_url": "https://market.example/listing/walnut-standing-desk-4821"
+      "href": "/odp/offerings/walnut-standing-desk-4821",
+      "web_url": "/listing/walnut-standing-desk-4821"
     },
     {
-      "id": "https://market.example/offerings/brass-task-lamp-9938",
+      "id": "brass-task-lamp-9938",
       "name": "Restored brass task lamp",
       "description": "A rewired vintage desk lamp with an adjustable arm.",
-      "href": "https://market.example/odp/offerings/brass-task-lamp-9938",
-      "web_url": "https://market.example/listing/brass-task-lamp-9938"
+      "href": "/odp/offerings/brass-task-lamp-9938",
+      "web_url": "/listing/brass-task-lamp-9938"
     }
   ],
   "refinements": [
@@ -43,5 +43,5 @@
       ]
     }
   ],
-  "next": "https://market.example/odp/collections/home-office/offerings?cursor=b2ZmZXJpbmdzMg"
+  "next": "/odp/collections/home-office/offerings?cursor=b2ZmZXJpbmdzMg"
 }

@@ -16,6 +16,8 @@ author:
     email: nas@inflowpay.ai
 
 normative:
+  RFC3986:
+  RFC6454:
   RFC2119:
   RFC8174:
   RFC8259:
@@ -141,6 +143,22 @@ Filter Definition
   Filter definitions use short Service-local identifiers and can be embedded or linked and
   paginated.
 
+Service Origin
+: The canonical ASCII serialization of the origin from which the Service Document was retrieved. The
+  Service Origin identifies the Service.
+
+Local Resource Identifier
+: A Service-created and Service-managed string that identifies a Collection or Offering within one
+  resource-type namespace at that Service.
+
+Resource Identity
+: The tuple of Service Origin, resource type, and Local Resource Identifier. An Agent composes this
+  tuple; a Service emits the Local Resource Identifier in the resource representation.
+
+Resource Reference
+: An origin-relative absolute-path reference or an absolute URL that locates an ODP resource or a
+  browser representation. A Resource Reference does not define Resource Identity.
+
 Subsequent Operation
 : An operation linked from an ODP resource whose semantics can be defined by ODP, AEP, MPP, x402, or
   another protocol.
@@ -174,6 +192,86 @@ find Services by indexing public Service metadata. A directory can cache Service
 to its own refresh policy, but it is not authoritative for Service-owned catalog data.
 
 ODP conformance does not depend on the use, availability, or implementation of a directory.
+
+# Resource Identity and References
+
+## Service Identity
+
+The Service Origin identifies a Service. An Agent MUST derive it from the final Service Document
+response URL using the ASCII serialization algorithm in {{RFC6454}}. The canonical serialization
+MUST use a lowercase scheme and host, MUST omit the default port, and MUST contain no path, query,
+fragment, or user information.
+
+The Service Origin scheme MUST be `https`. For local development, `http` is permitted only when the
+host is syntactically exactly `localhost`, `127.0.0.1`, or `[::1]`. Resolving another host name to a
+loopback address does not qualify.
+
+A Service Document MUST NOT declare another value as the Service's identity. Control of the Service
+Origin is established through the origin and transport security rather than a self-asserted global
+identifier. Changing the Service Origin changes the Service identity.
+
+## Local Resource Identifiers
+
+Every Collection and Offering representation MUST contain `id`, a Local Resource Identifier created
+and managed by the Service. ODP does not prescribe the Service's identifier-generation algorithm. A
+Service MAY use an existing database key, UUID, SKU, URI-shaped value, or another identifier that
+satisfies this section.
+
+A Local Resource Identifier MUST contain between 1 and 255 Unicode code points. It MUST NOT contain
+a control character or an unpaired surrogate. A Service MUST keep the identifier stable for the
+resource's lifetime and MUST NOT assign it to another resource in the same resource-type namespace.
+
+Collections and Offerings have separate identifier namespaces. The same Local Resource Identifier
+MAY identify one Collection and one Offering at a Service. It MUST NOT identify two Collections or
+two Offerings at that Service.
+
+Agents MUST treat a Local Resource Identifier as opaque. Comparison is exact and case-sensitive
+after JSON string decoding. Agents MUST NOT trim, case fold, Unicode-normalize, URL-decode, parse,
+or infer semantics from an identifier.
+
+## Complete Resource Identity
+
+The Resource Identity of a Collection or Offering is the tuple:
+
+~~~
+(Service Origin, resource type, Local Resource Identifier)
+~~~
+
+The resource type is `collection` or `offering`. Agent implementations SHOULD expose Resource
+Identity as a structured value. They SHOULD NOT create an externally visible concatenated form whose
+delimiters or escaping would constitute an additional identifier syntax.
+
+The Service is responsible for the Local Resource Identifier. The Agent is responsible for
+associating it with the Service Origin and resource type established by the representation context.
+The Service does not need to serialize the complete tuple in each representation.
+
+An Agent MUST compare all three tuple members when determining whether two representations identify
+the same resource. A Resource Reference, response URL, name, schema, or attribute change does not by
+itself change Resource Identity.
+
+## Resource References
+
+Fields defined as Resource References, including `href` and `web_url`, MUST contain one of:
+
+* an origin-relative absolute-path reference beginning with exactly one `/`, resolved against the
+  Service Origin according to {{RFC3986}}; or
+* an absolute URL using the lowercase `https` scheme.
+
+For local development, an absolute URL MAY use the lowercase `http` scheme only with a host
+syntactically equal to `localhost`, `127.0.0.1`, or `[::1]`. Path-relative references,
+parent-relative references, scheme-relative references, fragments, and user information are
+prohibited.
+
+A same-origin reference SHOULD use the origin-relative form. A cross-origin reference MUST use an
+absolute URL. Non-ASCII URL components MUST be percent-encoded before serialization.
+
+An Agent MUST resolve an origin-relative Resource Reference against the Service Origin, not against
+the path of the representation containing it. This rule makes `/odp/offerings/123` resolve to the
+same URL whether it appears in a Service Document, Collection, search result, or Offering.
+
+Following a cross-origin reference does not change the Service Origin or Resource Identity of the
+referring ODP resource. An Agent MUST apply origin and credential policy independently to the
+resolved target as required by the Security Considerations.
 
 # Discovery Architecture
 

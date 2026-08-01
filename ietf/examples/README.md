@@ -10,9 +10,10 @@ Each Offering uses a compact protocol envelope and a Service-defined `attributes
 structured data through types, constraints, titles, descriptions, and examples. The Service owns
 those property names and definitions.
 
-`href` identifies the machine-facing ODP resource. Optional `web_url` gives a person a
-browser-facing page. `actions` links to subsequent operations without making enrollment, payment,
-checkout, or fulfillment part of ODP.
+Each Collection and Offering uses a Service-created local `id`. An Agent combines that value with
+the Service origin and resource type; the URL is not the resource identity. Same-origin `href` and
+`web_url` values use origin-relative absolute paths. `actions` links to subsequent operations
+without making enrollment, payment, checkout, or fulfillment part of ODP.
 
 Schema annotations such as `x-odp-unit` and `x-odp-comparison` are exploratory presentation and
 comparison hints. They do not identify protocol-owned compute, flight, retail, or digital terms.

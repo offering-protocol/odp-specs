@@ -1,6 +1,5 @@
 {
   "odp_version": "0.1",
-  "id": "https://market.example",
   "name": "Market Example",
   "description": "A marketplace with millions of independent listings across a large taxonomy.",
   "keywords": [
@@ -12,16 +11,16 @@
   "links": [
     {
       "rel": "collections",
-      "href": "https://market.example/odp/collections"
+      "href": "/odp/collections"
     },
     {
       "rel": "search-collections",
-      "href": "https://market.example/odp/collections/search",
+      "href": "/odp/collections/search",
       "method": "POST"
     },
     {
       "rel": "search-offerings",
-      "href": "https://market.example/odp/offerings/search",
+      "href": "/odp/offerings/search",
       "method": "POST"
     }
   ],

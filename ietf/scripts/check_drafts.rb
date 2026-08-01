@@ -12,6 +12,7 @@ required_sections = [
   "# Non-Goals",
   "# Terminology",
   "# Roles",
+  "# Resource Identity and References",
   "# Discovery Architecture",
   "# Extensibility Model",
   "# Composition Boundaries",

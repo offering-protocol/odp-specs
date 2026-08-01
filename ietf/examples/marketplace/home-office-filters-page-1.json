@@ -23,5 +23,5 @@
       "sortable": false
     }
   ],
-  "next": "https://market.example/odp/collections/home-office/filters?limit=2&cursor=cGFnZTI"
+  "next": "/odp/collections/home-office/filters?limit=2&cursor=cGFnZTI"
 }

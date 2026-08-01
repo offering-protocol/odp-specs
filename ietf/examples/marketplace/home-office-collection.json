@@ -1,16 +1,16 @@
 {
   "odp_version": "0.1",
-  "id": "https://market.example/collections/home-office",
+  "id": "home-office",
   "name": "Home office",
   "description": "Furniture, lighting, and accessories for home workspaces.",
-  "href": "https://market.example/odp/collections/home-office",
-  "web_url": "https://market.example/c/home-office",
+  "href": "/odp/collections/home-office",
+  "web_url": "/c/home-office",
   "offerings": {
-    "href": "https://market.example/odp/collections/home-office/offerings"
+    "href": "/odp/collections/home-office/offerings"
   },
   "filter_capabilities": {
     "linked": {
-      "href": "https://market.example/odp/collections/home-office/filters?limit=2",
+      "href": "/odp/collections/home-office/filters?limit=2",
       "paginated": true
     }
   }

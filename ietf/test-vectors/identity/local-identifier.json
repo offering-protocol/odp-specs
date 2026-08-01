@@ -1,0 +1,47 @@
+{
+  "id": "local-identifier",
+  "title": "Service-managed local resource identifiers",
+  "description": "Local identifiers are bounded opaque JSON strings selected by the Service.",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "identity",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "profile": "core-identity",
+  "subject": "local-identifier",
+  "cases": [
+    {
+      "name": "service-database-key",
+      "value": "4821",
+      "valid": true
+    },
+    {
+      "name": "service-structured-value-remains-opaque",
+      "value": "gid://catalog/Offering/4821",
+      "valid": true
+    },
+    {
+      "name": "unicode-identifier",
+      "value": "商品-東京-42",
+      "valid": true
+    },
+    {
+      "name": "empty-identifier",
+      "value": "",
+      "valid": false
+    },
+    {
+      "name": "control-character",
+      "value": "offering\n42",
+      "valid": false
+    },
+    {
+      "name": "identifier-over-255-code-points",
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "valid": false
+    }
+  ]
+}

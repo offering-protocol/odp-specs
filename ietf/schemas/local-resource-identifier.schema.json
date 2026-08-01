@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://offeringprotocol.org/schemas/local-resource-identifier.schema.json",
+  "title": "ODP local resource identifier",
+  "description": "A Service-created identifier scoped by Service origin and resource type.",
+  "type": "string",
+  "minLength": 1,
+  "maxLength": 255,
+  "pattern": "^[^\\u0000-\\u001F\\u007F-\\u009F]+$"
+}
