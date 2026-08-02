@@ -120,6 +120,10 @@ Stable support resources are published at:
 - `https://offeringprotocol.org/examples/` for descriptive examples; and
 - `https://offeringprotocol.org/problems/` for Problem Details type documentation.
 
+The specification website is deployed from the committed `docs/` tree to
+[`www.offeringprotocol.org`](https://www.offeringprotocol.org/). Pull requests verify generated site
+artifacts before the deployment workflow publishes `main`.
+
 ## Reference Implementations
 
 Official implementations are maintained by the
