@@ -7,9 +7,9 @@ MARKDOWN_FILES := $(shell find .. -type f -name '*.md' \
 	-not -path '../ietf/.venv/*' | sort)
 DRAFTS := $(shell find specs -type f -name 'draft-*.md' | sort)
 
-.PHONY: check check-actions check-attribute-schemas check-collection-search check-collections check-composition check-drafts check-error-limits check-filters-sorting check-formatter check-format check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-service-document check-versioning format generate-marketplace-scale
+.PHONY: check check-actions check-attribute-schemas check-collection-search check-collections check-composition check-drafts check-error-limits check-filters-sorting check-formatter check-format check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning format generate-marketplace-scale
 
-check: check-drafts check-formatter check-format check-json check-actions check-attribute-schemas check-collection-search check-collections check-composition check-error-limits check-examples check-filters-sorting check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-service-document check-versioning
+check: check-drafts check-formatter check-format check-json check-actions check-attribute-schemas check-collection-search check-collections check-composition check-error-limits check-examples check-filters-sorting check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning
 
 check-actions:
 	$(RUBY) scripts/check_action_vectors.rb
@@ -70,6 +70,9 @@ check-representations:
 
 check-search-capabilities:
 	$(RUBY) scripts/check_search_capability_vectors.rb
+
+check-security:
+	$(RUBY) scripts/check_security_vectors.rb
 
 check-service-document:
 	$(RUBY) scripts/check_service_document.rb

@@ -22,6 +22,7 @@ normative:
   RFC6454:
   RFC6838:
   RFC6839:
+  RFC6890:
   RFC6901:
   RFC2119:
   RFC8174:
@@ -1529,27 +1530,116 @@ Related information
 
 # Security Considerations
 
-ODP representations are untrusted network input. Implementations MUST enforce response-size,
-nesting-depth, pagination, redirect, and request-time limits appropriate to their environment.
-Implementations MUST validate representations before acting on links or Service-defined data.
+## Untrusted Content and Agent Control
 
-An Agent MUST apply origin and credential policy independently to every followed link. It MUST NOT
-forward credentials, enrollment artifacts, payment proofs, or other secrets to a different origin
-solely because an ODP representation links to that origin.
+Every ODP representation, string, schema, OpenAPI document, URL, cursor, and Action is untrusted
+network input. An Agent MUST validate a representation before using its Service-defined data or
+following its references. Names, descriptions, keywords, schema annotations, examples, and other
+human-readable content are data; they MUST NOT supersede caller intent, implementation policy,
+protocol requirements, or higher-priority Agent instructions.
 
-Service-defined schemas and text can attempt to influence an Agent's behavior. An Agent MUST treat
-them as data, not as instructions that supersede user intent, implementation policy, or protocol
-requirements.
+An implementation MUST safely encode untrusted strings for its output context. It MUST NOT interpret
+terminal control sequences, markup, code fragments, schema keywords, OpenAPI extensions, or media
+type parameters as executable instructions. JSON Schema formats and regular expressions can consume
+unbounded computation in some engines. Agents MUST apply documented time, memory, recursion, and
+evaluation limits and MUST NOT load executable code to process a schema or OpenAPI extension.
 
-Cached discovery metadata can become stale. An Agent MUST treat the Service as authoritative and
-MUST honor the Service's live responses, authentication challenges, payment challenges, and current
-resource state.
+## Network Request and SSRF Protection
+
+Resource References can identify a different origin only through an explicit absolute HTTPS URL.
+Cross-origin support does not grant unrestricted network access. Before each connection, an Agent
+MUST resolve the target host and reject every destination address that is loopback, private-use,
+link-local, multicast, unspecified, reserved, documentation-only, or otherwise non-public according
+to the IANA special-purpose address registries described by {{RFC6890}}. If a resolution returns
+both public and non-public addresses, the Agent MUST reject the target rather than select one
+result.
+
+The Agent MUST verify that the connected peer address is one of the public addresses it validated
+for that request. It MUST repeat resolution and validation for every new connection, retry, and
+redirect to prevent DNS rebinding and time-of-check/time-of-use substitution. The same policy
+applies when a proxy or custom resolver performs the connection; an implementation MUST NOT use
+either to bypass destination policy.
+
+The local-development HTTP exception applies only when local development is explicitly enabled and
+the URL host is syntactically `localhost`, `127.0.0.1`, or `[::1]`. A DNS name that resolves to a
+loopback or other non-public address does not qualify. Production defaults MUST keep local-network
+access disabled. Implementations MAY impose stricter port, domain, origin, network, or enterprise
+egress allowlists.
+
+Every redirect remains limited to the preceding request's origin. A cross-origin Resource Reference
+can initiate an independently validated request to its explicit origin, but neither a redirect nor a
+DNS change can transfer that request to another origin or a non-public destination.
+
+## Credential and Payment Isolation
+
+An Agent applies origin and credential policy independently to every request. Retrieval of a JSON
+Schema, OpenAPI document, or other supporting metadata is anonymous. Such a request MUST NOT contain
+cookies, AEP credentials, payment credentials, caller authorization fields, or secrets copied from
+the referring request.
+
+An Agent MUST NOT copy a credential, enrollment artifact, payment proof, cookie, or authorization
+field to another origin solely because an ODP representation links there. A cross-origin Action
+begins without credentials belonging to the Offering Service. Credentials for the Action target can
+be obtained or sent only under the target origin's applicable protocol and live challenge rules.
+Redirect processing strips all sensitive fields before any separately authorized request begins.
+
+An advertised protocol, Price Preview, Action relation, schema annotation, or OpenAPI security
+declaration is not authorization to enroll, authenticate, or pay. A live challenge remains
+authoritative for protocol mechanics but does not override caller approval, spend limits, accepted
+assets, destination policy, or other payment policy. An Agent MUST present a changed authoritative
+amount or settlement choice to its policy layer rather than silently relying on discovery metadata.
+
+## Action Safety
+
+Discovering, parsing, validating, or resolving an Action MUST NOT invoke its target. An Agent
+invokes an Action only after a caller explicitly selects its `id` and supplies or approves the
+required inputs. Unknown relations are never selected automatically. Implementations MUST NOT
+prefetch an Action target as an optimization; retrieving a separately identified request schema or
+OpenAPI document does not invoke the Action.
+
+Services MUST implement a compact `GET` Action with safe HTTP semantics as defined by {{RFC9110}}.
+An Agent MUST NOT automatically retry a state-changing Action after an ambiguous outcome unless the
+operation defines an applicable idempotency mechanism and the retry preserves it. AEP, MPP, and x402
+challenge-response retries remain governed by their defining protocols and the exact request
+binding.
+
+## Resource Exhaustion and Abuse
+
+Implementations MUST enforce the decoded-size, nesting-depth, schema-graph, page, redirect, retry,
+and elapsed-time limits in this document before exposing a result. Compression does not increase a
+limit. A receiver fails closed when a complete document cannot be obtained within its bounds and
+never treats a truncated document as valid.
+
+Agents MUST bound concurrent Service, page, schema, OpenAPI, and Action-related work. Cursors and
+Service-defined identifiers are untrusted and provide no authorization. Services SHOULD apply
+request-rate, query-complexity, and concurrency controls without exposing private catalog existence
+through distinguishable errors.
+
+## Cache Poisoning and Staleness
+
+An Agent MUST honor `Cache-Control`, `Vary`, validators, authorization context, and the cache rules
+in this document. Cache entries are scoped by the effective request URL, method, representation and
+localization inputs, and authentication context required by HTTP. A response obtained in an
+authenticated or private context MUST NOT be reused as a public response. Validators from one URL or
+origin MUST NOT validate a representation from another.
+
+Cached discovery metadata, schemas, and OpenAPI documents can become stale or maliciously
+inconsistent. They never authorize access, payment, or Action execution. Live responses and current
+resource state remain authoritative, and a contradiction triggers narrow failure or revalidation
+rather than merging fields from conflicting representations.
 
 # Privacy Considerations
 
 Discovery requests can reveal user interests, intended purchases, location constraints, or business
 plans. Agents SHOULD minimize disclosed query data and avoid sending user-specific context that is
 not needed for the operation.
+
+Cross-origin schema and OpenAPI retrieval discloses the Agent's network address, timing, and
+interest in the referring Service or Offering to another operator. Agents SHOULD retrieve only
+supporting resources needed for the caller's operation, avoid eager resolution of every advertised
+Action, and apply privacy-preserving network policy where appropriate. Sensitive values MUST NOT be
+placed in Resource Reference query strings, logs, telemetry, cache keys visible to unrelated
+tenants, or Problem Details intended for another party.
 
 Services SHOULD minimize data returned in Terse Representations and apply access controls before
 returning sensitive Offering attributes. Directories SHOULD limit indexed data to public Service

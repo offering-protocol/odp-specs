@@ -19,5 +19,6 @@ access composition, and compatibility. Implementations publish the profiles and 
 | [`pagination`](./pagination/)               | Page envelopes, continuation links, limits, ordering, lifetime, and conditional retrieval.   |
 | [`refinements`](./refinements/)             | Opt-in filter references, contextual counts, response bounds, and continuation behavior.     |
 | [`representation`](./representation/)       | Operation defaults, overrides, and exhaustive Detail Fields.                                 |
+| [`security`](./security/)                   | Destination, credential, Action, payment, cache, and SSRF protections.                       |
 | [`service-document`](./service-document/)   | Well-known metadata, localization, operation advertisement, and endpoint-base validation.    |
 | [`versioning`](./versioning/)               | Protocol versions, top-level placement, media negotiation, and compatibility.                |
