@@ -1,0 +1,46 @@
+{
+  "odp_version": "1.0",
+  "id": "agent-safety-handbook-2",
+  "name": "Agent Safety Handbook",
+  "description": "A free handbook covering bounded network access and credential handling for autonomous agents.",
+  "web_url": "/handbooks/agent-safety",
+  "price": {
+    "type": "free"
+  },
+  "schema": {
+    "url": "https://downloads.example/schemas/digital-artifact-2.json"
+  },
+  "attributes": {
+    "version": "2.1.0",
+    "license": "CC-BY-4.0",
+    "languages": [
+      "en"
+    ],
+    "files": [
+      {
+        "media_type": "application/pdf",
+        "byte_size": 2487310,
+        "sha256": "4a44dc15364204a80fe80e9039455cc1608281820fe2b24a4407e5c2250b079d"
+      },
+      {
+        "media_type": "text/markdown",
+        "byte_size": 184220,
+        "sha256": "f5ca38f748a1d6e4af726b8a42fb575c3c71b5f0b7d1f4e6f5e5d8b7e3c9a101"
+      }
+    ]
+  },
+  "actions": [
+    {
+      "id": "download-pdf",
+      "rel": "download",
+      "description": "Download the PDF representation without enrollment or payment.",
+      "http": {
+        "href": "/artifacts/agent-safety-handbook-2.1.0.pdf",
+        "method": "GET",
+        "response_content_types": [
+          "application/pdf"
+        ]
+      }
+    }
+  ]
+}

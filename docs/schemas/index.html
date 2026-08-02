@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ODP JSON Schemas - Offering Discovery Protocol</title>
+    <style>
+      :root { color-scheme: light dark; --bg: #f8fafc; --fg: #172033; --muted: #5b6475; --panel: #fff; --border: #d7dce5; --link: #0b5cad; --code: #f1f5f9; }
+      @media (prefers-color-scheme: dark) { :root { --bg: #10141c; --fg: #eef2f8; --muted: #aeb7c8; --panel: #171d28; --border: #2d3545; --link: #8ab8ff; --code: #202735; } }
+      body { margin: 0; background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+      main { width: min(960px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 64px; }
+      h1 { margin: 0 0 8px; font-size: clamp(2rem, 6vw, 3.2rem); line-height: 1.05; }
+      h2 { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+      p { max-width: 780px; }
+      .intro, .back { color: var(--muted); }
+      .back { display: inline-block; margin-bottom: 24px; text-decoration: none; }
+      a { color: var(--link); }
+      table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); }
+      th, td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+      tbody tr:last-child td { border-bottom: none; }
+      th { color: var(--muted); font-size: 0.9rem; }
+      code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      pre { padding: 14px; overflow-x: auto; background: var(--code); border: 1px solid var(--border); }
+    </style>
+  </head>
+  <body>
+    <main id="top">
+      <h1>ODP JSON Schemas</h1>
+      <p class="intro">JSON Schemas for stable Offering Discovery Protocol wire objects. The Internet-Draft prose remains authoritative.</p>
+      <table><thead><tr><th>Schema</th><th>Title</th></tr></thead><tbody><tr><td><a href="action-relation.schema.json"><code>action-relation.schema.json</code></a></td><td>ODP Action relation</td></tr>
+<tr><td><a href="action-request.schema.json"><code>action-request.schema.json</code></a></td><td>ODP compact Action request body</td></tr>
+<tr><td><a href="action.schema.json"><code>action.schema.json</code></a></td><td>ODP Offering Action</td></tr>
+<tr><td><a href="attribute-schema-reference.schema.json"><code>attribute-schema-reference.schema.json</code></a></td><td>ODP Attribute Schema reference</td></tr>
+<tr><td><a href="capability-identifier.schema.json"><code>capability-identifier.schema.json</code></a></td><td>ODP Service-local capability identifier</td></tr>
+<tr><td><a href="capability-link.schema.json"><code>capability-link.schema.json</code></a></td><td>ODP linked capability source</td></tr>
+<tr><td><a href="collection-search-request.schema.json"><code>collection-search-request.schema.json</code></a></td><td>ODP Collection search request</td></tr>
+<tr><td><a href="collection.schema.json"><code>collection.schema.json</code></a></td><td>ODP Full Collection Representation</td></tr>
+<tr><td><a href="detail-fields.schema.json"><code>detail-fields.schema.json</code></a></td><td>ODP detail fields</td></tr>
+<tr><td><a href="filter-capability-source.schema.json"><code>filter-capability-source.schema.json</code></a></td><td>ODP Filter Definition source</td></tr>
+<tr><td><a href="filter-definition-page.schema.json"><code>filter-definition-page.schema.json</code></a></td><td>ODP Filter Definition page</td></tr>
+<tr><td><a href="filter-definition.schema.json"><code>filter-definition.schema.json</code></a></td><td>ODP Filter Definition</td></tr>
+<tr><td><a href="filter-expression.schema.json"><code>filter-expression.schema.json</code></a></td><td>ODP Filter Expression</td></tr>
+<tr><td><a href="filter-operator.schema.json"><code>filter-operator.schema.json</code></a></td><td>ODP filter operator</td></tr>
+<tr><td><a href="filter-type.schema.json"><code>filter-type.schema.json</code></a></td><td>ODP filter value type</td></tr>
+<tr><td><a href="filter-unit.schema.json"><code>filter-unit.schema.json</code></a></td><td>ODP filter unit</td></tr>
+<tr><td><a href="http-action-target.schema.json"><code>http-action-target.schema.json</code></a></td><td>ODP compact HTTP Action target</td></tr>
+<tr><td><a href="invalid-parameter.schema.json"><code>invalid-parameter.schema.json</code></a></td><td>ODP invalid parameter</td></tr>
+<tr><td><a href="local-resource-identifier-list.schema.json"><code>local-resource-identifier-list.schema.json</code></a></td><td>ODP local resource identifier list</td></tr>
+<tr><td><a href="local-resource-identifier.schema.json"><code>local-resource-identifier.schema.json</code></a></td><td>ODP local resource identifier</td></tr>
+<tr><td><a href="offering-search-request.schema.json"><code>offering-search-request.schema.json</code></a></td><td>ODP Offering search request</td></tr>
+<tr><td><a href="offering-search-response.schema.json"><code>offering-search-response.schema.json</code></a></td><td>ODP Offering search response</td></tr>
+<tr><td><a href="offering.schema.json"><code>offering.schema.json</code></a></td><td>ODP Full Offering Representation</td></tr>
+<tr><td><a href="openapi-action-target.schema.json"><code>openapi-action-target.schema.json</code></a></td><td>ODP OpenAPI Action target</td></tr>
+<tr><td><a href="page-envelope.schema.json"><code>page-envelope.schema.json</code></a></td><td>ODP page envelope</td></tr>
+<tr><td><a href="page-limit.schema.json"><code>page-limit.schema.json</code></a></td><td>ODP requested page limit</td></tr>
+<tr><td><a href="price-preview.schema.json"><code>price-preview.schema.json</code></a></td><td>ODP Price Preview</td></tr>
+<tr><td><a href="problem-code.schema.json"><code>problem-code.schema.json</code></a></td><td>ODP problem code</td></tr>
+<tr><td><a href="problem-details.schema.json"><code>problem-details.schema.json</code></a></td><td>ODP Problem Details</td></tr>
+<tr><td><a href="protocol-version.schema.json"><code>protocol-version.schema.json</code></a></td><td>ODP protocol version</td></tr>
+<tr><td><a href="refinement-bucket.schema.json"><code>refinement-bucket.schema.json</code></a></td><td>ODP Refinement Bucket</td></tr>
+<tr><td><a href="refinement-group.schema.json"><code>refinement-group.schema.json</code></a></td><td>ODP Refinement Group</td></tr>
+<tr><td><a href="representation.schema.json"><code>representation.schema.json</code></a></td><td>ODP representation selection</td></tr>
+<tr><td><a href="resource-identity.schema.json"><code>resource-identity.schema.json</code></a></td><td>ODP resource identity</td></tr>
+<tr><td><a href="resource-reference.schema.json"><code>resource-reference.schema.json</code></a></td><td>ODP resource reference</td></tr>
+<tr><td><a href="schema-reference.schema.json"><code>schema-reference.schema.json</code></a></td><td>ODP JSON Schema reference</td></tr>
+<tr><td><a href="search-capabilities.schema.json"><code>search-capabilities.schema.json</code></a></td><td>ODP search capability advertisement</td></tr>
+<tr><td><a href="service-document.schema.json"><code>service-document.schema.json</code></a></td><td>ODP Service Document</td></tr>
+<tr><td><a href="service-origin.schema.json"><code>service-origin.schema.json</code></a></td><td>ODP Service origin</td></tr>
+<tr><td><a href="service-protocols.schema.json"><code>service-protocols.schema.json</code></a></td><td>ODP Service protocol support</td></tr>
+<tr><td><a href="sort-capability-source.schema.json"><code>sort-capability-source.schema.json</code></a></td><td>ODP Sort Definition source</td></tr>
+<tr><td><a href="sort-definition-page.schema.json"><code>sort-definition-page.schema.json</code></a></td><td>ODP Sort Definition page</td></tr>
+<tr><td><a href="sort-definition.schema.json"><code>sort-definition.schema.json</code></a></td><td>ODP Sort Definition</td></tr>
+<tr><td><a href="sort-key.schema.json"><code>sort-key.schema.json</code></a></td><td>ODP Sort Key</td></tr>
+<tr><td><a href="top-level-document.schema.json"><code>top-level-document.schema.json</code></a></td><td>ODP top-level document</td></tr></tbody></table>
+    </main>
+  </body>
+</html>

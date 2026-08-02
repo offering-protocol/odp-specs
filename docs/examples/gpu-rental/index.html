@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GPU Rental Example - Offering Discovery Protocol</title>
+    <style>
+      :root { color-scheme: light dark; --bg: #f8fafc; --fg: #172033; --muted: #5b6475; --panel: #fff; --border: #d7dce5; --link: #0b5cad; --code: #f1f5f9; }
+      @media (prefers-color-scheme: dark) { :root { --bg: #10141c; --fg: #eef2f8; --muted: #aeb7c8; --panel: #171d28; --border: #2d3545; --link: #8ab8ff; --code: #202735; } }
+      body { margin: 0; background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+      main { width: min(960px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 64px; }
+      h1 { margin: 0 0 8px; font-size: clamp(2rem, 6vw, 3.2rem); line-height: 1.05; }
+      h2 { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+      p { max-width: 780px; }
+      .intro, .back { color: var(--muted); }
+      .back { display: inline-block; margin-bottom: 24px; text-decoration: none; }
+      a { color: var(--link); }
+      table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); }
+      th, td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+      tbody tr:last-child td { border-bottom: none; }
+      th { color: var(--muted); font-size: 0.9rem; }
+      code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      pre { padding: 14px; overflow-x: auto; background: var(--code); border: 1px solid var(--border); }
+    </style>
+  </head>
+  <body>
+    <main id="top">
+      <h1>GPU Rental Example</h1>
+      <p class="intro">A descriptive, non-normative ODP example.</p>
+      <a class="back" href="../">All examples</a>
+<p>This example shows a metered online Service whose capacity and price must be confirmed before use.</p>
+
+<p><a href="./gpu-rental-offering.json">gpu-rental-offering.json</a> illustrates:</p>
+<ul><li>
+<p>structured accelerator manufacturer, model, count, memory, region, rental interval, and network data;</p>
+</li><li>
+<p>explicit units and numeric comparison hints in a Service-owned attributes schema;</p>
+</li><li>
+<p>a metered Price Preview for early comparison, without promising final capacity or settlement terms; and</p>
+</li><li>
+<p>a compact JSON <code>quote</code> action whose live AEP, MPP, or x402 challenges remain authoritative.</p>
+</li></ul>
+
+<p><a href="./gpu-rental-attributes.schema.json">gpu-rental-attributes.schema.json</a> explains the compute-specific structure. It does not create a normative ODP compute profile or require other GPU Services to use the same property names.</p>
+
+    </main>
+  </body>
+</html>

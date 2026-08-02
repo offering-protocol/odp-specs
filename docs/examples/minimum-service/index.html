@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Minimum Service Integration - Offering Discovery Protocol</title>
+    <style>
+      :root { color-scheme: light dark; --bg: #f8fafc; --fg: #172033; --muted: #5b6475; --panel: #fff; --border: #d7dce5; --link: #0b5cad; --code: #f1f5f9; }
+      @media (prefers-color-scheme: dark) { :root { --bg: #10141c; --fg: #eef2f8; --muted: #aeb7c8; --panel: #171d28; --border: #2d3545; --link: #8ab8ff; --code: #202735; } }
+      body { margin: 0; background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+      main { width: min(960px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 64px; }
+      h1 { margin: 0 0 8px; font-size: clamp(2rem, 6vw, 3.2rem); line-height: 1.05; }
+      h2 { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+      p { max-width: 780px; }
+      .intro, .back { color: var(--muted); }
+      .back { display: inline-block; margin-bottom: 24px; text-decoration: none; }
+      a { color: var(--link); }
+      table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); }
+      th, td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+      tbody tr:last-child td { border-bottom: none; }
+      th { color: var(--muted); font-size: 0.9rem; }
+      code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      pre { padding: 14px; overflow-x: auto; background: var(--code); border: 1px solid var(--border); }
+    </style>
+  </head>
+  <body>
+    <main id="top">
+      <h1>Minimum Service Integration</h1>
+      <p class="intro">A descriptive, non-normative ODP example.</p>
+      <a class="back" href="../">All examples</a>
+<p>This example shows the complete catalog surface required for ODP Service conformance. It does not use Collections, search, prices, attributes, schemas, Actions, onboarding, or payments.</p>
+
+<p><a href="./minimum-service.json">minimum-service.json</a> publishes the public Service Document and advertises the two required operations. <a href="./offerings-page.json">offerings-page.json</a> is the first and final <code>list-offerings</code> page. <a href="./consultation-offering.json">consultation-offering.json</a> is the Full Offering returned by <code>get-offering</code>.</p>
+
+<p>The corresponding requests are:</p>
+
+<pre>GET /.well-known/odp
+GET /odp/offerings
+GET /odp/offerings/consultation</pre>
+
+<p>An integration can add optional operations and per-resource features independently. The minimum integration is the required Service role baseline, not a separately advertised capability or profile.</p>
+
+    </main>
+  </body>
+</html>

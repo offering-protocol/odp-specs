@@ -1,0 +1,74 @@
+{
+  "odp_version": "1.0",
+  "items": [
+    {
+      "id": "walnut-standing-desk-4821",
+      "name": "Handmade walnut standing desk",
+      "description": "Height-adjustable desk made to order by a verified workshop.",
+      "web_url": "/listing/walnut-standing-desk-4821",
+      "collection_ids": [
+        "home-office"
+      ],
+      "price": {
+        "type": "starting_at",
+        "amount": "1450.00",
+        "currency": "USD"
+      },
+      "schema": {
+        "url": "https://market.example/schemas/home-office-furniture-7.json"
+      },
+      "attributes": {
+        "category": "desk",
+        "materials": [
+          "walnut",
+          "steel"
+        ],
+        "made_to_order": true
+      },
+      "detail_fields": [
+        "/actions",
+        "/attributes/dimensions",
+        "/attributes/processing_days"
+      ]
+    },
+    {
+      "id": "brass-task-lamp-9938",
+      "name": "Restored brass task lamp",
+      "description": "A rewired vintage desk lamp with an adjustable arm.",
+      "web_url": "/listing/brass-task-lamp-9938",
+      "collection_ids": [
+        "home-office"
+      ]
+    }
+  ],
+  "refinements": [
+    {
+      "filter_id": "material",
+      "values": [
+        {
+          "value": "wood",
+          "count": 18420
+        },
+        {
+          "value": "metal",
+          "count": 12681,
+          "count_relation": "lower_bound"
+        }
+      ]
+    },
+    {
+      "filter_id": "made_to_order",
+      "values": [
+        {
+          "value": true,
+          "count": 9372
+        },
+        {
+          "value": false,
+          "count": 27811
+        }
+      ]
+    }
+  ],
+  "next": "/odp/collections/home-office/offerings?cursor=b2ZmZXJpbmdzMg"
+}

@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://software.example/schemas/team-subscription-4.json",
+  "title": "Digital subscription attributes",
+  "description": "Service-defined attributes for a recurring collaborative software plan.",
+  "type": "object",
+  "required": [
+    "billing_term",
+    "renews_automatically",
+    "cancellation_timing",
+    "seat_limits",
+    "features"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "billing_term": {
+      "type": "string",
+      "title": "Billing term",
+      "description": "ISO 8601 duration covered by the Price Preview.",
+      "pattern": "^P(?=\\d|T\\d)(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+    },
+    "renews_automatically": {
+      "type": "boolean",
+      "title": "Automatic renewal"
+    },
+    "cancellation_timing": {
+      "type": "string",
+      "title": "Cancellation timing",
+      "enum": [
+        "immediate",
+        "end_of_term"
+      ]
+    },
+    "seat_limits": {
+      "$ref": "#/$defs/seat_limits"
+    },
+    "features": {
+      "$ref": "#/$defs/features"
+    }
+  },
+  "$defs": {
+    "seat_limits": {
+      "type": "object",
+      "title": "Seat limits",
+      "required": [
+        "minimum",
+        "maximum"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "minimum": {
+          "type": "integer",
+          "minimum": 1,
+          "title": "Minimum seats",
+          "x-odp-comparison": "numeric"
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 1,
+          "title": "Maximum seats",
+          "x-odp-comparison": "numeric"
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "title": "Plan features",
+      "required": [
+        "shared_workspaces",
+        "version_history_days",
+        "support_level"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "shared_workspaces": {
+          "type": "boolean",
+          "title": "Shared workspaces"
+        },
+        "version_history_days": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "Version history retention",
+          "x-odp-unit": {
+            "code": "d"
+          },
+          "x-odp-comparison": "numeric"
+        },
+        "support_level": {
+          "type": "string",
+          "title": "Support level",
+          "enum": [
+            "standard",
+            "priority"
+          ]
+        }
+      }
+    }
+  }
+}

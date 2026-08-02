@@ -1,0 +1,16 @@
+{
+  "odp_version": "1.0",
+  "items": [
+    {
+      "id": "home-office",
+      "name": "Home office",
+      "detail_fields": [
+        "/description",
+        "/language",
+        "/localizations",
+        "/search_capabilities",
+        "/web_url"
+      ]
+    }
+  ]
+}

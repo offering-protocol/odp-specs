@@ -7,6 +7,10 @@ Schemas validate the contract described by normative prose. A schema cannot add 
 from the specification or relax one the specification requires. Published copies are generated and
 checked for drift.
 
+Run `make -C ietf render-schemas` from the repository root to regenerate `docs/schemas/`. The full
+repository check rejects a missing schema, an unexpected published file, a byte difference, a
+missing title, or a `$id` that does not equal its canonical published URL.
+
 | Schema                                                                                       | Contract                                              |
 | -------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | [`action-relation.schema.json`](./action-relation.schema.json)                               | Action semantic relation identifier.                  |

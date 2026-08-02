@@ -1,0 +1,39 @@
+{
+  "odp_version": "1.0",
+  "name": "Market Example",
+  "description": "A marketplace with millions of independent listings across a large taxonomy.",
+  "language": "en",
+  "localizations": [
+    "en",
+    "ja"
+  ],
+  "keywords": [
+    "marketplace",
+    "handmade",
+    "vintage",
+    "retail"
+  ],
+  "protocols": {
+    "onboarding": [
+      "aep"
+    ],
+    "payments": [
+      "mpp",
+      "x402"
+    ]
+  },
+  "operations": {
+    "supported": [
+      "list-offerings",
+      "get-offering",
+      "list-collections",
+      "search-collections",
+      "get-collection",
+      "list-collection-offerings",
+      "search-offerings"
+    ]
+  },
+  "http": {
+    "endpoint_base": "/odp/"
+  }
+}

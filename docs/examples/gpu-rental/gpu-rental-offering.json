@@ -1,0 +1,50 @@
+{
+  "odp_version": "1.0",
+  "id": "a100-80gb-us-west",
+  "name": "Dedicated NVIDIA A100 80 GB rental",
+  "description": "One dedicated A100 accelerator in the us-west-2 region, rented in one-minute increments.",
+  "web_url": "/gpu/a100-80gb-us-west",
+  "price": {
+    "type": "metered",
+    "amount": "2.40",
+    "currency": "USD",
+    "unit": "gpu-hour"
+  },
+  "schema": {
+    "url": "https://compute.example/schemas/gpu-rental-1.json"
+  },
+  "attributes": {
+    "accelerator": {
+      "manufacturer": "NVIDIA",
+      "model": "A100",
+      "count": 1,
+      "memory_per_device_gib": 80
+    },
+    "region": "us-west-2",
+    "rental": {
+      "minimum_duration_seconds": 600,
+      "billing_increment_seconds": 60
+    },
+    "network_egress_gbps": 25
+  },
+  "actions": [
+    {
+      "id": "request-quote",
+      "rel": "quote",
+      "description": "Request current capacity and price for a requested rental interval.",
+      "http": {
+        "href": "/quotes",
+        "method": "POST",
+        "request": {
+          "content_type": "application/json",
+          "schema": {
+            "url": "https://compute.example/schemas/gpu-quote-request-1.json"
+          }
+        },
+        "response_content_types": [
+          "application/json"
+        ]
+      }
+    }
+  ]
+}

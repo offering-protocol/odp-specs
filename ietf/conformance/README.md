@@ -23,6 +23,10 @@ language-neutral report format are defined with the vector index. The generated 
 [`report.schema.json`](./report.schema.json); it contains no capability manifest or runtime support
 advertisement.
 
+Run `make -C ietf render-schemas` from the repository root to publish the conformance schemas at
+their canonical `/conformance/` URLs together with the protocol wire schemas. Publication drift is
+part of the full repository check.
+
 ## Adapter Contract
 
 The harness owns vector discovery, role and suite selection, adapter orchestration, aggregation, and

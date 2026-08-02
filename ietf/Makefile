@@ -3,13 +3,14 @@ OUTPUT ?= /tmp/odp-marketplace-scale
 MARKDOWN_FILES := $(shell find .. -type f -name '*.md' \
 	-not -path '../.git/*' \
 	-not -path '../artifacts/*' \
+	-not -path '../docs/*' \
 	-not -path '../ietf/vendor/*' \
 	-not -path '../ietf/.venv/*' | sort)
 DRAFTS := $(shell find specs -type f -name 'draft-*.md' | sort)
 
-.PHONY: check check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-drafts check-error-limits check-filters-sorting check-formatter check-format check-harness check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning format generate-marketplace-scale
+.PHONY: check check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-drafts check-error-limits check-filters-sorting check-formatter check-format check-harness check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning format generate-marketplace-scale render-examples render-problems render-schemas render-support
 
-check: check-drafts check-formatter check-format check-json check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-error-limits check-examples check-filters-sorting check-harness check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning
+check: check-drafts check-formatter check-format check-json check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-error-limits check-examples check-filters-sorting check-harness check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning
 
 check-actions:
 	$(RUBY) scripts/check_action_vectors.rb
@@ -68,6 +69,9 @@ check-offerings:
 check-pagination:
 	$(RUBY) scripts/check_pagination_vectors.rb
 
+check-published-support:
+	$(RUBY) scripts/publish_support_artifacts.rb --check
+
 check-refinements:
 	$(RUBY) scripts/check_refinement_vectors.rb
 
@@ -91,3 +95,16 @@ generate-marketplace-scale:
 
 format:
 	$(RUBY) scripts/format_markdown.rb $(MARKDOWN_FILES)
+
+render-examples:
+	$(RUBY) scripts/publish_support_artifacts.rb examples
+
+render-problems:
+	$(RUBY) scripts/publish_support_artifacts.rb problems
+
+render-schemas:
+	$(RUBY) scripts/publish_support_artifacts.rb conformance
+	$(RUBY) scripts/publish_support_artifacts.rb schemas
+
+render-support:
+	$(RUBY) scripts/publish_support_artifacts.rb

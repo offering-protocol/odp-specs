@@ -110,8 +110,16 @@ Format Markdown tables and wrap prose to 100 columns:
 make -C ietf format
 ```
 
-The IETF workspace also provides rendering, formatting, schema publication, conformance, and idnits
-targets as described in [`ietf/README.md`](./ietf/README.md).
+The IETF workspace provides formatting, support-artifact publication, conformance, and drift checks
+as described in [`ietf/README.md`](./ietf/README.md). Draft rendering and idnits tooling are
+established separately.
+
+Stable support resources are published at:
+
+- `https://offeringprotocol.org/schemas/` for protocol wire schemas;
+- `https://offeringprotocol.org/conformance/` for offline harness schemas;
+- `https://offeringprotocol.org/examples/` for descriptive examples; and
+- `https://offeringprotocol.org/problems/` for Problem Details type documentation.
 
 ## Reference Implementations
 

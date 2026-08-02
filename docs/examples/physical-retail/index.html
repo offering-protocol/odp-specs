@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Physical Retail Example - Offering Discovery Protocol</title>
+    <style>
+      :root { color-scheme: light dark; --bg: #f8fafc; --fg: #172033; --muted: #5b6475; --panel: #fff; --border: #d7dce5; --link: #0b5cad; --code: #f1f5f9; }
+      @media (prefers-color-scheme: dark) { :root { --bg: #10141c; --fg: #eef2f8; --muted: #aeb7c8; --panel: #171d28; --border: #2d3545; --link: #8ab8ff; --code: #202735; } }
+      body { margin: 0; background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+      main { width: min(960px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 64px; }
+      h1 { margin: 0 0 8px; font-size: clamp(2rem, 6vw, 3.2rem); line-height: 1.05; }
+      h2 { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+      p { max-width: 780px; }
+      .intro, .back { color: var(--muted); }
+      .back { display: inline-block; margin-bottom: 24px; text-decoration: none; }
+      a { color: var(--link); }
+      table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); }
+      th, td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+      tbody tr:last-child td { border-bottom: none; }
+      th { color: var(--muted); font-size: 0.9rem; }
+      code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      pre { padding: 14px; overflow-x: auto; background: var(--code); border: 1px solid var(--border); }
+    </style>
+  </head>
+  <body>
+    <main id="top">
+      <h1>Physical Retail Example</h1>
+      <p class="intro">A descriptive, non-normative ODP example.</p>
+      <a class="back" href="../">All examples</a>
+<p>This example shows how a retailer can describe a physical good without turning ODP into an order, tax, inventory, or fulfillment protocol.</p>
+
+<p><a href="./travel-mug-offering.json">travel-mug-offering.json</a> represents one independently actionable variant: a 20-ounce blue travel mug. Its Service-local <code>id</code> belongs to that exact variant, so an agent does not need a second protocol-specific option-selection step before requesting a quote. Other colors or sizes would be separate Offerings when they can be purchased independently.</p>
+
+<p>The Price Preview is the advertised item price. The quote action determines current tax, shipping, pickup, inventory, and final price for the buyer’s circumstances. ODP does not calculate or settle those values.</p>
+
+<p><a href="./physical-retail-attributes.schema.json">physical-retail-attributes.schema.json</a> explains the Service-owned attributes:</p>
+<ul><li>
+<p><code>sku</code>, <code>brand</code>, <code>color</code>, and <code>capacity_ml</code> distinguish and compare the variant;</p>
+</li><li>
+<p><code>tax_classification</code> is the retailer’s input to its own tax process, not an ODP tax rule;</p>
+</li><li>
+<p><code>inventory</code> reports a regional snapshot and the time at which it was observed; and</p>
+</li><li>
+<p><code>fulfillment</code> advertises whether shipping and pickup may be requested, without promising that a particular address or store can fulfill the order.</p>
+</li></ul>
+
+<p>The schema is descriptive and non-normative. Another retailer can use a different attribute model and publish its own JSON Schema.</p>
+
+    </main>
+  </body>
+</html>

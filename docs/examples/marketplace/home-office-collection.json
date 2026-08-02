@@ -1,0 +1,34 @@
+{
+  "odp_version": "1.0",
+  "id": "home-office",
+  "name": "Home office",
+  "description": "Furniture, lighting, and accessories for home workspaces.",
+  "language": "en",
+  "localizations": [
+    "en"
+  ],
+  "web_url": "/c/home-office",
+  "search_capabilities": {
+    "filters": {
+      "linked": {
+        "href": "/odp/collections/home-office/filters?limit=2"
+      }
+    },
+    "sorts": {
+      "inline": [
+        {
+          "id": "processing-fastest",
+          "title": "Fastest processing",
+          "description": "Orders by the shortest advertised processing time.",
+          "keys": [
+            {
+              "filter_id": "processing_days",
+              "direction": "ascending",
+              "missing": "last"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

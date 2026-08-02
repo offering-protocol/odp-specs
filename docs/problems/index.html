@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ODP Problem Types - Offering Discovery Protocol</title>
+    <style>
+      :root { color-scheme: light dark; --bg: #f8fafc; --fg: #172033; --muted: #5b6475; --panel: #fff; --border: #d7dce5; --link: #0b5cad; --code: #f1f5f9; }
+      @media (prefers-color-scheme: dark) { :root { --bg: #10141c; --fg: #eef2f8; --muted: #aeb7c8; --panel: #171d28; --border: #2d3545; --link: #8ab8ff; --code: #202735; } }
+      body { margin: 0; background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+      main { width: min(960px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 64px; }
+      h1 { margin: 0 0 8px; font-size: clamp(2rem, 6vw, 3.2rem); line-height: 1.05; }
+      h2 { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+      p { max-width: 780px; }
+      .intro, .back { color: var(--muted); }
+      .back { display: inline-block; margin-bottom: 24px; text-decoration: none; }
+      a { color: var(--link); }
+      table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); }
+      th, td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+      tbody tr:last-child td { border-bottom: none; }
+      th { color: var(--muted); font-size: 0.9rem; }
+      code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      pre { padding: 14px; overflow-x: auto; background: var(--code); border: 1px solid var(--border); }
+    </style>
+  </head>
+  <body>
+    <main id="top">
+      <h1>ODP Problem Types</h1>
+      <p class="intro">Stable Problem Details type URLs defined by the Offering Discovery Protocol.</p>
+      <table><thead><tr><th>Code</th><th>Status</th><th>Meaning</th></tr></thead><tbody><tr><td><a href="invalid-request/"><code>INVALID_REQUEST</code></a></td><td>400</td><td>Request syntax or values are invalid.</td></tr>
+<tr><td><a href="not-authenticated/"><code>NOT_AUTHENTICATED</code></a></td><td>401</td><td>Authentication is required or invalid.</td></tr>
+<tr><td><a href="not-authorized/"><code>NOT_AUTHORIZED</code></a></td><td>403</td><td>The principal cannot perform the operation.</td></tr>
+<tr><td><a href="not-found/"><code>NOT_FOUND</code></a></td><td>404</td><td>The requested ODP resource does not exist.</td></tr>
+<tr><td><a href="not-acceptable/"><code>NOT_ACCEPTABLE</code></a></td><td>406</td><td>No acceptable response representation exists.</td></tr>
+<tr><td><a href="continuation-expired/"><code>CONTINUATION_EXPIRED</code></a></td><td>410</td><td>The continuation link has expired.</td></tr>
+<tr><td><a href="request-too-large/"><code>REQUEST_TOO_LARGE</code></a></td><td>413</td><td>The request exceeds its resource limit.</td></tr>
+<tr><td><a href="unsupported-media-type/"><code>UNSUPPORTED_MEDIA_TYPE</code></a></td><td>415</td><td>The request media type is unsupported.</td></tr>
+<tr><td><a href="rate-limited/"><code>RATE_LIMITED</code></a></td><td>429</td><td>Request rate or quota has been exceeded.</td></tr>
+<tr><td><a href="service-unavailable/"><code>SERVICE_UNAVAILABLE</code></a></td><td>503</td><td>The Service is temporarily unable to respond.</td></tr></tbody></table>
+    </main>
+  </body>
+</html>

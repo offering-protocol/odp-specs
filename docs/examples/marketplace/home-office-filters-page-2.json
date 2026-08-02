@@ -1,0 +1,29 @@
+{
+  "odp_version": "1.0",
+  "items": [
+    {
+      "id": "made_to_order",
+      "title": "Made to order",
+      "description": "Whether production begins after an order is placed.",
+      "type": "boolean",
+      "operators": [
+        "eq"
+      ],
+      "refinable": true
+    },
+    {
+      "id": "processing_days",
+      "title": "Processing time",
+      "description": "Number of days before the item is ready to ship or collect.",
+      "type": "integer",
+      "unit": {
+        "system": "ucum",
+        "code": "d"
+      },
+      "operators": [
+        "gte",
+        "lte"
+      ]
+    }
+  ]
+}

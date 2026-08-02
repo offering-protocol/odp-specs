@@ -1,0 +1,28 @@
+{
+  "odp_version": "1.0",
+  "items": [
+    {
+      "id": "category",
+      "title": "Category",
+      "description": "Marketplace category within the home-office Collection.",
+      "type": "string",
+      "operators": [
+        "eq",
+        "in"
+      ],
+      "refinable": true
+    },
+    {
+      "id": "material",
+      "title": "Material",
+      "description": "Primary material declared by the listing owner.",
+      "type": "string",
+      "operators": [
+        "eq",
+        "in"
+      ],
+      "refinable": true
+    }
+  ],
+  "next": "/odp/collections/home-office/filters?limit=2&cursor=cGFnZTI"
+}

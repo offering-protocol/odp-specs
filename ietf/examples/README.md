@@ -3,6 +3,10 @@
 These examples explore the ODP information model. They are non-normative design inputs, not a stable
 wire contract or industry vocabulary.
 
+Run `make -C ietf render-examples` from the repository root to regenerate the descriptive HTML pages
+and directly downloadable source artifacts under `docs/examples/`. The full repository check rejects
+publication drift.
+
 ## What the examples demonstrate
 
 Each Offering uses a compact protocol envelope and a Service-defined `attributes` object.

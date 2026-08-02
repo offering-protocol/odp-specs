@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Marketplace-Scale Catalog Example - Offering Discovery Protocol</title>
+    <style>
+      :root { color-scheme: light dark; --bg: #f8fafc; --fg: #172033; --muted: #5b6475; --panel: #fff; --border: #d7dce5; --link: #0b5cad; --code: #f1f5f9; }
+      @media (prefers-color-scheme: dark) { :root { --bg: #10141c; --fg: #eef2f8; --muted: #aeb7c8; --panel: #171d28; --border: #2d3545; --link: #8ab8ff; --code: #202735; } }
+      body { margin: 0; background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+      main { width: min(960px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 64px; }
+      h1 { margin: 0 0 8px; font-size: clamp(2rem, 6vw, 3.2rem); line-height: 1.05; }
+      h2 { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+      p { max-width: 780px; }
+      .intro, .back { color: var(--muted); }
+      .back { display: inline-block; margin-bottom: 24px; text-decoration: none; }
+      a { color: var(--link); }
+      table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); }
+      th, td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+      tbody tr:last-child td { border-bottom: none; }
+      th { color: var(--muted); font-size: 0.9rem; }
+      code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      pre { padding: 14px; overflow-x: auto; background: var(--code); border: 1px solid var(--border); }
+    </style>
+  </head>
+  <body>
+    <main id="top">
+      <h1>Marketplace-Scale Catalog Example</h1>
+      <p class="intro">A descriptive, non-normative ODP example.</p>
+      <a class="back" href="../">All examples</a>
+<p>This example tests ODP against a Service with millions of independently managed listings and a large, contextual filter vocabulary. It intentionally uses a few representative records to explain a scalable protocol shape rather than filling the repository with hundreds of repetitive filters.</p>
+
+<p>The files illustrate a complete sequence:</p>
+<ol><li>
+<p><a href="./marketplace-service.json">marketplace-service.json</a> is the compact cached Service document. It advertises its Collection and Offering operations through a fixed endpoint base. Its localized freeform keywords help a directory index the Service but do not advertise catalog query terms, filters, suggestions, or facets. Its protocol summary advertises Service-wide AEP, MPP, and x402 support without claiming that any particular catalog request requires them.</p>
+</li><li>
+<p><a href="./home-office-collection.json">home-office-collection.json</a> is a full Collection root representation with language metadata, omitted root <code>parent_ids</code>, and a browser link. Instead of embedding every Collection-specific filter, it links to a pageable filter resource while embedding one supported indexed sort recipe.</p>
+</li><li>
+<p><a href="./home-office-collection-search-request.json">home-office-collection-search-request.json</a> combines a Service-interpreted text query with the exact root-Collection constraint.</p>
+</li><li>
+<p><a href="./home-office-collection-search-response.json">home-office-collection-search-response.json</a> shows the same Collection as a terse search item with its root relationship and exhaustive <code>detail_fields</code>. The Service owns matching and ordering.</p>
+</li><li>
+<p><a href="./home-office-filters-page-1.json">home-office-filters-page-1.json</a> and <a href="./home-office-filters-page-2.json">home-office-filters-page-2.json</a> show short Service-local filter identifiers, types, operators, units, and cursor-style continuation.</p>
+</li><li>
+<p><a href="./home-office-offering-search-request.json">home-office-offering-search-request.json</a> combines a Service-interpreted text query with explicit descendant expansion below the selected Collection, indexed filtering and sorting, and an explicit request for two advertised refinements.</p>
+</li><li>
+<p><a href="./home-office-search-response.json">home-office-search-response.json</a> shows terse Offering results with Service-selected ordering and attributes, exhaustive <code>detail_fields</code>, and requested contextual value counts. Its refinements reference previously advertised refinable filters; they do not define a third filter source. Exact and lower-bound counts demonstrate how a marketplace can expose useful navigation without requiring expensive exact aggregation for every bucket.</p>
+</li><li>
+<p><a href="./walnut-standing-desk-offering.json">walnut-standing-desk-offering.json</a> expands one terse result into its full Offering, including direct <code>collection_ids</code>, a <code>starting_at</code> Price Preview, Service-owned attributes, and a quote action for current tax, shipping/pickup, and availability.</p>
+</li><li>
+<p><a href="./home-office-furniture-attributes.schema.json">home-office-furniture-attributes.schema.json</a> teaches an agent how to interpret the marketplace’s listing attributes without making that retail model normative to ODP.</p>
+</li></ol>
+
+<p>Together, the files demonstrate why filters are contextual, why the well-known document must remain bounded, and why directory Service search must not be confused with cross-Service Offering indexing.</p>
+
+    </main>
+  </body>
+</html>

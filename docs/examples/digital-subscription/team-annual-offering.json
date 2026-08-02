@@ -1,0 +1,40 @@
+{
+  "odp_version": "1.0",
+  "id": "team-annual",
+  "name": "Team annual plan",
+  "description": "A collaborative workspace subscription for teams of 3 to 25 people.",
+  "web_url": "/plans/team-annual",
+  "price": {
+    "type": "fixed",
+    "amount": "240.00",
+    "currency": "USD"
+  },
+  "schema": {
+    "url": "https://software.example/schemas/team-subscription-4.json"
+  },
+  "attributes": {
+    "billing_term": "P1Y",
+    "renews_automatically": true,
+    "cancellation_timing": "end_of_term",
+    "seat_limits": {
+      "minimum": 3,
+      "maximum": 25
+    },
+    "features": {
+      "shared_workspaces": true,
+      "version_history_days": 365,
+      "support_level": "priority"
+    }
+  },
+  "actions": [
+    {
+      "id": "request-quote",
+      "rel": "quote",
+      "description": "Request current pricing and terms for the selected seat count and billing location.",
+      "openapi": {
+        "url": "https://software.example/openapi.json",
+        "operation_id": "createTeamSubscriptionQuote"
+      }
+    }
+  ]
+}
