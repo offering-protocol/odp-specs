@@ -12,12 +12,15 @@ checked for drift.
 | [`attribute-schema-reference.schema.json`](./attribute-schema-reference.schema.json)         | Reference to a Service-defined Attribute Schema.      |
 | [`collection.schema.json`](./collection.schema.json)                                         | Full Collection Representation envelope.              |
 | [`detail-fields.schema.json`](./detail-fields.schema.json)                                   | Omitted fields available in a Full Representation.    |
+| [`invalid-parameter.schema.json`](./invalid-parameter.schema.json)                           | Structured invalid request parameter.                 |
 | [`local-resource-identifier.schema.json`](./local-resource-identifier.schema.json)           | Service-created Collection and Offering identifiers.  |
 | [`local-resource-identifier-list.schema.json`](./local-resource-identifier-list.schema.json) | Unique Service-local resource identifier arrays.      |
 | [`offering.schema.json`](./offering.schema.json)                                             | Full Offering Representation envelope.                |
 | [`page-envelope.schema.json`](./page-envelope.schema.json)                                   | Shared list and search response envelope.             |
 | [`page-limit.schema.json`](./page-limit.schema.json)                                         | Requested maximum items per page.                     |
 | [`price-preview.schema.json`](./price-preview.schema.json)                                   | Discovery-time Offering price summary.                |
+| [`problem-code.schema.json`](./problem-code.schema.json)                                     | Stable machine-readable problem identifier.           |
+| [`problem-details.schema.json`](./problem-details.schema.json)                               | ODP RFC 9457 error response.                          |
 | [`protocol-version.schema.json`](./protocol-version.schema.json)                             | Major and minor ODP protocol versions.                |
 | [`representation.schema.json`](./representation.schema.json)                                 | Terse and Full Representation selection.              |
 | [`resource-identity.schema.json`](./resource-identity.schema.json)                           | Structured identity composed by an Agent.             |
