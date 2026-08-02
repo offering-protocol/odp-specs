@@ -2,14 +2,5 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://offeringprotocol.org/schemas/attribute-schema-reference.schema.json",
   "title": "ODP Attribute Schema reference",
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "url"
-  ],
-  "properties": {
-    "url": {
-      "$ref": "resource-reference.schema.json"
-    }
-  }
+  "$ref": "schema-reference.schema.json"
 }

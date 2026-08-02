@@ -29,17 +29,22 @@
   },
   "actions": [
     {
+      "id": "request-quote",
       "rel": "quote",
-      "href": "/quotes",
-      "method": "POST",
       "description": "Request current capacity and price for a requested rental interval.",
-      "request": {
-        "content_type": "application/json",
-        "schema_url": "https://compute.example/schemas/gpu-quote-request-1.json"
-      },
-      "response_content_types": [
-        "application/json"
-      ]
+      "http": {
+        "href": "/quotes",
+        "method": "POST",
+        "request": {
+          "content_type": "application/json",
+          "schema": {
+            "url": "https://compute.example/schemas/gpu-quote-request-1.json"
+          }
+        },
+        "response_content_types": [
+          "application/json"
+        ]
+      }
     }
   ]
 }

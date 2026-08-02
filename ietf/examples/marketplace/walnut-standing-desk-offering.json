@@ -32,10 +32,13 @@
   },
   "actions": [
     {
+      "id": "request-quote",
       "rel": "quote",
-      "href": "/quotes",
-      "method": "POST",
-      "description": "Request current price, tax, shipping or pickup options, and production availability."
+      "description": "Request current price, tax, shipping or pickup options, and production availability.",
+      "http": {
+        "href": "/quotes",
+        "method": "POST"
+      }
     }
   ]
 }

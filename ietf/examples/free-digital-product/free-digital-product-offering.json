@@ -31,13 +31,16 @@
   },
   "actions": [
     {
+      "id": "download-pdf",
       "rel": "download",
-      "href": "/artifacts/agent-safety-handbook-2.1.0.pdf",
-      "method": "GET",
       "description": "Download the PDF representation without enrollment or payment.",
-      "response_content_types": [
-        "application/pdf"
-      ]
+      "http": {
+        "href": "/artifacts/agent-safety-handbook-2.1.0.pdf",
+        "method": "GET",
+        "response_content_types": [
+          "application/pdf"
+        ]
+      }
     }
   ]
 }

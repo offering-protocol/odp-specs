@@ -9,6 +9,9 @@ checked for drift.
 
 | Schema                                                                                       | Contract                                              |
 | -------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| [`action-relation.schema.json`](./action-relation.schema.json)                               | Action semantic relation identifier.                  |
+| [`action-request.schema.json`](./action-request.schema.json)                                 | Compact Action request-body description.              |
+| [`action.schema.json`](./action.schema.json)                                                 | Offering Action and exclusive target union.           |
 | [`attribute-schema-reference.schema.json`](./attribute-schema-reference.schema.json)         | Reference to a Service-defined Attribute Schema.      |
 | [`capability-identifier.schema.json`](./capability-identifier.schema.json)                   | Service-local filter and sort identifiers.            |
 | [`capability-link.schema.json`](./capability-link.schema.json)                               | Link to a pageable capability source.                 |
@@ -22,12 +25,14 @@ checked for drift.
 | [`filter-operator.schema.json`](./filter-operator.schema.json)                               | Core filter operators.                                |
 | [`filter-type.schema.json`](./filter-type.schema.json)                                       | Core filter value types.                              |
 | [`filter-unit.schema.json`](./filter-unit.schema.json)                                       | UCUM and Service-defined units.                       |
+| [`http-action-target.schema.json`](./http-action-target.schema.json)                         | Compact GET or POST Action target.                    |
 | [`invalid-parameter.schema.json`](./invalid-parameter.schema.json)                           | Structured invalid request parameter.                 |
 | [`local-resource-identifier.schema.json`](./local-resource-identifier.schema.json)           | Service-created Collection and Offering identifiers.  |
 | [`local-resource-identifier-list.schema.json`](./local-resource-identifier-list.schema.json) | Unique Service-local resource identifier arrays.      |
 | [`offering-search-request.schema.json`](./offering-search-request.schema.json)               | Offering text and Collection-scope search request.    |
 | [`offering-search-response.schema.json`](./offering-search-response.schema.json)             | Offering search results and requested refinements.    |
 | [`offering.schema.json`](./offering.schema.json)                                             | Full Offering Representation envelope.                |
+| [`openapi-action-target.schema.json`](./openapi-action-target.schema.json)                   | Exact OpenAPI 3.1 operation reference.                |
 | [`page-envelope.schema.json`](./page-envelope.schema.json)                                   | Shared list and search response envelope.             |
 | [`page-limit.schema.json`](./page-limit.schema.json)                                         | Requested maximum items per page.                     |
 | [`price-preview.schema.json`](./price-preview.schema.json)                                   | Discovery-time Offering price summary.                |
@@ -39,6 +44,7 @@ checked for drift.
 | [`refinement-group.schema.json`](./refinement-group.schema.json)                             | Refinement buckets for one advertised filter.         |
 | [`resource-identity.schema.json`](./resource-identity.schema.json)                           | Structured identity composed by an Agent.             |
 | [`resource-reference.schema.json`](./resource-reference.schema.json)                         | Origin-relative and absolute resource references.     |
+| [`schema-reference.schema.json`](./schema-reference.schema.json)                             | Reusable JSON Schema reference.                       |
 | [`search-capabilities.schema.json`](./search-capabilities.schema.json)                       | Search capability advertisement container.            |
 | [`service-origin.schema.json`](./service-origin.schema.json)                                 | Canonical Service-origin serialization.               |
 | [`sort-capability-source.schema.json`](./sort-capability-source.schema.json)                 | Inline or linked Sort Definition source.              |

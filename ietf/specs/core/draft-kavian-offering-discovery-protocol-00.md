@@ -30,6 +30,12 @@ normative:
   RFC9110:
   RFC9111:
   RFC9457:
+  OPENAPI31:
+    title: OpenAPI Specification v3.1.2
+    target: https://spec.openapis.org/oas/v3.1.2.html
+    date: 2025-09-19
+    author:
+      - org: OpenAPI Initiative
   UCUM:
     title: The Unified Code for Units of Measure
     target: https://ucum.org/ucum
@@ -963,16 +969,78 @@ Offering with no advertised action omits the field. A Terse Offering MUST NOT co
 when permitted by the common representation rules it can advertise `/actions` through
 `detail_fields`.
 
-An action uses exactly one of two description forms: a compact HTTP action for operations whose
-request and response can be described directly, or a reference to one OpenAPI operation for more
-complex parameter, body, response, or security semantics. Both forms contain an action relation and
-can contain a human-readable description. A compact action distinguishes request content type from
-accepted response content types. The Actions contract defines the complete forms, registered
-relations, OpenAPI reference rules, and composition behavior.
+An Action describes an executable HTTP transition associated with its Offering. It does not define a
+commerce workflow, payment behavior, or the domain-specific shape of the operation's successful
+result. An Action has required `id` and `rel` members, can contain `description`, and contains
+exactly one of `http` or `openapi`. An Offering contains at most 16 Actions, and their `id` values
+MUST be unique within that Offering. Action identifiers use the Local Resource Identifier syntax and
+remain stable while the Action exists on that Offering.
+
+`rel` states the broad result sought from the operation. It is a lower-case token of at most 64
+characters using letters, digits, and internal hyphens. This specification defines five values:
+
+| Relation   | Meaning                                                       |
+| ---------- | ------------------------------------------------------------- |
+| `download` | Retrieve a downloadable representation, whether free or paid. |
+| `purchase` | Complete a one-time acquisition.                              |
+| `quote`    | Obtain current terms without completing an acquisition.       |
+| `reserve`  | Hold or allocate a resource.                                  |
+| `invoke`   | Execute an online capability and obtain its result.           |
+
+`free` is a Price Preview type and is not an Action relation. `download` does not imply that an
+Offering is free. Recurring subscription behavior is not defined by ODP 1.0. An Agent encountering
+an unknown `rel` retains the Action but MUST NOT automatically select it based on an assumed
+meaning. A caller can explicitly select the Action by `id`.
+
+### Compact HTTP Target
+
+`http` describes an operation that does not need a complete interface description. It contains a
+required Resource Reference `href` and a required `method` of `GET` or `POST`. It can contain a
+non-empty `request` object and a non-empty `response_content_types` array of at most eight unique
+media types. Parameters, multiple request-body alternatives, complex responses, or declared security
+requirements require an OpenAPI target instead.
+
+`request` describes one optional request body. It contains at least one of `content_type` or
+`schema`. `content_type` identifies the body media type. `schema` is a JSON Schema reference with a
+required Resource Reference `url` and follows the retrieval, resolution, caching, vocabulary, and
+narrow-failure rules defined for Attribute Schemas. The schema describes only the Action request
+body. It does not describe URL, header, or cookie parameters. An Agent MUST NOT send a request body
+unless the caller supplies one or the operation definition supplies a complete value.
+
+`response_content_types` advertises media types the successful operation can return. It does not
+constrain authentication, payment, redirection, Problem Details, or other non-success responses. The
+live response `Content-Type` remains authoritative.
+
+### OpenAPI Target
+
+`openapi` identifies exactly one operation in an OpenAPI 3.1 document {{OPENAPI31}}. It contains a
+required Resource Reference `url` and a required case-sensitive `operation_id` of at most 128
+Unicode code points. The referenced document MUST use an `openapi` version in the `3.1.x` line and
+MUST contain exactly one Operation Object whose `operationId` equals `operation_id`. An Agent MUST
+NOT guess an operation from a path, method, summary, description, or similar identifier when that
+lookup fails or is ambiguous.
+
+OpenAPI retrieval is anonymous. An Agent MUST NOT attach AEP credentials, payment credentials,
+cookies, or authorization fields copied from the Offering request. Agents accept JSON represented as
+`application/vnd.oai.openapi+json` with a `version=3.1` parameter or `application/json`; missing,
+malformed, non-JSON, or other media types are rejected. Standard HTTP caching applies. The decoded
+document is limited to 1,048,576 bytes, JSON depth 32, and five redirects.
+
+An invalid Action, failed request-schema retrieval, failed OpenAPI retrieval, or unresolved
+`operation_id` makes only that Action unusable. Duplicate Action IDs make every Action bearing that
+ID unusable. Unrelated Actions and Offering fields remain usable. An Agent-oriented SDK exposes
+these failures as scoped issues rather than rejecting the entire Offering.
 
 Action metadata is descriptive. A live AEP, MPP, x402, or other HTTP challenge is authoritative for
 access and payment. An Agent MUST NOT execute an action whose request, authorization, payment, or
 security consequences it cannot determine.
+
+Payment protection and Action meaning are independent. Paying to retrieve an ODP Offering grants
+access to that Offering representation and MUST NOT be interpreted as acquiring the Offering. An
+Agent invokes the separate Action target in its current authentication context and follows live AEP
+and payment challenges according to the composition rules in this document. A successful Action
+response is interpreted according to the compact metadata or OpenAPI operation, not as an ODP
+Offering response unless that operation explicitly returns one.
 
 ## Offering Granularity
 
@@ -1351,6 +1419,7 @@ byte limit.
 | Pages per linked capability source         | 16              |
 | One Attribute Schema document              | 262,144 bytes   |
 | Complete Attribute Schema reference graph  | 1,048,576 bytes |
+| One OpenAPI Action document                | 1,048,576 bytes |
 | Distinct documents in one schema graph     | 16              |
 | Attribute Schema reference depth           | 8               |
 | Redirects per retrieved resource           | 5               |
@@ -1360,11 +1429,11 @@ document continue to apply. A Service MAY return fewer page items than requested
 the page limit. Domain-specific attribute arrays are bounded by their Attribute Schema and the
 overall byte and depth limits rather than by a universal element count.
 
-Every redirect target for an ODP resource or one Attribute Schema resource MUST retain the scheme,
-host, and effective port of the preceding request. An Agent MUST reject redirect loops, transport
-security downgrades, and a sixth redirect. A cross-origin Resource Reference can initiate a request
-to its explicit origin; that resource cannot use redirects to transfer the request to another
-origin.
+Every redirect target for an ODP resource, JSON Schema resource, or OpenAPI Action document MUST
+retain the scheme, host, and effective port of the preceding request. An Agent MUST reject redirect
+loops, transport security downgrades, and a sixth redirect. A cross-origin Resource Reference can
+initiate a request to its explicit origin; that resource cannot use redirects to transfer the
+request to another origin.
 
 ## Limit Failures
 

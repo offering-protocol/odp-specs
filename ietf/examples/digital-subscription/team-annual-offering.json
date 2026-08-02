@@ -28,6 +28,7 @@
   },
   "actions": [
     {
+      "id": "request-quote",
       "rel": "quote",
       "description": "Request current pricing and terms for the selected seat count and billing location.",
       "openapi": {

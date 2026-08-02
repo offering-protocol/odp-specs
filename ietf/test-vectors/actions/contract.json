@@ -1,0 +1,246 @@
+{
+  "id": "action-contract",
+  "title": "Offering Action identity, relations, targets, and narrow failures",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "actions",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "profile": "core",
+  "subject": "action-contract",
+  "cases": [
+    {
+      "name": "all-core-relations",
+      "operation": "validate-actions",
+      "actions": [
+        {
+          "id": "download-file",
+          "rel": "download",
+          "http": {
+            "href": "/files/item.pdf",
+            "method": "GET",
+            "response_content_types": [
+              "application/pdf"
+            ]
+          }
+        },
+        {
+          "id": "purchase-once",
+          "rel": "purchase",
+          "openapi": {
+            "url": "/openapi.json",
+            "operation_id": "purchaseItem"
+          }
+        },
+        {
+          "id": "request-quote",
+          "rel": "quote",
+          "http": {
+            "href": "/quotes",
+            "method": "POST"
+          }
+        },
+        {
+          "id": "reserve-capacity",
+          "rel": "reserve",
+          "http": {
+            "href": "/reservations",
+            "method": "POST",
+            "request": {
+              "content_type": "application/json",
+              "schema": {
+                "url": "/schemas/reservation-request.json"
+              }
+            }
+          }
+        },
+        {
+          "id": "invoke-model",
+          "rel": "invoke",
+          "openapi": {
+            "url": "https://compute.example/openapi.json",
+            "operation_id": "runInference"
+          }
+        }
+      ],
+      "expected_usable": [
+        "download-file",
+        "purchase-once",
+        "request-quote",
+        "reserve-capacity",
+        "invoke-model"
+      ],
+      "expected_issues": []
+    },
+    {
+      "name": "unknown-relation-is-retained",
+      "operation": "validate-actions",
+      "actions": [
+        {
+          "id": "future-operation",
+          "rel": "future-operation",
+          "http": {
+            "href": "/future",
+            "method": "POST"
+          }
+        }
+      ],
+      "expected_usable": [
+        "future-operation"
+      ],
+      "expected_issues": []
+    },
+    {
+      "name": "exclusive-target-union",
+      "operation": "validate-actions",
+      "actions": [
+        {
+          "id": "ambiguous",
+          "rel": "quote",
+          "http": {
+            "href": "/quotes",
+            "method": "POST"
+          },
+          "openapi": {
+            "url": "/openapi.json",
+            "operation_id": "createQuote"
+          }
+        },
+        {
+          "id": "valid-download",
+          "rel": "download",
+          "http": {
+            "href": "/file",
+            "method": "GET"
+          }
+        }
+      ],
+      "expected_usable": [
+        "valid-download"
+      ],
+      "expected_issues": [
+        "ambiguous"
+      ]
+    },
+    {
+      "name": "duplicate-identifiers-are-quarantined",
+      "operation": "validate-actions",
+      "actions": [
+        {
+          "id": "same-id",
+          "rel": "download",
+          "http": {
+            "href": "/first",
+            "method": "GET"
+          }
+        },
+        {
+          "id": "same-id",
+          "rel": "download",
+          "http": {
+            "href": "/second",
+            "method": "GET"
+          }
+        },
+        {
+          "id": "unrelated",
+          "rel": "quote",
+          "http": {
+            "href": "/quote",
+            "method": "POST"
+          }
+        }
+      ],
+      "expected_usable": [
+        "unrelated"
+      ],
+      "expected_issues": [
+        "same-id",
+        "same-id"
+      ]
+    },
+    {
+      "name": "unsupported-compact-method",
+      "operation": "validate-actions",
+      "actions": [
+        {
+          "id": "delete-item",
+          "rel": "purchase",
+          "http": {
+            "href": "/item",
+            "method": "DELETE"
+          }
+        }
+      ],
+      "expected_usable": [],
+      "expected_issues": [
+        "delete-item"
+      ]
+    },
+    {
+      "name": "openapi-operation-resolves-once",
+      "operation": "resolve-openapi",
+      "target": {
+        "url": "/openapi.json",
+        "operation_id": "purchaseItem"
+      },
+      "document": {
+        "openapi": "3.1.1",
+        "operation_ids": [
+          "purchaseItem",
+          "requestQuote"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "name": "openapi-operation-is-missing",
+      "operation": "resolve-openapi",
+      "target": {
+        "url": "/openapi.json",
+        "operation_id": "purchaseItem"
+      },
+      "document": {
+        "openapi": "3.1.1",
+        "operation_ids": [
+          "requestQuote"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "openapi-operation-is-ambiguous",
+      "operation": "resolve-openapi",
+      "target": {
+        "url": "/openapi.json",
+        "operation_id": "purchaseItem"
+      },
+      "document": {
+        "openapi": "3.1.1",
+        "operation_ids": [
+          "purchaseItem",
+          "purchaseItem"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "openapi-version-must-be-3-1",
+      "operation": "resolve-openapi",
+      "target": {
+        "url": "/openapi.json",
+        "operation_id": "purchaseItem"
+      },
+      "document": {
+        "openapi": "3.2.0",
+        "operation_ids": [
+          "purchaseItem"
+        ]
+      },
+      "valid": false
+    }
+  ]
+}

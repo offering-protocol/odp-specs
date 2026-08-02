@@ -67,9 +67,9 @@
     "actions": {
       "type": "array",
       "minItems": 1,
+      "maxItems": 16,
       "items": {
-        "type": "object",
-        "minProperties": 1
+        "$ref": "action.schema.json"
       }
     }
   },

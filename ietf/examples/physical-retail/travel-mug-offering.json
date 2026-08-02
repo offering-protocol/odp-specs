@@ -30,17 +30,22 @@
   },
   "actions": [
     {
+      "id": "request-quote",
       "rel": "quote",
-      "href": "/quotes",
-      "method": "POST",
       "description": "Request current inventory, tax, shipping or pickup options, and final price.",
-      "request": {
-        "content_type": "application/json",
-        "schema_url": "https://retail.example/schemas/retail-quote-request-2.json"
-      },
-      "response_content_types": [
-        "application/json"
-      ]
+      "http": {
+        "href": "/quotes",
+        "method": "POST",
+        "request": {
+          "content_type": "application/json",
+          "schema": {
+            "url": "https://retail.example/schemas/retail-quote-request-2.json"
+          }
+        },
+        "response_content_types": [
+          "application/json"
+        ]
+      }
     }
   ]
 }
