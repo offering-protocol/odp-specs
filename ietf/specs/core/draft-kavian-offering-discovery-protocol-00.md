@@ -712,9 +712,8 @@ Offerings whose `collection_ids` contains the requested Collection identifier. A
 the operation result consistent with the Offering membership it publishes.
 
 Hierarchy and membership are independent. Membership in a child Collection does not imply membership
-in any ancestor Collection. ODP version 1.0 does not define implicit descendant expansion. A future
-search contract can define an explicit descendant-inclusion request without changing direct
-membership semantics.
+in any ancestor Collection. ODP version 1.0 does not define implicit descendant expansion. Offering
+search can request explicit descendant inclusion without changing direct membership semantics.
 
 Every `collection_ids` entry MUST resolve to a Collection visible under the same access context. An
 Agent MUST ignore a missing membership edge without rejecting the Offering or unrelated memberships.
@@ -728,6 +727,48 @@ equivalent business meaning, and an SDK can label `list-offerings` for user-inte
 without creating an ODP resource.
 
 # Offerings
+
+## Offering Search
+
+The `search-offerings` operation accepts an ODP Top-Level Document containing `odp_version` and
+`query`. It MAY also contain `collection_id`, `include_descendants`, and `limit`. A request without
+`query` is invalid unless another advertised search capability explicitly defines an alternative
+criterion. An Agent uses `list-offerings` for an unconstrained sequence and
+`list-collection-offerings` for the unconstrained direct members of one Collection.
+
+`query` is a non-empty string of no more than 256 Unicode code points and MUST contain at least one
+non-whitespace character. It conveys text-search intent to the Service. The Service owns query
+interpretation, matching, indexing, and relevance. It can use lexical, full-text, language-aware,
+semantic, or other matching over Offering metadata and Service-defined attributes visible under the
+request's access and language context. ODP does not define tokenization, stemming, case folding,
+searchable fields, or a portable relevance algorithm. An Agent MUST NOT assume that the same query
+produces equivalent matches at different Services.
+
+`collection_id` is a Local Resource Identifier that constrains results to Offerings in the named
+Collection. The Collection MUST resolve under the current access context. Otherwise, the Service
+returns `404 Not Found` with a `NOT_FOUND` problem. A Service MAY use the same response when
+revealing that an inaccessible Collection exists would disclose protected information.
+
+`include_descendants` is a Boolean and MUST NOT appear without `collection_id`. Its default is
+`false`. When false or omitted, an Offering matches the Collection constraint only when its
+`collection_ids` contains `collection_id`. When true, an Offering matches when it is a direct member
+of the named Collection or any Collection reachable by following child relationships from it. This
+expansion does not alter or imply Offering membership.
+
+Descendant expansion observes the common Collection graph depth and invalid-edge rules. A Collection
+reachable through multiple paths is processed once. An Offering belonging to multiple included
+Collections appears at most once in the result sequence.
+
+The Service chooses result ordering. It can use relevance, curated ranking, popularity, or another
+Service policy, and ODP version 1.0 defines no client-selected Offering sort. The common pagination
+contract requires the chosen logical sequence to remain stable during one traversal and uses `id` as
+the final ordering tie-breaker. An Agent MUST NOT reorder results before exposing them unless its
+caller explicitly requests local presentation ordering.
+
+The successful response is a page envelope containing Offering Representations selected by the
+common `representation` query parameter. No matches produce `200 OK` with an empty `items` array.
+Malformed request bodies or unsupported member values produce an `INVALID_REQUEST` problem. The
+request and response use `application/odp+json`.
 
 ## Offering Envelope
 

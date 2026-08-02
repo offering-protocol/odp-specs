@@ -16,6 +16,7 @@ checked for drift.
 | [`invalid-parameter.schema.json`](./invalid-parameter.schema.json)                           | Structured invalid request parameter.                 |
 | [`local-resource-identifier.schema.json`](./local-resource-identifier.schema.json)           | Service-created Collection and Offering identifiers.  |
 | [`local-resource-identifier-list.schema.json`](./local-resource-identifier-list.schema.json) | Unique Service-local resource identifier arrays.      |
+| [`offering-search-request.schema.json`](./offering-search-request.schema.json)               | Offering text and Collection-scope search request.    |
 | [`offering.schema.json`](./offering.schema.json)                                             | Full Offering Representation envelope.                |
 | [`page-envelope.schema.json`](./page-envelope.schema.json)                                   | Shared list and search response envelope.             |
 | [`page-limit.schema.json`](./page-limit.schema.json)                                         | Requested maximum items per page.                     |

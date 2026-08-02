@@ -1,0 +1,7 @@
+{
+  "odp_version": "1.0",
+  "query": "standing desk",
+  "collection_id": "home-office",
+  "include_descendants": true,
+  "limit": 50
+}

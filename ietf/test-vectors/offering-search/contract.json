@@ -1,0 +1,172 @@
+{
+  "id": "offering-search-contract",
+  "title": "Offering search request and Collection scope semantics",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "offering-search",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "profile": "core",
+  "subject": "offering-search-contract",
+  "cases": [
+    {
+      "name": "service-owned-text-query",
+      "operation": "validate-request",
+      "request": {
+        "odp_version": "1.0",
+        "query": "standing desk",
+        "limit": 50
+      },
+      "valid": true
+    },
+    {
+      "name": "direct-collection-scope",
+      "operation": "validate-request",
+      "request": {
+        "odp_version": "1.0",
+        "query": "standing desk",
+        "collection_id": "home-office"
+      },
+      "valid": true
+    },
+    {
+      "name": "explicit-descendant-expansion",
+      "operation": "validate-request",
+      "request": {
+        "odp_version": "1.0",
+        "query": "standing desk",
+        "collection_id": "home-office",
+        "include_descendants": true
+      },
+      "valid": true
+    },
+    {
+      "name": "missing-query",
+      "operation": "validate-request",
+      "request": {
+        "odp_version": "1.0",
+        "collection_id": "home-office"
+      },
+      "valid": false
+    },
+    {
+      "name": "descendants-without-collection",
+      "operation": "validate-request",
+      "request": {
+        "odp_version": "1.0",
+        "query": "standing desk",
+        "include_descendants": true
+      },
+      "valid": false
+    },
+    {
+      "name": "direct-scope-does-not-inherit-child-membership",
+      "operation": "apply-constraints",
+      "request": {
+        "odp_version": "1.0",
+        "query": "desk",
+        "collection_id": "home-office"
+      },
+      "collections": [
+        {
+          "id": "home-office"
+        },
+        {
+          "id": "desks",
+          "parent_ids": [
+            "home-office"
+          ]
+        }
+      ],
+      "service_matches": [
+        {
+          "id": "desk-lamp",
+          "collection_ids": [
+            "home-office"
+          ]
+        },
+        {
+          "id": "standing-desk",
+          "collection_ids": [
+            "desks"
+          ]
+        }
+      ],
+      "expected": [
+        "desk-lamp"
+      ]
+    },
+    {
+      "name": "descendant-expansion-deduplicates-and-preserves-service-order",
+      "operation": "apply-constraints",
+      "request": {
+        "odp_version": "1.0",
+        "query": "desk",
+        "collection_id": "home-office",
+        "include_descendants": true
+      },
+      "collections": [
+        {
+          "id": "home-office"
+        },
+        {
+          "id": "desks",
+          "parent_ids": [
+            "home-office"
+          ]
+        },
+        {
+          "id": "standing-desks",
+          "parent_ids": [
+            "desks"
+          ]
+        }
+      ],
+      "service_matches": [
+        {
+          "id": "standing-desk",
+          "collection_ids": [
+            "desks",
+            "standing-desks"
+          ]
+        },
+        {
+          "id": "desk-lamp",
+          "collection_ids": [
+            "home-office"
+          ]
+        },
+        {
+          "id": "standing-desk",
+          "collection_ids": [
+            "desks",
+            "standing-desks"
+          ]
+        }
+      ],
+      "expected": [
+        "standing-desk",
+        "desk-lamp"
+      ]
+    },
+    {
+      "name": "missing-collection-is-not-found",
+      "operation": "apply-constraints",
+      "request": {
+        "odp_version": "1.0",
+        "query": "desk",
+        "collection_id": "missing"
+      },
+      "collections": [
+        {
+          "id": "home-office"
+        }
+      ],
+      "service_matches": [],
+      "expected": "not-found"
+    }
+  ]
+}

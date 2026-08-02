@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://offeringprotocol.org/schemas/offering-search-request.schema.json",
+  "title": "ODP Offering search request",
+  "type": "object",
+  "required": [
+    "odp_version",
+    "query"
+  ],
+  "dependentRequired": {
+    "include_descendants": [
+      "collection_id"
+    ]
+  },
+  "properties": {
+    "odp_version": {
+      "const": "1.0"
+    },
+    "query": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "\\S"
+    },
+    "collection_id": {
+      "$ref": "local-resource-identifier.schema.json"
+    },
+    "include_descendants": {
+      "type": "boolean",
+      "default": false
+    },
+    "limit": {
+      "$ref": "page-limit.schema.json"
+    }
+  }
+}
