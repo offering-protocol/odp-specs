@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retail.example/schemas/physical-retail-3.json",
+  "title": "Physical retail attributes",
+  "description": "Retailer-defined attributes for a purchasable physical-good variant.",
+  "type": "object",
+  "required": [
+    "sku",
+    "brand",
+    "color",
+    "capacity_ml",
+    "tax_classification",
+    "inventory",
+    "fulfillment"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "sku": {
+      "type": "string",
+      "title": "Stock keeping unit"
+    },
+    "brand": {
+      "type": "string",
+      "title": "Brand"
+    },
+    "color": {
+      "type": "string",
+      "title": "Color"
+    },
+    "capacity_ml": {
+      "type": "integer",
+      "minimum": 1,
+      "title": "Capacity",
+      "x-odp-unit": {
+        "code": "mL"
+      },
+      "x-odp-comparison": "numeric"
+    },
+    "tax_classification": {
+      "type": "string",
+      "title": "Service tax classification",
+      "description": "A Service-defined classification used when requesting a final quote."
+    },
+    "inventory": {
+      "$ref": "#/$defs/inventory"
+    },
+    "fulfillment": {
+      "$ref": "#/$defs/fulfillment"
+    }
+  },
+  "$defs": {
+    "inventory": {
+      "type": "object",
+      "title": "Regional inventory snapshot",
+      "required": [
+        "region",
+        "status",
+        "observed_at"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "region": {
+          "type": "string",
+          "title": "Inventory region"
+        },
+        "status": {
+          "type": "string",
+          "title": "Inventory status",
+          "enum": [
+            "in_stock",
+            "limited",
+            "out_of_stock"
+          ]
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Observation time"
+        }
+      }
+    },
+    "fulfillment": {
+      "type": "object",
+      "title": "Potential fulfillment methods",
+      "required": [
+        "shipping_supported",
+        "pickup_supported"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "shipping_supported": {
+          "type": "boolean",
+          "title": "Shipping supported"
+        },
+        "pickup_supported": {
+          "type": "boolean",
+          "title": "Pickup supported"
+        }
+      }
+    }
+  }
+}

@@ -41,6 +41,11 @@ comparison hints. They do not identify protocol-owned compute, flight, retail, o
 - [`marketplace`](marketplace/) models a large catalog with Collections, terse Offering results, and
   linked pageable Collection filters. A compact two-page sample represents the protocol shape; it
   does not attempt to store hundreds of repetitive filters in this repository.
+- [`physical-retail`](physical-retail/) models one purchasable variant, regional inventory, shipping
+  and pickup eligibility, and tax classification without defining commerce semantics in ODP.
+- [`digital-subscription`](digital-subscription/) models a recurring software plan whose term,
+  renewal policy, and entitlements are Service-defined attributes and whose subscription operation
+  remains outside ODP.
 
 The examples intentionally span different domains to test protocol flexibility. They do not
 establish normative ODP profiles for those domains.

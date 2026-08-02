@@ -1,0 +1,46 @@
+{
+  "odp_version": "1.0",
+  "id": "travel-mug-20oz-blue",
+  "name": "Insulated travel mug, 20 oz, blue",
+  "description": "A vacuum-insulated stainless-steel travel mug with a leak-resistant lid.",
+  "web_url": "/products/travel-mug-20oz-blue",
+  "price": {
+    "type": "fixed",
+    "amount": "34.95",
+    "currency": "USD"
+  },
+  "schema": {
+    "url": "https://retail.example/schemas/physical-retail-3.json"
+  },
+  "attributes": {
+    "sku": "MUG-20-BLU",
+    "brand": "Northstar",
+    "color": "blue",
+    "capacity_ml": 591,
+    "tax_classification": "general-merchandise",
+    "inventory": {
+      "region": "US-CA",
+      "status": "in_stock",
+      "observed_at": "2026-08-01T18:30:00Z"
+    },
+    "fulfillment": {
+      "shipping_supported": true,
+      "pickup_supported": true
+    }
+  },
+  "actions": [
+    {
+      "rel": "quote",
+      "href": "/quotes",
+      "method": "POST",
+      "description": "Request current inventory, tax, shipping or pickup options, and final price.",
+      "request": {
+        "content_type": "application/json",
+        "schema_url": "https://retail.example/schemas/retail-quote-request-2.json"
+      },
+      "response_content_types": [
+        "application/json"
+      ]
+    }
+  ]
+}
