@@ -1,0 +1,139 @@
+{
+  "id": "collection-search-contract",
+  "title": "Collection search request and matching semantics",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "collection-search",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "profile": "core",
+  "subject": "collection-search-contract",
+  "cases": [
+    {
+      "name": "service-owned-text-query",
+      "operation": "validate-request",
+      "request": {
+        "odp_version": "1.0",
+        "query": "home office",
+        "limit": 50
+      },
+      "valid": true
+    },
+    {
+      "name": "root-collections",
+      "operation": "validate-request",
+      "request": {
+        "odp_version": "1.0",
+        "parent_id": null
+      },
+      "valid": true
+    },
+    {
+      "name": "direct-children",
+      "operation": "validate-request",
+      "request": {
+        "odp_version": "1.0",
+        "parent_id": "furniture"
+      },
+      "valid": true
+    },
+    {
+      "name": "combined-query-and-parent",
+      "operation": "validate-request",
+      "request": {
+        "odp_version": "1.0",
+        "query": "office",
+        "parent_id": "furniture"
+      },
+      "valid": true
+    },
+    {
+      "name": "unconstrained-search",
+      "operation": "validate-request",
+      "request": {
+        "odp_version": "1.0",
+        "limit": 50
+      },
+      "valid": false
+    },
+    {
+      "name": "whitespace-query",
+      "operation": "validate-request",
+      "request": {
+        "odp_version": "1.0",
+        "query": "   "
+      },
+      "valid": false
+    },
+    {
+      "name": "query-and-parent-use-logical-and",
+      "operation": "apply-constraints",
+      "request": {
+        "odp_version": "1.0",
+        "query": "office",
+        "parent_id": "furniture"
+      },
+      "collections": [
+        {
+          "id": "home-office",
+          "parent_ids": [
+            "furniture"
+          ]
+        },
+        {
+          "id": "office-supplies",
+          "parent_ids": [
+            "supplies"
+          ]
+        },
+        {
+          "id": "desks",
+          "parent_ids": [
+            "furniture"
+          ]
+        }
+      ],
+      "service_matches": [
+        "office-supplies",
+        "home-office"
+      ],
+      "collection_ids": [
+        "home-office"
+      ]
+    },
+    {
+      "name": "null-parent-selects-roots-and-preserves-service-order",
+      "operation": "apply-constraints",
+      "request": {
+        "odp_version": "1.0",
+        "parent_id": null
+      },
+      "collections": [
+        {
+          "id": "electronics"
+        },
+        {
+          "id": "furniture"
+        },
+        {
+          "id": "desks",
+          "parent_ids": [
+            "furniture"
+          ]
+        }
+      ],
+      "service_matches": [
+        "furniture",
+        "desks",
+        "electronics"
+      ],
+      "collection_ids": [
+        "furniture",
+        "electronics"
+      ]
+    }
+  ]
+}

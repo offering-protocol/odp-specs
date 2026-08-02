@@ -11,20 +11,22 @@ The files illustrate a complete sequence:
 2. [`home-office-collection.json`](./home-office-collection.json) is a full Collection root
    representation with language metadata, omitted root `parent_ids`, and a browser link. Instead of
    embedding every Collection-specific filter, it links to a pageable filter resource.
-3. [`home-office-collection-search-response.json`](./home-office-collection-search-response.json)
+3. [`home-office-collection-search-request.json`](./home-office-collection-search-request.json)
+   combines a Service-interpreted text query with the exact root-Collection constraint.
+4. [`home-office-collection-search-response.json`](./home-office-collection-search-response.json)
    shows the same Collection as a terse search item with its root relationship and exhaustive
-   `detail_fields`.
-4. [`home-office-filters-page-1.json`](./home-office-filters-page-1.json) and
+   `detail_fields`. The Service owns matching and ordering.
+5. [`home-office-filters-page-1.json`](./home-office-filters-page-1.json) and
    [`home-office-filters-page-2.json`](./home-office-filters-page-2.json) show short Service-local
    filter identifiers, types, operators, units, sorting capability, and cursor-style continuation.
-5. [`home-office-search-response.json`](./home-office-search-response.json) shows terse Offering
+6. [`home-office-search-response.json`](./home-office-search-response.json) shows terse Offering
    results with Service-selected attributes, exhaustive `detail_fields`, and dynamic value counts.
    Its refinements reference previously advertised filters; they do not define a third filter
    source.
-6. [`walnut-standing-desk-offering.json`](./walnut-standing-desk-offering.json) expands one terse
+7. [`walnut-standing-desk-offering.json`](./walnut-standing-desk-offering.json) expands one terse
    result into its full Offering, including direct `collection_ids`, a `starting_at` Price Preview,
    Service-owned attributes, and a quote action for current tax, shipping/pickup, and availability.
-7. [`home-office-furniture-attributes.schema.json`](./home-office-furniture-attributes.schema.json)
+8. [`home-office-furniture-attributes.schema.json`](./home-office-furniture-attributes.schema.json)
    teaches an agent how to interpret the marketplace's listing attributes without making that retail
    model normative to ODP.
 

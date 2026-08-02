@@ -624,6 +624,40 @@ ODP resource.
 
 # Collections
 
+## Collection Search
+
+The `search-collections` operation accepts an ODP Top-Level Document containing `odp_version` and at
+least one of `query` or `parent_id`. It MAY also contain `limit`. A request containing neither
+search criterion is invalid; an Agent uses `list-collections` for an unconstrained sequence.
+
+`query` is a non-empty string of no more than 256 Unicode code points and MUST contain at least one
+non-whitespace character. It conveys text-search intent to the Service. The Service owns query
+interpretation, matching, indexing, and relevance. It can use lexical, full-text, language-aware,
+semantic, or other matching over Collection metadata visible under the request's access and language
+context. ODP does not define tokenization, stemming, case folding, searchable fields, or a portable
+relevance algorithm. An Agent MUST NOT assume that the same query produces equivalent matches at
+different Services.
+
+`parent_id` defines an exact hierarchy constraint. An omitted `parent_id` applies no hierarchy
+constraint. A JSON `null` value selects root Collections, which omit `parent_ids`. A Local Resource
+Identifier selects Collections whose `parent_ids` contains that identifier, meaning its direct
+children. It does not select the named Collection or recursively select descendants.
+
+When both `query` and `parent_id` are present, a Collection MUST satisfy both criteria. The
+`parent_id` predicate retains its exact protocol-defined meaning regardless of how the Service
+interprets `query`.
+
+The Service chooses result ordering. It can use relevance, curated taxonomy order, popularity, or
+another Service policy, and ODP version 1.0 defines no client-selected Collection sort. The common
+pagination contract requires the chosen logical sequence to remain stable during one traversal and
+uses `id` as the final ordering tie-breaker. An Agent MUST NOT reorder results before exposing them
+unless its caller explicitly requests local presentation ordering.
+
+The successful response is a page envelope containing Collection Representations selected by the
+common `representation` query parameter. No matches produce `200 OK` with an empty `items` array.
+Malformed request bodies or unsupported member values produce an `INVALID_REQUEST` problem. The
+request and response use `application/odp+json`.
+
 ## Collection Envelope
 
 A Full Collection Representation MUST contain `odp_version`, `id`, and `name`. It MAY contain

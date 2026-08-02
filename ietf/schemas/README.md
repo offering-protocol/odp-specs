@@ -10,6 +10,7 @@ checked for drift.
 | Schema                                                                                       | Contract                                              |
 | -------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | [`attribute-schema-reference.schema.json`](./attribute-schema-reference.schema.json)         | Reference to a Service-defined Attribute Schema.      |
+| [`collection-search-request.schema.json`](./collection-search-request.schema.json)           | Collection text and direct-parent search request.     |
 | [`collection.schema.json`](./collection.schema.json)                                         | Full Collection Representation envelope.              |
 | [`detail-fields.schema.json`](./detail-fields.schema.json)                                   | Omitted fields available in a Full Representation.    |
 | [`invalid-parameter.schema.json`](./invalid-parameter.schema.json)                           | Structured invalid request parameter.                 |
