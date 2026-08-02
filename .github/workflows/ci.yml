@@ -14,7 +14,42 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
-      - run: make -C ietf check
+          bundler-cache: true
+          working-directory: ietf
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: ietf/requirements.txt
+
+      - name: Install PDF system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libpango-1.0-0 \
+            libpangocairo-1.0-0 \
+            libgdk-pixbuf-2.0-0 \
+            libffi-dev \
+            shared-mime-info \
+            fonts-noto
+
+      - name: Install Python tooling
+        working-directory: ietf
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install --upgrade pip
+          .venv/bin/python -m pip install -r requirements.txt
+
+      - name: Check drafts and support files
+        run: make -C ietf check
+
+      - name: Render draft and site artifacts
+        run: make -C ietf render
+
+      - name: Check committed site artifacts
+        run: git diff --exit-code -- docs

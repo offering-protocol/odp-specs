@@ -24,13 +24,21 @@ normative:
   RFC6839:
   RFC6890:
   RFC6901:
-  RFC2119:
-  RFC8174:
   RFC8259:
   RFC8615:
   RFC9110:
   RFC9111:
   RFC9457:
+    title: Problem Details for HTTP APIs
+    target: https://www.rfc-editor.org/info/rfc9457
+    date: 2023-07
+    seriesinfo:
+      RFC: 9457
+      DOI: 10.17487/RFC9457
+    author:
+      - ins: M. Nottingham
+      - ins: E. Wilde
+      - ins: S. Dalal
   OPENAPI31:
     title: OpenAPI Specification v3.1.2
     target: https://spec.openapis.org/oas/v3.1.2.html
@@ -119,10 +127,7 @@ and Offering data.
 
 # Requirements Language
 
-The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD
-NOT**, **RECOMMENDED**, **NOT RECOMMENDED**, **MAY**, and **OPTIONAL** in this document are to be
-interpreted as described in BCP 14 {{RFC2119}} {{RFC8174}} when, and only when, they appear in all
-capitals, as shown here.
+{::boilerplate bcp14-tagged}
 
 # Scope
 

@@ -5,7 +5,10 @@ require "json"
 require "pathname"
 
 root = Pathname.new(__dir__).join("..").expand_path
-paths = Dir[root.join("**/*.json")].sort
+ignored_directories = %w[.bundle .cache .refcache .venv vendor].freeze
+paths = Dir[root.join("**/*.json")].sort.reject do |path|
+  (Pathname.new(path).relative_path_from(root).each_filename.to_a & ignored_directories).any?
+end
 abort "No JSON files found" if paths.empty?
 
 def canonical_json(value, depth = 0)

@@ -110,9 +110,8 @@ Format Markdown tables and wrap prose to 100 columns:
 make -C ietf format
 ```
 
-The IETF workspace provides formatting, support-artifact publication, conformance, and drift checks
-as described in [`ietf/README.md`](./ietf/README.md). Draft rendering and idnits tooling are
-established separately.
+The IETF workspace provides formatting, support-artifact publication, conformance, draft rendering,
+idnits, and drift checks as described in [`ietf/README.md`](./ietf/README.md).
 
 Stable support resources are published at:
 

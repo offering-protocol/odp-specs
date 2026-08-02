@@ -24,5 +24,24 @@ Run `make -C ietf render-support` to publish schemas, descriptive examples, and 
 into `docs/`. The full check rejects missing, unexpected, or stale published support artifacts and
 rejects disagreement between Problem Details vectors and the normative problem-code table.
 
+Install the pinned Internet-Draft toolchain:
+
+```sh
+cd ietf
+bundle install
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -r requirements.txt
+```
+
+Run `make -C ietf render` from the repository root to generate XML, text, HTML, and PDF draft files
+under ignored `artifacts/` and regenerate every committed site artifact under `docs/`. Run `make -C
+ietf idnits` to render the draft and inspect its text artifact with idnits. The full check also
+rejects hard-coded section numbers into external Internet-Drafts and a stale site index.
+
+Rendering derives RFC bibliography dependencies from draft frontmatter and seeds the ignored local
+cache from the official `ietf-tools/bibxml-data-archive` before invoking kramdown-rfc. The source
+draft remains the reference manifest; no separate RFC list is maintained.
+
 Normative Internet-Draft prose is authoritative. Supporting artifacts make the contract testable but
 do not override the drafts.

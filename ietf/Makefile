@@ -1,5 +1,11 @@
 RUBY ?= ruby
 OUTPUT ?= /tmp/odp-marketplace-scale
+ARTIFACTS := ../artifacts
+INDEX_ARTIFACT := ../docs/index.html
+KRAMDOWN_RFC := bundle exec kramdown-rfc
+XML2RFC := .venv/bin/xml2rfc
+XML2RFC_CACHE := .cache/xml2rfc
+IDNITS := idnits
 MARKDOWN_FILES := $(shell find .. -type f -name '*.md' \
 	-not -path '../.git/*' \
 	-not -path '../artifacts/*' \
@@ -8,9 +14,9 @@ MARKDOWN_FILES := $(shell find .. -type f -name '*.md' \
 	-not -path '../ietf/.venv/*' | sort)
 DRAFTS := $(shell find specs -type f -name 'draft-*.md' | sort)
 
-.PHONY: check check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-drafts check-error-limits check-filters-sorting check-formatter check-format check-harness check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning format generate-marketplace-scale render-examples render-problems render-schemas render-support
+.PHONY: check check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-drafts check-error-limits check-external-section-refs check-filters-sorting check-formatter check-format check-harness check-index check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning clean format generate-marketplace-scale idnits prepare-references render render-drafts render-examples render-index render-problems render-schemas render-support
 
-check: check-drafts check-formatter check-format check-json check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-error-limits check-examples check-filters-sorting check-harness check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning
+check: check-drafts check-external-section-refs check-formatter check-format check-json check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-error-limits check-examples check-filters-sorting check-harness check-identity check-index check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning
 
 check-actions:
 	$(RUBY) scripts/check_action_vectors.rb
@@ -36,6 +42,9 @@ check-drafts:
 check-error-limits:
 	$(RUBY) scripts/check_error_limit_vectors.rb
 
+check-external-section-refs:
+	$(RUBY) scripts/check_external_section_refs.rb $(DRAFTS)
+
 check-formatter:
 	$(RUBY) scripts/check_markdown_formatter.rb
 
@@ -56,6 +65,9 @@ check-filters-sorting:
 
 check-identity:
 	$(RUBY) scripts/check_identity_vectors.rb
+
+check-index:
+	$(RUBY) scripts/render_index.rb --check $(DRAFTS) "$(INDEX_ARTIFACT)"
 
 check-marketplace-scale:
 	$(RUBY) scripts/check_marketplace_scale.rb
@@ -96,8 +108,26 @@ generate-marketplace-scale:
 format:
 	$(RUBY) scripts/format_markdown.rb $(MARKDOWN_FILES)
 
+render: render-drafts render-support render-index
+
+prepare-references:
+	$(RUBY) scripts/prepare_references.rb $(DRAFTS)
+
+render-drafts: prepare-references
+	@$(KRAMDOWN_RFC) --version >/dev/null || { echo "kramdown-rfc is required for render; run bundle install"; exit 1; }
+	@test -x "$(XML2RFC)" || { echo "xml2rfc is required for render; run python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt"; exit 1; }
+	@mkdir -p "$(ARTIFACTS)" "$(XML2RFC_CACHE)"
+	@for draft in $(DRAFTS); do \
+		docname=$$(basename "$$draft" .md); \
+		$(KRAMDOWN_RFC) "$$draft" > "$(ARTIFACTS)/$$docname.xml"; \
+		$(XML2RFC) --cache "$(XML2RFC_CACHE)" --text --html --pdf --path "$(ARTIFACTS)" "$(ARTIFACTS)/$$docname.xml"; \
+	done
+
 render-examples:
 	$(RUBY) scripts/publish_support_artifacts.rb examples
+
+render-index:
+	$(RUBY) scripts/render_index.rb $(DRAFTS) "$(INDEX_ARTIFACT)"
 
 render-problems:
 	$(RUBY) scripts/publish_support_artifacts.rb problems
@@ -108,3 +138,21 @@ render-schemas:
 
 render-support:
 	$(RUBY) scripts/publish_support_artifacts.rb
+
+idnits: render-drafts
+	@command -v "$(IDNITS)" >/dev/null || { echo "idnits is required"; exit 1; }
+	@for draft in $(DRAFTS); do \
+		docname=$$(basename "$$draft" .md); \
+		echo "== idnits: $$docname.txt =="; \
+		$(IDNITS) "$(ARTIFACTS)/$$docname.txt"; \
+		echo; \
+	done
+
+clean:
+	@for draft in $(DRAFTS); do \
+		docname=$$(basename "$$draft" .md); \
+		rm -f "$(ARTIFACTS)/$$docname.xml"; \
+		rm -f "$(ARTIFACTS)/$$docname.txt"; \
+		rm -f "$(ARTIFACTS)/$$docname.html"; \
+		rm -f "$(ARTIFACTS)/$$docname.pdf"; \
+	done

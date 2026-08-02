@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Offering Discovery Protocol Specifications</title>
+    <style>
+      :root { color-scheme: light dark; --bg: #f8fafc; --fg: #172033; --muted: #5b6475; --panel: #fff; --border: #d7dce5; --link: #0b5cad; }
+      @media (prefers-color-scheme: dark) { :root { --bg: #10141c; --fg: #eef2f8; --muted: #aeb7c8; --panel: #171d28; --border: #2d3545; --link: #8ab8ff; } }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.5; }
+      main { width: min(960px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 64px; }
+      h1 { margin: 0 0 8px; font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.05; }
+      h2 { margin-top: 36px; }
+      p { max-width: 760px; color: var(--muted); }
+      a { color: var(--link); }
+      table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); }
+      th, td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+      tbody tr:last-child td { border-bottom: none; }
+      th { color: var(--muted); font-size: 0.9rem; }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      td:last-child { white-space: nowrap; }
+      @media (max-width: 640px) { table, tbody, tr, td { display: block; width: 100%; } thead { display: none; } tr { border-bottom: 1px solid var(--border); } td { border: 0; white-space: normal; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Offering Discovery Protocol Specifications</h1>
+        <p>Internet-Draft sources, rendered specifications, and implementation-support artifacts for ODP.</p>
+      </header>
+
+      <h2>Current Draft</h2>
+      <table>
+        <thead><tr><th>Draft</th><th>Description</th><th>Formats</th></tr></thead>
+        <tbody><tr>
+  <td><code>draft-kavian-offering-discovery-protocol-00</code></td>
+  <td>The Offering Discovery Protocol (ODP) enables an automated Agent to inspect a Service, discover its Collections and Offerings, interpret Service-defined structured attributes, and identify links to subsequent operations.</td>
+  <td><a href="https://datatracker.ietf.org/doc/draft-kavian-offering-discovery-protocol/">IETF</a> <a href="https://github.com/offering-protocol/odp-specs/releases/latest/download/draft-kavian-offering-discovery-protocol-00.html">HTML</a> <a href="https://github.com/offering-protocol/odp-specs/releases/latest/download/draft-kavian-offering-discovery-protocol-00.txt">TXT</a> <a href="https://github.com/offering-protocol/odp-specs/releases/latest/download/draft-kavian-offering-discovery-protocol-00.xml">XML</a> <a href="https://github.com/offering-protocol/odp-specs/releases/latest/download/draft-kavian-offering-discovery-protocol-00.pdf">PDF</a></td>
+</tr>
+</tbody>
+      </table>
+
+      <h2>Implementation Support</h2>
+      <table>
+        <thead><tr><th>Resource</th><th>Description</th></tr></thead>
+        <tbody><tr><td><a href="schemas/">Protocol schemas</a></td><td>Stable ODP wire-object JSON Schemas.</td></tr>
+<tr><td><a href="conformance/">Conformance schemas</a></td><td>Offline adapter, index, and report contracts.</td></tr>
+<tr><td><a href="examples/">Descriptive examples</a></td><td>Browsable scenarios with downloadable JSON artifacts.</td></tr>
+<tr><td><a href="problems/">Problem Types</a></td><td>Stable Problem Details type documentation.</td></tr></tbody>
+      </table>
+
+      <h2>Source</h2>
+      <p>Sources and contribution guidance are maintained in the
+        <a href="https://github.com/offering-protocol/odp-specs">offering-protocol/odp-specs</a> repository.</p>
+    </main>
+  </body>
+</html>
