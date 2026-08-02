@@ -38,6 +38,26 @@
     },
     "unit": {
       "$ref": "filter-unit.schema.json"
+    },
+    "refinable": {
+      "const": true
+    }
+  },
+  "if": {
+    "required": [
+      "refinable"
+    ]
+  },
+  "then": {
+    "properties": {
+      "operators": {
+        "contains": {
+          "enum": [
+            "eq",
+            "in"
+          ]
+        }
+      }
     }
   }
 }

@@ -19,5 +19,9 @@
     }
   ],
   "sort": "processing-fastest",
+  "refinements": [
+    "material",
+    "made_to_order"
+  ],
   "limit": 50
 }

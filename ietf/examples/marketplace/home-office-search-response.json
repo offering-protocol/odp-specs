@@ -51,7 +51,8 @@
         },
         {
           "value": "metal",
-          "count": 12681
+          "count": 12681,
+          "count_relation": "lower_bound"
         }
       ]
     },

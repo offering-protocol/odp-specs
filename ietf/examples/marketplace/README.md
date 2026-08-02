@@ -22,11 +22,13 @@ The files illustrate a complete sequence:
    filter identifiers, types, operators, units, and cursor-style continuation.
 6. [`home-office-offering-search-request.json`](./home-office-offering-search-request.json) combines
    a Service-interpreted text query with explicit descendant expansion below the selected
-   Collection.
+   Collection, indexed filtering and sorting, and an explicit request for two advertised
+   refinements.
 7. [`home-office-search-response.json`](./home-office-search-response.json) shows terse Offering
-   results with Service-selected ordering and attributes, exhaustive `detail_fields`, and dynamic
-   value counts. Its refinements reference previously advertised filters; they do not define a third
-   filter source.
+   results with Service-selected ordering and attributes, exhaustive `detail_fields`, and requested
+   contextual value counts. Its refinements reference previously advertised refinable filters; they
+   do not define a third filter source. Exact and lower-bound counts demonstrate how a marketplace
+   can expose useful navigation without requiring expensive exact aggregation for every bucket.
 8. [`walnut-standing-desk-offering.json`](./walnut-standing-desk-offering.json) expands one terse
    result into its full Offering, including direct `collection_ids`, a `starting_at` Price Preview,
    Service-owned attributes, and a quote action for current tax, shipping/pickup, and availability.

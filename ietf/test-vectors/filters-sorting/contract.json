@@ -85,6 +85,37 @@
       "valid": false
     },
     {
+      "name": "refinable-equality-filter",
+      "operation": "validate-definition",
+      "definition": {
+        "id": "material",
+        "title": "Material",
+        "description": "Primary materials declared for the Offering.",
+        "type": "string",
+        "operators": [
+          "eq",
+          "in"
+        ],
+        "refinable": true
+      },
+      "valid": true
+    },
+    {
+      "name": "refinable-filter-without-equality-operator",
+      "operation": "validate-definition",
+      "definition": {
+        "id": "processing_days",
+        "title": "Processing time",
+        "description": "Days before the item is ready.",
+        "type": "integer",
+        "operators": [
+          "lte"
+        ],
+        "refinable": true
+      },
+      "valid": false
+    },
+    {
       "name": "in-expression",
       "operation": "validate-expression",
       "definition": {

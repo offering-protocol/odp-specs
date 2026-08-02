@@ -26,6 +26,7 @@ checked for drift.
 | [`local-resource-identifier.schema.json`](./local-resource-identifier.schema.json)           | Service-created Collection and Offering identifiers.  |
 | [`local-resource-identifier-list.schema.json`](./local-resource-identifier-list.schema.json) | Unique Service-local resource identifier arrays.      |
 | [`offering-search-request.schema.json`](./offering-search-request.schema.json)               | Offering text and Collection-scope search request.    |
+| [`offering-search-response.schema.json`](./offering-search-response.schema.json)             | Offering search results and requested refinements.    |
 | [`offering.schema.json`](./offering.schema.json)                                             | Full Offering Representation envelope.                |
 | [`page-envelope.schema.json`](./page-envelope.schema.json)                                   | Shared list and search response envelope.             |
 | [`page-limit.schema.json`](./page-limit.schema.json)                                         | Requested maximum items per page.                     |
@@ -34,6 +35,8 @@ checked for drift.
 | [`problem-details.schema.json`](./problem-details.schema.json)                               | ODP RFC 9457 error response.                          |
 | [`protocol-version.schema.json`](./protocol-version.schema.json)                             | Major and minor ODP protocol versions.                |
 | [`representation.schema.json`](./representation.schema.json)                                 | Terse and Full Representation selection.              |
+| [`refinement-bucket.schema.json`](./refinement-bucket.schema.json)                           | Typed value and contextual match count.               |
+| [`refinement-group.schema.json`](./refinement-group.schema.json)                             | Refinement buckets for one advertised filter.         |
 | [`resource-identity.schema.json`](./resource-identity.schema.json)                           | Structured identity composed by an Agent.             |
 | [`resource-reference.schema.json`](./resource-reference.schema.json)                         | Origin-relative and absolute resource references.     |
 | [`search-capabilities.schema.json`](./search-capabilities.schema.json)                       | Search capability advertisement container.            |

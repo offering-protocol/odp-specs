@@ -21,6 +21,12 @@ def request_valid?(request)
   end
   return false if request.key?("sort") &&
     (!request["sort"].is_a?(String) || !request["sort"].match?(/\A[A-Za-z0-9._~-]{1,64}\z/))
+  if request.key?("refinements")
+    refinements = request["refinements"]
+    return false unless refinements.is_a?(Array) && refinements.length.between?(1, 16) &&
+      refinements.uniq.length == refinements.length &&
+      refinements.all? { |identifier| identifier.is_a?(String) && identifier.match?(/\A[A-Za-z0-9._~-]{1,64}\z/) }
+  end
   return false if request.key?("collection_id") && !OdpIdentity.local_identifier?(request["collection_id"])
   if request.key?("include_descendants")
     return false unless [true, false].include?(request["include_descendants"]) && request.key?("collection_id")

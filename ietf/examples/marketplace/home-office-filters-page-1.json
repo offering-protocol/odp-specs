@@ -9,7 +9,8 @@
       "operators": [
         "eq",
         "in"
-      ]
+      ],
+      "refinable": true
     },
     {
       "id": "material",
@@ -19,7 +20,8 @@
       "operators": [
         "eq",
         "in"
-      ]
+      ],
+      "refinable": true
     }
   ],
   "next": "/odp/collections/home-office/filters?limit=2&cursor=cGFnZTI"

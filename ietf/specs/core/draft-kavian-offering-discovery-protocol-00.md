@@ -738,7 +738,7 @@ without creating an ODP resource.
 
 The `search-offerings` operation accepts an ODP Top-Level Document containing `odp_version` and at
 least one of `query` or `filters`. It MAY also contain `collection_id`, `include_descendants`,
-`sort`, and `limit`. An Agent uses `list-offerings` for an unconstrained sequence and
+`sort`, `refinements`, and `limit`. An Agent uses `list-offerings` for an unconstrained sequence and
 `list-collection-offerings` for the unconstrained direct members of one Collection.
 
 `query` is a non-empty string of no more than 256 Unicode code points and MUST contain at least one
@@ -778,6 +778,10 @@ The successful response is a page envelope containing Offering Representations s
 common `representation` query parameter. No matches produce `200 OK` with an empty `items` array.
 Malformed request bodies or unsupported member values produce an `INVALID_REQUEST` problem. The
 request and response use `application/odp+json`.
+
+When requested, the initial response MAY also contain the bounded Refinement Groups defined below. A
+continuation response MUST omit `refinements`. Refinements describe the complete logical result set
+for the initial request, not only the Offerings serialized on its first page.
 
 ## Offering Envelope
 
@@ -996,7 +1000,9 @@ equality; ODP performs no normalization or locale folding.
 A Filter Definition contains `id`, `title`, `description`, `type`, and `operators`. `title` is a
 non-empty string of no more than 128 Unicode code points. `description` is a non-empty string of no
 more than 1024 Unicode code points. `operators` is a non-empty array of unique supported core
-operators. A numeric Filter Definition MAY contain `unit`; other types MUST omit it.
+operators. A numeric Filter Definition MAY contain `unit`; other types MUST omit it. A definition
+that supports value-count refinement contains `refinable` with the value `true`; otherwise it omits
+`refinable`. A refinable definition MUST advertise `eq`, `in`, or both.
 
 Every operator advertised by a Filter Definition MUST be compatible with its type:
 
@@ -1049,6 +1055,41 @@ expression tree, negative operator, substring operator, or regular-expression op
 
 An unknown identifier, unadvertised or incompatible operator, invalid value, excessive expression
 count, or excessive `in` cardinality produces an `INVALID_REQUEST` problem.
+
+## Refinements
+
+`refinements` in an Offering-search request is a non-empty array of at most 16 unique capability
+identifiers. Every identifier MUST resolve to an effective Filter Definition whose `refinable`
+member is `true`. An unavailable, invalid, quarantined, duplicate, or non-refinable identifier
+produces an `INVALID_REQUEST` problem. A Service that advertises no refinable Filter Definitions
+does not implement refinement computation.
+
+An initial Offering-search response MAY contain `refinements` only when the request contains it. The
+response member is a non-empty array of at most 16 Refinement Groups. Each group contains
+`filter_id` and `values`; `filter_id` MUST occur in the request and MUST be unique among the
+returned groups. A Service MAY omit a requested group when it cannot produce useful values. An
+omitted group does not invalidate other groups or the Offering results.
+
+`values` contains 1 through 32 Refinement Buckets whose values are unique under the referenced
+Filter Definition's equality semantics. Each bucket contains `value` and `count`. `value` MUST be a
+scalar valid for the referenced Filter Definition's type. `count` is a non-negative JSON integer no
+greater than 9,007,199,254,740,991. An exact count omits `count_relation`. A count known only to be
+a lower bound contains `count_relation` with the value `lower_bound`. A Service MUST NOT report an
+estimate as exact.
+
+For one bucket, the Service evaluates the original Collection constraint, query, access context, and
+every Filter Expression whose identifier differs from the group's `filter_id`. It then applies the
+bucket value to the referenced Filter Definition using its equality semantics. `count` is the number
+of distinct matching Offerings. Removing same-filter expressions makes alternative values useful for
+navigation while retaining every independent constraint. Sorting and page limits do not affect the
+count.
+
+Refinement values are contextual suggestions, not a complete enumeration of a Filter Definition's
+domain and not another capability source. An Agent resolves `filter_id` through the effective
+capability catalog and interprets every bucket using that definition's type and unit. ODP does not
+define total-result counts; a bucket count applies only to that candidate value. An Agent-oriented
+SDK SHOULD return normalized groups with their resolved Filter Definitions and scoped issues rather
+than requiring its caller to join raw identifiers.
 
 ## Sort Definitions
 

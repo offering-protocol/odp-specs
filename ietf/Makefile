@@ -6,9 +6,9 @@ MARKDOWN_FILES := $(shell find .. -type f -name '*.md' \
 	-not -path '../ietf/.venv/*' | sort)
 DRAFTS := $(shell find specs -type f -name 'draft-*.md' | sort)
 
-.PHONY: check check-attribute-schemas check-collection-search check-collections check-drafts check-error-limits check-filters-sorting check-formatter check-format check-json check-examples check-identity check-offering-search check-offerings check-pagination check-representations check-search-capabilities check-service-document check-versioning format
+.PHONY: check check-attribute-schemas check-collection-search check-collections check-drafts check-error-limits check-filters-sorting check-formatter check-format check-json check-examples check-identity check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-service-document check-versioning format
 
-check: check-drafts check-formatter check-format check-json check-attribute-schemas check-collection-search check-collections check-error-limits check-examples check-filters-sorting check-identity check-offering-search check-offerings check-pagination check-representations check-search-capabilities check-service-document check-versioning
+check: check-drafts check-formatter check-format check-json check-attribute-schemas check-collection-search check-collections check-error-limits check-examples check-filters-sorting check-identity check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-service-document check-versioning
 
 check-attribute-schemas:
 	$(RUBY) scripts/check_attribute_schema_vectors.rb
@@ -51,6 +51,9 @@ check-offerings:
 
 check-pagination:
 	$(RUBY) scripts/check_pagination_vectors.rb
+
+check-refinements:
+	$(RUBY) scripts/check_refinement_vectors.rb
 
 check-representations:
 	$(RUBY) scripts/check_representation_vectors.rb

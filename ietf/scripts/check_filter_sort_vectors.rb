@@ -54,6 +54,8 @@ def definition_valid?(definition)
   return false unless operators.all? { |operator| OPERATORS.include?(operator) }
   return false if (operators & %w[lt lte gt gte]).any? && !ORDERED_TYPES.include?(definition["type"])
   return false if definition.key?("unit") && !%w[integer number decimal].include?(definition["type"])
+  return false if definition.key?("refinable") && definition["refinable"] != true
+  return false if definition["refinable"] && (operators & %w[eq in]).empty?
 
   !definition.key?("unit") || unit_valid?(definition["unit"])
 end
