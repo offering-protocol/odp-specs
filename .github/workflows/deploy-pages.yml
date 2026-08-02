@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -24,6 +24,56 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+          working-directory: ietf
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: ietf/requirements.txt
+
+      - name: Install PDF system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libpango-1.0-0 \
+            libpangocairo-1.0-0 \
+            libgdk-pixbuf-2.0-0 \
+            libffi-dev \
+            shared-mime-info \
+            fonts-noto
+
+      - name: Install Python tooling
+        working-directory: ietf
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install --upgrade pip
+          .venv/bin/python -m pip install -r requirements.txt
+
+      - name: Render release artifacts
+        run: make -C ietf render
+
+      - name: Publish latest release artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view latest >/dev/null 2>&1; then
+            gh release upload latest artifacts/draft-* --clobber
+            gh release edit latest \
+              --title "Latest ODP specification artifacts" \
+              --notes "Generated from commit ${{ github.sha }}." \
+              --latest
+          else
+            gh release create latest artifacts/draft-* \
+              --title "Latest ODP specification artifacts" \
+              --notes "Generated from commit ${{ github.sha }}." \
+              --latest
+          fi
 
       - uses: actions/configure-pages@v6
 

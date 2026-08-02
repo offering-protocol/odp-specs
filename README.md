@@ -122,7 +122,12 @@ Stable support resources are published at:
 
 The specification website is deployed from the committed `docs/` tree to
 [`www.offeringprotocol.org`](https://www.offeringprotocol.org/). Pull requests verify generated site
-artifacts before the deployment workflow publishes `main`.
+artifacts before the deployment workflow publishes `main`. Rendered HTML, text, XML, and PDF drafts
+are available from the [latest GitHub
+release](https://github.com/offering-protocol/odp-specs/releases/latest).
+
+Protocol compatibility, deprecation, Internet-Draft revisions, and immutable publication releases
+are governed by [GOVERNANCE.md](./GOVERNANCE.md).
 
 ## Reference Implementations
 

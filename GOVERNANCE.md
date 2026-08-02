@@ -27,6 +27,29 @@ Behavior-changing work identifies affected agents and Services, security/privacy
 versioning impact, migration behavior, and conformance changes. Existing vectors are changed only to
 correct an error or accompany an approved compatibility decision.
 
+## Protocol Lifecycle
+
+ODP wire versions use the `MAJOR.MINOR` form defined by the authoritative Internet-Draft. Repository
+commits, Git tags, Internet-Draft revisions, implementation versions, and conformance-report formats
+are separate identifiers and do not change `odp_version`.
+
+| Change                                            | Protocol-version effect                                                                 |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Editorial or non-normative support correction     | None.                                                                                   |
+| Compatible optional behavior                      | Increment `MINOR` when the behavior becomes normative.                                  |
+| Removal, incompatible redefinition, or wire epoch | Increment `MAJOR`; publish new versioned resources rather than changing old identities. |
+
+An Internet-Draft revision such as `-00` or `-01` records an IETF document publication. It is not a
+protocol version and does not imply compatibility by itself. Compatibility is determined by the
+normative wire rules and `odp_version`.
+
+## Deprecation
+
+A same-major revision may deprecate a field, value, operation, or behavior, but it remains valid for
+the rest of that major-version family. Deprecation is recorded in normative prose and migration
+guidance; it does not introduce an unadvertised wire signal. Removal or incompatible reuse requires
+a new major version.
+
 ## Review and Evidence
 
 Protocol changes require focused pull requests and passing repository checks. Normative behavior
@@ -40,6 +63,20 @@ The `ietf/` directory is the source for specifications and support material. The
 is the published site. Rendered Internet-Draft artifacts are reproducible and published as release
 assets. Stable JSON Schema URLs and other web artifacts are generated from their source files and
 checked for drift.
+
+Every successful deployment replaces the `latest` GitHub Release with rendered artifacts from the
+deployed `main` commit. `latest` is a convenience snapshot and is not an immutable specification
+version.
+
+An Internet-Draft submitted to the IETF receives an immutable release and Git tag matching its full
+document name, for example `draft-kavian-offering-discovery-protocol-00`. An immutable release is
+not replaced or retagged. A correction after submission is published as the next Internet-Draft
+revision.
+
+Stable support-resource URLs remain available for the compatibility family they identify. A
+same-major update may change their content only in ways permitted by the protocol compatibility
+rules. An incompatible resource receives a new versioned URL; an existing stable URL is not silently
+repurposed.
 
 ## IETF Relationship
 

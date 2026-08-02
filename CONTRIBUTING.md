@@ -31,6 +31,18 @@ conformance evidence from an independent implementation before it is declared st
 examples should exercise general ODP behavior without making an industry-specific vocabulary
 normative.
 
+## Publishing an Internet-Draft Revision
+
+After an Internet-Draft revision is submitted and its repository commit is verified:
+
+1. Render the draft and run idnits with `make -C ietf idnits`.
+2. Create an annotated Git tag matching the full document name.
+3. Create a GitHub Release with the same name and attach that draft's HTML, PDF, text, and XML
+   artifacts.
+
+Published revision tags and releases are immutable. Corrections use the next Internet-Draft revision
+rather than moving or replacing a published tag.
+
 ## Writing and Data Conventions
 
 - Follow `ietf/STYLE.md` for Internet-Draft conventions.
