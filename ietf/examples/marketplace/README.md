@@ -10,7 +10,8 @@ The files illustrate a complete sequence:
    It advertises its Collection and Offering operations through a fixed endpoint base.
 2. [`home-office-collection.json`](./home-office-collection.json) is a full Collection root
    representation with language metadata, omitted root `parent_ids`, and a browser link. Instead of
-   embedding every Collection-specific filter, it links to a pageable filter resource.
+   embedding every Collection-specific filter, it links to a pageable filter resource while
+   embedding one supported indexed sort recipe.
 3. [`home-office-collection-search-request.json`](./home-office-collection-search-request.json)
    combines a Service-interpreted text query with the exact root-Collection constraint.
 4. [`home-office-collection-search-response.json`](./home-office-collection-search-response.json)

@@ -8,10 +8,27 @@
     "en"
   ],
   "web_url": "/c/home-office",
-  "filter_capabilities": {
-    "linked": {
-      "href": "/odp/collections/home-office/filters?limit=2",
-      "paginated": true
+  "search_capabilities": {
+    "filters": {
+      "linked": {
+        "href": "/odp/collections/home-office/filters?limit=2"
+      }
+    },
+    "sorts": {
+      "inline": [
+        {
+          "id": "processing-fastest",
+          "title": "Fastest processing",
+          "description": "Orders by the shortest advertised processing time.",
+          "keys": [
+            {
+              "filter_id": "processing_days",
+              "direction": "ascending",
+              "missing": "last"
+            }
+          ]
+        }
+      ]
     }
   }
 }

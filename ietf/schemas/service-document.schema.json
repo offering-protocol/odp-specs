@@ -89,6 +89,9 @@
           "pattern": "^/(?!/)[A-Za-z0-9._~!$&'()*+,;=:@%/-]*$"
         }
       }
+    },
+    "search_capabilities": {
+      "$ref": "search-capabilities.schema.json"
     }
   }
 }

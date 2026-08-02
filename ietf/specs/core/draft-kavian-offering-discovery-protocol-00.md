@@ -384,8 +384,8 @@ operations advertised by the document.
 
 The successful response MUST be an ODP JSON Top-Level Document. The Service Document MUST be a flat
 JSON object and MUST contain `odp_version`, `name`, `description`, `language`, `localizations`,
-`operations`, and `http`. It MAY contain `keywords`. It MUST NOT contain a self-asserted Service
-identifier or `web_url`.
+`operations`, and `http`. It MAY contain `keywords` and `search_capabilities`. It MUST NOT contain a
+self-asserted Service identifier or `web_url`.
 
 `name` is a non-empty string of at most 128 Unicode code points. `description` is a non-empty string
 of at most 1024 Unicode code points. `keywords` is an array of at most 32 non-empty freeform
@@ -478,9 +478,9 @@ Agent MUST reject cross-origin redirects, transport-security downgrades, and red
 HTTP cache directives and validators are authoritative. When a response supplies no freshness
 information, an SDK SHOULD use configurable fallback freshness lifetimes of four hours for Service
 Documents, one hour for Collections, five minutes for Offerings, zero seconds for search responses,
-one hour for Filter Definitions, and 24 hours for Attribute Schemas. Each resource class MUST be
-configurable independently. A fallback does not override `Cache-Control`, `Expires`, validators, or
-other HTTP caching semantics.
+one hour for Filter and Sort Definitions, and 24 hours for Attribute Schemas. Each resource class
+MUST be configurable independently. A fallback does not override `Cache-Control`, `Expires`,
+validators, or other HTTP caching semantics.
 
 # Pagination
 
@@ -667,9 +667,9 @@ request and response use `application/odp+json`.
 ## Collection Envelope
 
 A Full Collection Representation MUST contain `odp_version`, `id`, and `name`. It MAY contain
-`description`, `language`, `localizations`, `parent_ids`, and `web_url`. Other Collection
-capabilities are defined by the operation or feature that uses them. An optional field with no
-applicable or available value is omitted rather than serialized as an empty value.
+`description`, `language`, `localizations`, `parent_ids`, `web_url`, and `search_capabilities`.
+Other Collection capabilities are defined by the operation or feature that uses them. An optional
+field with no applicable or available value is omitted rather than serialized as an empty value.
 
 `language` and `localizations` have the syntax and meaning defined for Service Document language
 metadata, but describe this Collection. They are omitted when the Collection uses the applicable
@@ -1071,6 +1071,59 @@ The Service MUST append Offering `id` as the final ascending tie-breaker after a
 The resulting order is subject to the common stable-pagination contract. An absent `sort` selects
 the Service's preferred ordering and does not require a Sort Definition. An unknown or unavailable
 Sort Definition identifier produces an `INVALID_REQUEST` problem.
+
+## Search Capability Advertisement
+
+`search_capabilities` is an object that contains at least one of `filters` or `sorts`. A Service
+Document advertises Service-wide capabilities. A Full Collection Representation advertises
+capabilities specific to searches whose request explicitly names that Collection. The field MUST NOT
+appear unless the Service advertises `search-offerings`.
+
+`filters` and `sorts` are independent capability sources. Each source contains exactly one of
+`inline` or `linked`. `inline` is a non-empty array containing no more than 32 Filter Definitions or
+16 Sort Definitions, according to the source. `linked` is an object containing `href`, a same-origin
+Resource Reference to the first page of the applicable definition sequence. A source with no
+definitions is omitted rather than represented by an empty array.
+
+A linked source is retrieved with `GET` and uses `application/odp+json`. The response is a standard
+page envelope whose `items` contain only the applicable definition kind and whose `next` links obey
+the common continuation contract. A page contains no more than 100 definitions. The linked operation
+can enforce access policy through live HTTP challenges. It follows the common `Accept-Language`,
+`Content-Language`, `Vary`, validator, redirect, response-limit, and caching rules. The
+advertisement does not contain a redundant pagination flag; only `next` indicates another page.
+
+Each inline or complete linked source is atomic. An Agent MUST retrieve and validate every page,
+enforce source uniqueness and bounds, and only then expose definitions from that source. It MUST NOT
+expose an earlier page while later pages remain unresolved. A failed or invalid source is omitted
+from the normalized capability catalog and reported as a scoped issue. Once a linked source cannot
+fit within the applicable effective-catalog bound, the Agent MUST stop retrieving that source and
+discard it. Failure of a Collection-specific source does not invalidate a valid Service-wide source,
+and capability failure does not prevent text-only Offering search.
+
+## Effective Search Capabilities
+
+An Offering search without `collection_id` uses only Service-wide capabilities. A search with
+`collection_id` uses the union of Service-wide capabilities and capabilities advertised by that
+exact Collection. Ancestors, descendants, and other Collections do not contribute definitions.
+`include_descendants` changes the Offering membership scope but does not change capability
+inheritance.
+
+The effective catalog contains at most 1,024 Filter Definitions and 128 Sort Definitions after
+merging its sources. The Service-wide source is applied before the selected-Collection source.
+Exceeding either limit makes the source that causes the overflow invalid; an Agent preserves earlier
+valid sources and reports a scoped issue. SDKs SHOULD retain and index the normalized catalog
+programmatically rather than placing every definition into an Agent's language model context.
+
+A conforming Service MUST NOT publish the same Filter Definition identifier or Sort Definition
+identifier in two effective sources, even when their serialized definitions are equal. An Agent
+quarantines each cross-source duplicate identifier rather than selecting an override. It also
+quarantines every Sort Definition that references a missing, invalid, or quarantined Filter
+Definition. Unrelated definitions remain usable. A request using a quarantined or otherwise
+unavailable identifier produces an `INVALID_REQUEST` problem.
+
+An Agent-oriented SDK SHOULD expose one normalized effective capability catalog containing valid
+Filter Definitions and resolved Sort Definitions, plus scoped issues. Callers need not process raw
+capability pages, merge scopes, detect conflicts, or resolve Sort Definition references.
 
 # Composition Boundaries
 

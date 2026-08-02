@@ -6,9 +6,9 @@
       "name": "Home office",
       "detail_fields": [
         "/description",
-        "/filter_capabilities",
         "/language",
         "/localizations",
+        "/search_capabilities",
         "/web_url"
       ]
     }

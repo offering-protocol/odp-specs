@@ -91,9 +91,16 @@ Dir[root.join("**/*-collection.json")].sort.each do |name|
   errors << "#{relative}: localizations must contain language" if
     document.key?("language") && document.key?("localizations") &&
     (!document["localizations"].is_a?(Array) || !document["localizations"].include?(document["language"]))
-  if document.key?("filter_capabilities")
-    sources = %w[inline linked].select { |field| document.fetch("filter_capabilities", {}).key?(field) }
-    errors << "#{relative}: filter_capabilities must contain exactly one of inline or linked" unless sources.length == 1
+  if document.key?("search_capabilities")
+    capabilities = document.fetch("search_capabilities")
+    errors << "#{relative}: search_capabilities must contain filters or sorts" unless
+      capabilities.is_a?(Hash) && %w[filters sorts].any? { |field| capabilities.key?(field) }
+    %w[filters sorts].each do |kind|
+      next unless capabilities.is_a?(Hash) && capabilities.key?(kind)
+
+      sources = %w[inline linked].select { |field| capabilities.fetch(kind, {}).key?(field) }
+      errors << "#{relative}: search_capabilities.#{kind} must contain exactly one source" unless sources.length == 1
+    end
   end
 end
 

@@ -53,6 +53,9 @@
     },
     "web_url": {
       "$ref": "resource-reference.schema.json"
+    },
+    "search_capabilities": {
+      "$ref": "search-capabilities.schema.json"
     }
   }
 }

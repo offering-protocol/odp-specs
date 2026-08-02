@@ -11,9 +11,12 @@ checked for drift.
 | -------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | [`attribute-schema-reference.schema.json`](./attribute-schema-reference.schema.json)         | Reference to a Service-defined Attribute Schema.      |
 | [`capability-identifier.schema.json`](./capability-identifier.schema.json)                   | Service-local filter and sort identifiers.            |
+| [`capability-link.schema.json`](./capability-link.schema.json)                               | Link to a pageable capability source.                 |
 | [`collection-search-request.schema.json`](./collection-search-request.schema.json)           | Collection text and direct-parent search request.     |
 | [`collection.schema.json`](./collection.schema.json)                                         | Full Collection Representation envelope.              |
 | [`detail-fields.schema.json`](./detail-fields.schema.json)                                   | Omitted fields available in a Full Representation.    |
+| [`filter-capability-source.schema.json`](./filter-capability-source.schema.json)             | Inline or linked Filter Definition source.            |
+| [`filter-definition-page.schema.json`](./filter-definition-page.schema.json)                 | Pageable Filter Definition sequence.                  |
 | [`filter-definition.schema.json`](./filter-definition.schema.json)                           | Search Filter Definition.                             |
 | [`filter-expression.schema.json`](./filter-expression.schema.json)                           | Filter request expression.                            |
 | [`filter-operator.schema.json`](./filter-operator.schema.json)                               | Core filter operators.                                |
@@ -33,7 +36,10 @@ checked for drift.
 | [`representation.schema.json`](./representation.schema.json)                                 | Terse and Full Representation selection.              |
 | [`resource-identity.schema.json`](./resource-identity.schema.json)                           | Structured identity composed by an Agent.             |
 | [`resource-reference.schema.json`](./resource-reference.schema.json)                         | Origin-relative and absolute resource references.     |
+| [`search-capabilities.schema.json`](./search-capabilities.schema.json)                       | Search capability advertisement container.            |
 | [`service-origin.schema.json`](./service-origin.schema.json)                                 | Canonical Service-origin serialization.               |
+| [`sort-capability-source.schema.json`](./sort-capability-source.schema.json)                 | Inline or linked Sort Definition source.              |
+| [`sort-definition-page.schema.json`](./sort-definition-page.schema.json)                     | Pageable Sort Definition sequence.                    |
 | [`sort-definition.schema.json`](./sort-definition.schema.json)                               | Advertised indexed sorting recipe.                    |
 | [`sort-key.schema.json`](./sort-key.schema.json)                                             | One fixed key in a sorting recipe.                    |
 | [`service-document.schema.json`](./service-document.schema.json)                             | Well-known Service discovery metadata and operations. |

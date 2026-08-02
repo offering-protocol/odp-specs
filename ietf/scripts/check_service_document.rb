@@ -3,6 +3,7 @@
 
 require "json"
 require "pathname"
+require_relative "odp_identity"
 
 OPERATIONS = %w[
   list-collections search-collections get-collection list-collection-offerings
@@ -10,6 +11,29 @@ OPERATIONS = %w[
 ].freeze
 LANGUAGE_TAG = /\A[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*\z/
 ENDPOINT_BASE = %r{\A/(?!/)[A-Za-z0-9._~!$&'()*+,;=:@%/-]*\z}
+
+def capability_source_valid?(source, maximum)
+  return false unless source.is_a?(Hash)
+
+  forms = %w[inline linked].select { |field| source.key?(field) }
+  return false unless forms.length == 1
+
+  if source.key?("inline")
+    source["inline"].is_a?(Array) && source["inline"].length.between?(1, maximum)
+  else
+    linked = source["linked"]
+    linked.is_a?(Hash) && OdpIdentity.resource_reference?(linked["href"])
+  end
+end
+
+def search_capabilities_valid?(capabilities, supported)
+  return false unless capabilities.is_a?(Hash) && (capabilities.key?("filters") || capabilities.key?("sorts"))
+  return false unless supported.include?("search-offerings")
+  return false if capabilities.key?("filters") && !capability_source_valid?(capabilities["filters"], 32)
+  return false if capabilities.key?("sorts") && !capability_source_valid?(capabilities["sorts"], 16)
+
+  true
+end
 
 def depth(value)
   children = value.is_a?(Hash) ? value.values : value.is_a?(Array) ? value : []
@@ -44,6 +68,8 @@ def valid_document?(document, source)
   supported = document.dig("operations", "supported")
   return false unless supported.is_a?(Array) && supported.length.between?(1, 32)
   return false unless supported.uniq.length == supported.length && supported.all? { |operation| OPERATIONS.include?(operation) }
+  return false if document.key?("search_capabilities") &&
+    !search_capabilities_valid?(document["search_capabilities"], supported)
 
   endpoint_base = document.dig("http", "endpoint_base")
   endpoint_base.is_a?(String) && endpoint_base.ascii_only? && endpoint_base.length <= 2048 && endpoint_base.match?(ENDPOINT_BASE)
