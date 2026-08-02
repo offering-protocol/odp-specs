@@ -11,6 +11,7 @@ access composition, and compatibility. Implementations publish the profiles and 
 | ------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | [`attribute-schemas`](./attribute-schemas/) | Reference, retrieval, dialect, validation, and narrow failure behavior.                      |
 | [`collections`](./collections/)             | Directed-acyclic hierarchy, direct membership, depth, and narrow edge failure.               |
+| [`composition`](./composition/)             | Service protocol support and authoritative AEP, MPP, and x402 live signals.                  |
 | [`errors-limits`](./errors-limits/)         | Problem Details, resource ceilings, narrow failures, and bounded retries.                    |
 | [`identity`](./identity/)                   | Service origins, local identifiers, structured identity comparison, and resource references. |
 | [`offerings`](./offerings/)                 | Offering envelope, attributes, Price Preview, and action placement.                          |

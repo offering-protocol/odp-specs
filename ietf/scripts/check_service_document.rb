@@ -35,6 +35,19 @@ def search_capabilities_valid?(capabilities, supported)
   true
 end
 
+def protocols_valid?(protocols)
+  return false unless protocols.is_a?(Hash) && !protocols.empty?
+  return false unless (protocols.keys - %w[onboarding payments]).empty?
+
+  return false if protocols.key?("onboarding") && protocols["onboarding"] != ["aep"]
+  payments = protocols["payments"]
+  return false if protocols.key?("payments") &&
+    (!payments.is_a?(Array) || payments.empty? || payments.length > 2 || payments.uniq.length != payments.length ||
+      !(payments - %w[mpp x402]).empty?)
+
+  true
+end
+
 def depth(value)
   children = value.is_a?(Hash) ? value.values : value.is_a?(Array) ? value : []
   children.empty? ? 1 : 1 + children.map { |child| depth(child) }.max
@@ -72,6 +85,7 @@ def valid_document?(document, source)
   return false unless supported.uniq.length == supported.length && supported.all? { |operation| OPERATIONS.include?(operation) }
   return false if document.key?("search_capabilities") &&
     !search_capabilities_valid?(document["search_capabilities"], supported)
+  return false if document.key?("protocols") && !protocols_valid?(document["protocols"])
 
   endpoint_base = document.dig("http", "endpoint_base")
   endpoint_base.is_a?(String) && endpoint_base.ascii_only? && endpoint_base.length <= 2048 && endpoint_base.match?(ENDPOINT_BASE)
@@ -89,9 +103,12 @@ Dir[root.join("*.json")].sort.each do |path|
   end
 end
 
-example = Pathname.new(__dir__).join("..", "examples", "marketplace", "marketplace-service.json")
-example_source = example.read
-errors << "#{example}: invalid Service Document example" unless valid_document?(JSON.parse(example_source), example_source)
+examples = Pathname.new(__dir__).join("..", "examples").expand_path
+Dir[examples.join("**", "*-service.json")].sort.each do |name|
+  example = Pathname.new(name)
+  example_source = example.read
+  errors << "#{example}: invalid Service Document example" unless valid_document?(JSON.parse(example_source), example_source)
+end
 
 if errors.empty?
   puts "Service Document vectors OK"

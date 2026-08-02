@@ -91,6 +91,9 @@
         }
       }
     },
+    "protocols": {
+      "$ref": "service-protocols.schema.json"
+    },
     "search_capabilities": {
       "$ref": "search-capabilities.schema.json"
     }

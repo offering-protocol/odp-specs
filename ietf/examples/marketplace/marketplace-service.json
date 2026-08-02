@@ -13,6 +13,15 @@
     "vintage",
     "retail"
   ],
+  "protocols": {
+    "onboarding": [
+      "aep"
+    ],
+    "payments": [
+      "mpp",
+      "x402"
+    ]
+  },
   "operations": {
     "supported": [
       "list-collections",

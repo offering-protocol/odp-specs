@@ -1,0 +1,141 @@
+{
+  "id": "composition-contract",
+  "title": "Service-wide protocol support and authoritative live challenges",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "composition",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "profile": "core",
+  "subject": "composition-contract",
+  "cases": [
+    {
+      "name": "onboarding-and-payment-support",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "onboarding": [
+          "aep"
+        ],
+        "payments": [
+          "mpp",
+          "x402"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "name": "successful-request-does-not-trigger-advertised-protocols",
+      "operation": "classify-live-response",
+      "advertised": {
+        "onboarding": [
+          "aep"
+        ],
+        "payments": [
+          "mpp",
+          "x402"
+        ]
+      },
+      "response": {
+        "status": 200,
+        "headers": {}
+      },
+      "expected": []
+    },
+    {
+      "name": "aep-live-challenge",
+      "operation": "classify-live-response",
+      "advertised": {
+        "onboarding": [
+          "aep"
+        ]
+      },
+      "response": {
+        "status": 401,
+        "headers": {
+          "WWW-Authenticate": "AEP service_did=\"did:web:catalog.example\", inspect=\"https://catalog.example/.well-known/aep\""
+        }
+      },
+      "expected": [
+        "aep"
+      ]
+    },
+    {
+      "name": "mpp-live-challenge",
+      "operation": "classify-live-response",
+      "advertised": {
+        "payments": [
+          "mpp"
+        ]
+      },
+      "response": {
+        "status": 402,
+        "headers": {
+          "WWW-Authenticate": "Payment realm=\"catalog.example\", id=\"challenge-1\", method=\"inflow\""
+        }
+      },
+      "expected": [
+        "mpp"
+      ]
+    },
+    {
+      "name": "x402-live-challenge",
+      "operation": "classify-live-response",
+      "advertised": {
+        "payments": [
+          "x402"
+        ]
+      },
+      "response": {
+        "status": 402,
+        "headers": {
+          "PAYMENT-REQUIRED": "encoded-x402-requirements"
+        }
+      },
+      "expected": [
+        "x402"
+      ]
+    },
+    {
+      "name": "both-payment-challenges",
+      "operation": "classify-live-response",
+      "advertised": {
+        "payments": [
+          "mpp",
+          "x402"
+        ]
+      },
+      "response": {
+        "status": 402,
+        "headers": {
+          "WWW-Authenticate": "Payment realm=\"catalog.example\", id=\"challenge-1\", method=\"inflow\"",
+          "PAYMENT-REQUIRED": "encoded-x402-requirements"
+        }
+      },
+      "expected": [
+        "mpp",
+        "x402"
+      ]
+    },
+    {
+      "name": "unadvertised-live-protocol-remains-authoritative",
+      "operation": "classify-live-response",
+      "advertised": {
+        "payments": [
+          "mpp"
+        ]
+      },
+      "response": {
+        "status": 402,
+        "headers": {
+          "PAYMENT-REQUIRED": "encoded-x402-requirements"
+        }
+      },
+      "expected": [
+        "x402"
+      ]
+    }
+  ]
+}

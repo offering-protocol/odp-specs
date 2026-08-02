@@ -7,9 +7,9 @@ MARKDOWN_FILES := $(shell find .. -type f -name '*.md' \
 	-not -path '../ietf/.venv/*' | sort)
 DRAFTS := $(shell find specs -type f -name 'draft-*.md' | sort)
 
-.PHONY: check check-attribute-schemas check-collection-search check-collections check-drafts check-error-limits check-filters-sorting check-formatter check-format check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-service-document check-versioning format generate-marketplace-scale
+.PHONY: check check-attribute-schemas check-collection-search check-collections check-composition check-drafts check-error-limits check-filters-sorting check-formatter check-format check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-service-document check-versioning format generate-marketplace-scale
 
-check: check-drafts check-formatter check-format check-json check-attribute-schemas check-collection-search check-collections check-error-limits check-examples check-filters-sorting check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-service-document check-versioning
+check: check-drafts check-formatter check-format check-json check-attribute-schemas check-collection-search check-collections check-composition check-error-limits check-examples check-filters-sorting check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-service-document check-versioning
 
 check-attribute-schemas:
 	$(RUBY) scripts/check_attribute_schema_vectors.rb
@@ -19,6 +19,9 @@ check-collection-search:
 
 check-collections:
 	$(RUBY) scripts/check_collection_vectors.rb
+
+check-composition:
+	$(RUBY) scripts/check_composition_vectors.rb
 
 check-drafts:
 	$(RUBY) scripts/check_drafts.rb $(DRAFTS)

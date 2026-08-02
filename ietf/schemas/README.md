@@ -46,4 +46,5 @@ checked for drift.
 | [`sort-definition.schema.json`](./sort-definition.schema.json)                               | Advertised indexed sorting recipe.                    |
 | [`sort-key.schema.json`](./sort-key.schema.json)                                             | One fixed key in a sorting recipe.                    |
 | [`service-document.schema.json`](./service-document.schema.json)                             | Well-known Service discovery metadata and operations. |
+| [`service-protocols.schema.json`](./service-protocols.schema.json)                           | Service-wide onboarding and payment support.          |
 | [`top-level-document.schema.json`](./top-level-document.schema.json)                         | Shared version-bearing ODP document envelope.         |

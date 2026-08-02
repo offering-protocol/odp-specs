@@ -1,0 +1,28 @@
+{
+  "odp_version": "1.0",
+  "name": "Protected Catalog Example",
+  "description": "A catalog that supports agent onboarding and agentic payment.",
+  "language": "en",
+  "localizations": [
+    "en"
+  ],
+  "protocols": {
+    "onboarding": [
+      "aep"
+    ],
+    "payments": [
+      "mpp",
+      "x402"
+    ]
+  },
+  "operations": {
+    "supported": [
+      "list-offerings",
+      "search-offerings",
+      "get-offering"
+    ]
+  },
+  "http": {
+    "endpoint_base": "/odp/"
+  }
+}

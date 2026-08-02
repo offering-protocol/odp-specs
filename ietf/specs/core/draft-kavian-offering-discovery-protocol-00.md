@@ -38,6 +38,15 @@ normative:
         org: Regenstrief Institute, Inc.
 
 informative:
+  AEP:
+    title: "The Agent Enrollment Protocol"
+    target: https://datatracker.ietf.org/doc/draft-kavian-agent-enrollment-protocol/
+    date: 2026-07-23
+    seriesinfo:
+      Internet-Draft: draft-kavian-agent-enrollment-protocol-02
+    author:
+      - ins: N. Kavian
+        name: Nas Kavian
   JSON-SCHEMA:
     title: JSON Schema
     target: https://json-schema.org/draft/2020-12/json-schema-core.html
@@ -48,6 +57,28 @@ informative:
         ins: H. Andrews
       -
         ins: B. Hutton
+  MPP:
+    title: 'The "Payment" HTTP Authentication Scheme'
+    target: https://datatracker.ietf.org/doc/draft-ryan-httpauth-payment/
+    date: 2026-03-17
+    seriesinfo:
+      Internet-Draft: draft-ryan-httpauth-payment-01
+    author:
+      - ins: B. Ryan
+        name: Brendan Ryan
+      - ins: J. Moxey
+        name: Jake Moxey
+      - ins: T. Meagher
+        name: Tom Meagher
+      - ins: J. Weinstein
+        name: Jeff Weinstein
+      - ins: S. Kaliski
+        name: Steve Kaliski
+  X402:
+    title: x402 Specification
+    target: https://github.com/x402-foundation/x402/tree/main/specs
+    author:
+      - org: x402 Foundation
 ...
 
 --- abstract
@@ -394,8 +425,8 @@ operations advertised by the document.
 
 The successful response MUST be an ODP JSON Top-Level Document. The Service Document MUST be a flat
 JSON object and MUST contain `odp_version`, `name`, `description`, `language`, `localizations`,
-`operations`, and `http`. It MAY contain `keywords` and `search_capabilities`. It MUST NOT contain a
-self-asserted Service identifier or `web_url`.
+`operations`, and `http`. It MAY contain `keywords`, `protocols`, and `search_capabilities`. It MUST
+NOT contain a self-asserted Service identifier or `web_url`.
 
 `name` is a non-empty string of at most 128 Unicode code points. `description` is a non-empty string
 of at most 1024 Unicode code points. `keywords` is an array of at most 32 unique freeform strings,
@@ -409,6 +440,20 @@ define filters. ODP defines no case folding, normalization, stemming, or semanti
 them; array uniqueness uses JSON string equality. An Agent MUST NOT restrict a Collection or
 Offering search query to Service keywords or assume that a Service supports keyword enumeration or
 query completion.
+
+`protocols` advertises Service-wide support for onboarding and payment protocols. It contains at
+least one of `onboarding` or `payments`. `onboarding`, when present, is the single-item array
+`["aep"]`, identifying AEP {{AEP}}. `payments`, when present, is a non-empty array containing `mpp`,
+identifying the `Payment` HTTP Authentication Scheme {{MPP}}, `x402`, identifying the x402 protocol
+{{X402}}, or both without duplicates. When both payment protocols are present, their array order
+expresses Service preference. An unsupported category is omitted rather than serialized as an empty
+array.
+
+Protocol advertisement does not state that a protocol is required or accepted by every ODP
+operation, catalog resource, or Action. It does not describe access order or policy. A missing
+category means only that support is not advertised. An Agent and directory MAY derive a
+Service-support summary from this field, but a live HTTP response remains authoritative for the
+request that produced it.
 
 ## Language Selection
 
@@ -1190,10 +1235,23 @@ capability pages, merge scopes, detect conflicts, or resolve Sort Definition ref
 ODP describes resources and references that lead to subsequent operations. It does not duplicate the
 semantics of those operations.
 
-A Service MAY make ODP resources public, require AEP enrollment before some or all ODP operations,
-require MPP or x402 payment, or combine these protocols in a Service-selected order. Capability
-metadata is descriptive. Live HTTP authentication and payment challenges are authoritative for the
-request being made.
+A Service MAY make ODP resources public, require AEP {{AEP}} enrollment before some or all ODP
+operations, require MPP {{MPP}} or x402 {{X402}} payment, or combine these protocols in a
+Service-selected order. Capability metadata is descriptive. Live HTTP authentication and payment
+challenges are authoritative for the request being made.
+
+The following signals belong to their defining protocols and are not redefined by ODP:
+
+| Protocol | Live signal                                                              |
+| -------- | ------------------------------------------------------------------------ |
+| AEP      | `401 Unauthorized` with an `AEP` challenge in `WWW-Authenticate`.        |
+| MPP      | `402 Payment Required` with a `Payment` challenge in `WWW-Authenticate`. |
+| x402     | `402 Payment Required` with payment requirements in `PAYMENT-REQUIRED`.  |
+
+A successful response means that the request did not require another challenge at that point,
+regardless of the Service-wide advertisement. A live challenge for an unadvertised protocol is still
+authoritative. An advertised protocol without a corresponding live challenge MUST NOT cause an Agent
+to enroll, authenticate, or pay speculatively.
 
 An Agent MUST NOT infer that support for ODP implies support for AEP, MPP, x402, or any other
 protocol. An Agent MUST NOT infer that support for one composition order implies support for

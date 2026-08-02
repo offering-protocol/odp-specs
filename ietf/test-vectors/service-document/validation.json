@@ -82,6 +82,86 @@
       }
     },
     {
+      "name": "service-wide-protocol-support",
+      "valid": true,
+      "document": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "en",
+        "localizations": [
+          "en"
+        ],
+        "protocols": {
+          "onboarding": [
+            "aep"
+          ],
+          "payments": [
+            "mpp",
+            "x402"
+          ]
+        },
+        "operations": {
+          "supported": [
+            "search-offerings"
+          ]
+        },
+        "http": {
+          "endpoint_base": "/odp/"
+        }
+      }
+    },
+    {
+      "name": "empty-protocol-category",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "en",
+        "localizations": [
+          "en"
+        ],
+        "protocols": {
+          "payments": []
+        },
+        "operations": {
+          "supported": [
+            "search-offerings"
+          ]
+        },
+        "http": {
+          "endpoint_base": "/odp/"
+        }
+      }
+    },
+    {
+      "name": "unknown-payment-protocol",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "en",
+        "localizations": [
+          "en"
+        ],
+        "protocols": {
+          "payments": [
+            "future-pay"
+          ]
+        },
+        "operations": {
+          "supported": [
+            "search-offerings"
+          ]
+        },
+        "http": {
+          "endpoint_base": "/odp/"
+        }
+      }
+    },
+    {
       "name": "freeform-keywords-have-no-case-normalization",
       "valid": true,
       "document": {

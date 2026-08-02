@@ -43,6 +43,8 @@ comparison hints. They do not identify protocol-owned compute, flight, retail, o
   does not attempt to store hundreds of repetitive filters in this repository.
 - [`physical-retail`](physical-retail/) models one purchasable variant, regional inventory, shipping
   and pickup eligibility, and tax classification without defining commerce semantics in ODP.
+- [`protected-discovery`](protected-discovery/) separates Service-wide AEP/MPP/x402 support
+  advertisement from authoritative live access challenges.
 - [`digital-subscription`](digital-subscription/) models a recurring software plan whose term,
   renewal policy, and entitlements are Service-defined attributes and whose subscription operation
   remains outside ODP.

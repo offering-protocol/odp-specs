@@ -9,7 +9,8 @@ The files illustrate a complete sequence:
 1. [`marketplace-service.json`](./marketplace-service.json) is the compact cached Service document.
    It advertises its Collection and Offering operations through a fixed endpoint base. Its localized
    freeform keywords help a directory index the Service but do not advertise catalog query terms,
-   filters, suggestions, or facets.
+   filters, suggestions, or facets. Its protocol summary advertises Service-wide AEP, MPP, and x402
+   support without claiming that any particular catalog request requires them.
 2. [`home-office-collection.json`](./home-office-collection.json) is a full Collection root
    representation with language metadata, omitted root `parent_ids`, and a browser link. Instead of
    embedding every Collection-specific filter, it links to a pageable filter resource while
