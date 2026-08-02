@@ -13,6 +13,7 @@ access composition, and compatibility. Implementations publish the profiles and 
 | [`collections`](./collections/)             | Directed-acyclic hierarchy, direct membership, depth, and narrow edge failure.               |
 | [`identity`](./identity/)                   | Service origins, local identifiers, structured identity comparison, and resource references. |
 | [`offerings`](./offerings/)                 | Offering envelope, attributes, Price Preview, and action placement.                          |
+| [`pagination`](./pagination/)               | Page envelopes, continuation links, limits, ordering, lifetime, and conditional retrieval.   |
 | [`representation`](./representation/)       | Operation defaults, overrides, and exhaustive Detail Fields.                                 |
 | [`service-document`](./service-document/)   | Well-known metadata, localization, operation advertisement, and endpoint-base validation.    |
 | [`versioning`](./versioning/)               | Protocol versions, top-level placement, media negotiation, and compatibility.                |

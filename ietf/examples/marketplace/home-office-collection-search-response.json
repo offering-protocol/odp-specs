@@ -4,7 +4,6 @@
     {
       "id": "home-office",
       "name": "Home office",
-      "parent_ids": [],
       "detail_fields": [
         "/description",
         "/filter_capabilities",

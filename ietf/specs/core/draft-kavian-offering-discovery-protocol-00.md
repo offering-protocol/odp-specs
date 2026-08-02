@@ -28,6 +28,7 @@ normative:
   RFC8259:
   RFC8615:
   RFC9110:
+  RFC9111:
 
 informative:
   JSON-SCHEMA:
@@ -473,6 +474,87 @@ Documents, one hour for Collections, five minutes for Offerings, zero seconds fo
 one hour for Filter Definitions, and 24 hours for Attribute Schemas. Each resource class MUST be
 configurable independently. A fallback does not override `Cache-Control`, `Expires`, validators, or
 other HTTP caching semantics.
+
+# Pagination
+
+## Page Envelope
+
+Every successful list or search response is an ODP Top-Level Document containing `odp_version` and
+`items`. `items` is an array and can be empty. A response containing another page MUST also contain
+`next`. The final page MUST omit `next`; an empty `items` array alone does not prove that the
+sequence ended.
+
+`next` is a Resource Reference of no more than 2048 ASCII characters. It MUST resolve to the same
+origin as the initial operation. An Agent MUST preserve it exactly and MUST NOT decode, modify,
+construct, or derive behavior from its path, query, or embedded continuation token.
+
+ODP does not define previous-page traversal, numeric page indexes, offsets, or total-result counts.
+An Agent that needs to restart traversal repeats the initial operation request.
+
+## Continuation Requests
+
+An Agent retrieves `next` with `GET`. The response is another page envelope governed by the same
+representation and access context. Only omission of `next` marks the end of the sequence. A
+continuation response MUST advance traversal and MUST NOT return the request URL as its own `next`.
+
+The Service chooses the continuation URL and preserves every input needed to continue the original
+operation, including representation, filters, search terms, sorting, access context, and page-size
+policy. The Agent does not repeat the original request body or reconstruct those inputs. A
+continuation link from a `POST` search is still retrieved with `GET`.
+
+Every initial list and search operation accepts `limit`, an integer from 1 through 100 that requests
+the maximum number of items per page. `GET` operations carry it as a query parameter; `POST` search
+operations carry it as a top-level request-body member. A Service MAY return fewer items than
+requested. A Service chooses its default page size when `limit` is absent. An Agent-oriented SDK
+SHOULD use a configurable initial page size with a default of 50 and MAY request fewer items when
+its caller's remaining overall result limit is smaller.
+
+## Continuation Semantics
+
+A continuation sequence contains a stable logical sequence of Resource Identities and their order.
+Within one traversal, the Service MUST NOT change that sequence or return the same Resource Identity
+more than once. Resource representations can reflect changes made after the initial request, but
+membership and ordering in the continuation sequence remain stable. An item's `id` is the final
+deterministic ordering tie-breaker.
+
+Each `next` link MUST remain usable for at least one hour after issuance. A Service MAY choose a
+longer lifetime. An expired continuation MUST NOT silently restart traversal; the Service returns an
+expired-continuation problem, and an Agent-oriented SDK reports that failure to its caller.
+
+The continuation link is an interface contract, not a server storage model. Its path or query MAY
+contain a self-contained authenticated cursor or a reference to server-managed state. A stateless
+cursor can carry a query digest, snapshot or revision, keyset boundary, access-context binding, and
+expiration. Clients cannot distinguish stateless and stateful continuation and MUST treat both
+identically.
+
+A self-contained cursor embedded in `next` MUST be integrity protected. It MUST NOT disclose
+credentials, private catalog data, access-policy details, or other sensitive state. A Service SHOULD
+encrypt a self-contained cursor whose continuation state is confidential. A Service MUST validate
+every cursor as untrusted input and MUST NOT treat possession of a cursor as authorization.
+
+## Agent Iteration
+
+An Agent-oriented SDK SHOULD expose list and search results as asynchronous iterables that retrieve
+continuation pages automatically. Its ordinary item interface SHOULD yield Collection or Offering
+representations rather than page envelopes or continuation links. A lower-level page interface MAY
+expose `items` and `next` for callers that require explicit page control.
+
+An overall caller result limit is independent of the Service page `limit`. Reaching the caller's
+limit stops local iteration and does not imply that the Service sequence ended. An SDK MUST NOT
+fetch another page after the caller stops iteration.
+
+## Page Caching and Conditional Requests
+
+Each page request has its own HTTP cache key and validators under {{RFC9110}} and {{RFC9111}}. For
+`GET` pages, a Service SHOULD provide an entity tag and honor conditional retrieval such as
+`If-None-Match`; an unchanged conditional `GET` returns `304 Not Modified`. Collection and Offering
+page fallbacks use their applicable resource-class freshness lifetime. Filter Definition pages use
+the Filter Definition fallback.
+
+Search responses, including their `GET` continuation pages, retain the zero-second fallback
+freshness lifetime. A `POST` search response is cacheable only when explicit HTTP semantics permit
+it. A continuation link does not override cache directives, create a shared-cache authorization, or
+make a private response public.
 
 ## Catalog Discovery
 

@@ -15,6 +15,8 @@ checked for drift.
 | [`local-resource-identifier.schema.json`](./local-resource-identifier.schema.json)           | Service-created Collection and Offering identifiers.  |
 | [`local-resource-identifier-list.schema.json`](./local-resource-identifier-list.schema.json) | Unique Service-local resource identifier arrays.      |
 | [`offering.schema.json`](./offering.schema.json)                                             | Full Offering Representation envelope.                |
+| [`page-envelope.schema.json`](./page-envelope.schema.json)                                   | Shared list and search response envelope.             |
+| [`page-limit.schema.json`](./page-limit.schema.json)                                         | Requested maximum items per page.                     |
 | [`price-preview.schema.json`](./price-preview.schema.json)                                   | Discovery-time Offering price summary.                |
 | [`protocol-version.schema.json`](./protocol-version.schema.json)                             | Major and minor ODP protocol versions.                |
 | [`representation.schema.json`](./representation.schema.json)                                 | Terse and Full Representation selection.              |
