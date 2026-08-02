@@ -9,6 +9,7 @@ access composition, and compatibility. Implementations publish the profiles and 
 
 | Area                                      | Coverage                                                                                     |
 | ----------------------------------------- | -------------------------------------------------------------------------------------------- |
+| [`collections`](./collections/)           | Directed-acyclic hierarchy, direct membership, depth, and narrow edge failure.               |
 | [`identity`](./identity/)                 | Service origins, local identifiers, structured identity comparison, and resource references. |
 | [`representation`](./representation/)     | Operation defaults, overrides, and exhaustive Detail Fields.                                 |
 | [`service-document`](./service-document/) | Well-known metadata, localization, operation advertisement, and endpoint-base validation.    |

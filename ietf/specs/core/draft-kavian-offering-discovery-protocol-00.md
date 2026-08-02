@@ -539,6 +539,73 @@ Collections and Offerings MAY include a `web_url` link for a human-facing browse
 browser representation is informative for Agent operation and does not replace the machine-readable
 ODP resource.
 
+# Collections
+
+## Collection Envelope
+
+A Full Collection Representation MUST contain `odp_version`, `id`, `name`, `description`,
+`language`, `localizations`, and `parent_ids`. It MAY contain `web_url`. Other Collection
+capabilities are defined by the operation or feature that uses them.
+
+`language` and `localizations` have the syntax and meaning defined for Service Document language
+metadata, but describe this Collection. Collection retrieval uses the same `Accept-Language`,
+Lookup, fallback, `Content-Language`, `Vary`, and entity-tag rules as Service Document retrieval.
+
+`parent_ids` MUST be an array of unique Local Resource Identifiers. Every identifier names a direct
+parent Collection at the same Service. An empty array identifies a root Collection. A Service can
+publish multiple roots or a flat set in which every Collection is a root.
+
+A Terse Collection follows the common Terse Representation contract. It MUST contain `id` and
+`name`; it can omit any other optional terse field, including `parent_ids`, and can use
+`detail_fields` to identify fields available through full retrieval.
+
+## Hierarchy
+
+Collection parent relationships form a directed acyclic graph. A Collection MAY have more than one
+parent. A Collection MUST NOT name itself as a parent, every parent identifier MUST resolve to a
+Collection visible under the same access context, and following parent relationships MUST NOT
+produce a cycle.
+
+The maximum path from a Collection through successive parents is 32 edges. A conforming Service MUST
+NOT publish a deeper hierarchy. Breadth and parent-array cardinality are governed by the common
+resource and response limits rather than the depth limit.
+
+`parent_ids` is the sole serialized source of hierarchy edges. Collections do not duplicate edges in
+a `child_ids` field. An Agent discovers direct children through Collection search constrained by the
+parent identifier. The Collection search contract defines that constraint.
+
+An Agent traversing hierarchy data MUST track visited Resource Identities. When an edge closes a
+cycle, exceeds the depth limit, names the current Collection, or names a missing Collection, the
+Agent MUST ignore that edge. The invalid edge does not invalidate unrelated Collections, hierarchy
+edges, Offering memberships, or operations.
+
+## Offering Membership
+
+A Full Offering Representation MUST contain `collection_ids`, an array of unique Local Resource
+Identifiers. Each identifier names a Collection at the same Service in which the Offering is a
+direct member. An empty array means that the Offering has no Collection membership. A Terse Offering
+MAY omit `collection_ids` under the common Terse Representation rules.
+
+The `list-collection-offerings` operation is the inverse query over this relationship: it returns
+Offerings whose `collection_ids` contains the requested Collection identifier. A Service MUST keep
+the operation result consistent with the Offering membership it publishes.
+
+Hierarchy and membership are independent. Membership in a child Collection does not imply membership
+in any ancestor Collection. ODP version 1.0 does not define implicit descendant expansion. A future
+search contract can define an explicit descendant-inclusion request without changing direct
+membership semantics.
+
+Every `collection_ids` entry MUST resolve to a Collection visible under the same access context. An
+Agent MUST ignore a missing membership edge without rejecting the Offering or unrelated memberships.
+
+## No Synthetic Collection Identity
+
+ODP does not define an "All Offerings" Collection, reserve a Collection identifier for that purpose,
+or assign Resource Identity to a client-side convenience view. An Agent uses `list-offerings` for
+the complete accessible Offering sequence. A Service can publish an ordinary Collection with
+equivalent business meaning, and an SDK can label `list-offerings` for user-interface convenience
+without creating an ODP resource.
+
 # Extensibility Model
 
 ## Core Evolution

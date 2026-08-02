@@ -6,6 +6,9 @@
       "name": "Handmade walnut standing desk",
       "description": "Height-adjustable desk made to order by a verified workshop.",
       "web_url": "/listing/walnut-standing-desk-4821",
+      "collection_ids": [
+        "home-office"
+      ],
       "attributes": {
         "category": "desk",
         "materials": [
@@ -25,7 +28,10 @@
       "id": "brass-task-lamp-9938",
       "name": "Restored brass task lamp",
       "description": "A rewired vintage desk lamp with an adjustable arm.",
-      "web_url": "/listing/brass-task-lamp-9938"
+      "web_url": "/listing/brass-task-lamp-9938",
+      "collection_ids": [
+        "home-office"
+      ]
     }
   ],
   "refinements": [

@@ -3,6 +3,11 @@
   "id": "home-office",
   "name": "Home office",
   "description": "Furniture, lighting, and accessories for home workspaces.",
+  "language": "en",
+  "localizations": [
+    "en"
+  ],
+  "parent_ids": [],
   "web_url": "/c/home-office",
   "filter_capabilities": {
     "linked": {

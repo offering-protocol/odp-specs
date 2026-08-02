@@ -4,6 +4,7 @@
   "name": "InFlow Air 123 from San Francisco to New York",
   "description": "A nonstop scheduled flight offered in economy cabin.",
   "web_url": "/flights/IF123-2026-09-14-SFO-JFK",
+  "collection_ids": [],
   "schema": {
     "url": "https://travel.example/schemas/flight-itinerary-1.json",
     "media_type": "application/schema+json",

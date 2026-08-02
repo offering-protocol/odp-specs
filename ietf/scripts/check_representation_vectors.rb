@@ -92,6 +92,14 @@ if terse && !valid_detail_fields?(terse, full)
   errors << "marketplace example: detail_fields do not exhaustively describe the matching Full Representation"
 end
 
+collection_search = JSON.parse(examples.join("home-office-collection-search-response.json").read)
+full_collection = JSON.parse(examples.join("home-office-collection.json").read)
+terse_collection = collection_search.fetch("items").find { |item| item["id"] == full_collection["id"] }
+errors << "marketplace example: missing matching terse Collection" unless terse_collection
+if terse_collection && !valid_detail_fields?(terse_collection, full_collection)
+  errors << "marketplace example: Collection detail_fields do not exhaustively describe the Full Representation"
+end
+
 if errors.empty?
   puts "Representation vectors OK"
 else

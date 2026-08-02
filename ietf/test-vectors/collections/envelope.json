@@ -1,0 +1,77 @@
+{
+  "id": "collection-envelope",
+  "title": "Full Collection envelope",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "collections",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "profile": "core",
+  "subject": "collection-envelope",
+  "cases": [
+    {
+      "name": "localized-root-collection",
+      "valid": true,
+      "document": {
+        "odp_version": "1.0",
+        "id": "gpus",
+        "name": "GPUs",
+        "description": "Accelerated computing resources.",
+        "language": "en",
+        "localizations": [
+          "en",
+          "ja"
+        ],
+        "parent_ids": []
+      }
+    },
+    {
+      "name": "language-missing-from-localizations",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "id": "gpus",
+        "name": "GPUs",
+        "description": "Accelerated computing resources.",
+        "language": "ja",
+        "localizations": [
+          "en"
+        ],
+        "parent_ids": []
+      }
+    },
+    {
+      "name": "missing-parent-ids",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "id": "gpus",
+        "name": "GPUs",
+        "description": "Accelerated computing resources.",
+        "language": "en",
+        "localizations": [
+          "en"
+        ]
+      }
+    },
+    {
+      "name": "duplicate-localizations-ignore-case",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "id": "gpus",
+        "name": "GPUs",
+        "description": "Accelerated computing resources.",
+        "language": "en",
+        "localizations": [
+          "en",
+          "EN"
+        ],
+        "parent_ids": []
+      }
+    }
+  ]
+}

@@ -4,6 +4,9 @@
   "name": "Handmade walnut standing desk",
   "description": "Height-adjustable desk made to order by a verified workshop.",
   "web_url": "/listing/walnut-standing-desk-4821",
+  "collection_ids": [
+    "home-office"
+  ],
   "schema": {
     "url": "https://market.example/schemas/home-office-furniture-7.json",
     "media_type": "application/schema+json",

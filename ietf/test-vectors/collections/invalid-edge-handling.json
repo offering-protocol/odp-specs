@@ -1,0 +1,35 @@
+{
+  "id": "invalid-collection-edge-handling",
+  "title": "Narrow Collection edge failure",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "collections",
+  "applies_to": [
+    "agent"
+  ],
+  "profile": "core",
+  "subject": "invalid-edge-handling",
+  "cases": [
+    {
+      "name": "cycle-closing-edge",
+      "condition": "cycle",
+      "expected": "ignore-edge"
+    },
+    {
+      "name": "edge-beyond-depth-limit",
+      "condition": "depth-exceeded",
+      "expected": "ignore-edge"
+    },
+    {
+      "name": "missing-parent-edge",
+      "condition": "missing-parent",
+      "expected": "ignore-edge"
+    },
+    {
+      "name": "missing-membership-edge",
+      "condition": "missing-collection",
+      "expected": "ignore-edge"
+    }
+  ]
+}

@@ -4,6 +4,7 @@
   "name": "Agent Safety Handbook",
   "description": "A free handbook covering bounded network access and credential handling for autonomous agents.",
   "web_url": "/handbooks/agent-safety",
+  "collection_ids": [],
   "schema": {
     "url": "https://downloads.example/schemas/digital-artifact-2.json",
     "media_type": "application/schema+json",

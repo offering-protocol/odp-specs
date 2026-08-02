@@ -58,12 +58,15 @@ Dir[root.join("**/*-offering.json")].sort.each do |name|
   document = load_json(path, errors)
   next unless document.is_a?(Hash)
 
-  require_fields(document, %w[odp_version id name description schema attributes actions], relative, errors)
+  require_fields(document, %w[odp_version id name description collection_ids schema attributes actions], relative, errors)
   errors << "#{relative}: id must be a valid local resource identifier" unless OdpIdentity.local_identifier?(document["id"])
   schema_url = document.dig("schema", "url")
   errors << "#{relative}: schema.url must be an absolute HTTPS URL" unless absolute_https?(schema_url)
   errors << "#{relative}: attributes must be an object" unless document["attributes"].is_a?(Hash)
   errors << "#{relative}: actions must be an array" unless document["actions"].is_a?(Array)
+  errors << "#{relative}: collection_ids must contain unique local identifiers" unless
+    document["collection_ids"].is_a?(Array) && document["collection_ids"].uniq.length == document["collection_ids"].length &&
+    document["collection_ids"].all? { |identifier| OdpIdentity.local_identifier?(identifier) }
 end
 
 Dir[root.join("**/*-collection.json")].sort.each do |name|
@@ -72,8 +75,13 @@ Dir[root.join("**/*-collection.json")].sort.each do |name|
   document = load_json(path, errors)
   next unless document.is_a?(Hash)
 
-  require_fields(document, %w[odp_version id name description filter_capabilities], relative, errors)
+  require_fields(document, %w[odp_version id name description language localizations parent_ids filter_capabilities], relative, errors)
   errors << "#{relative}: id must be a valid local resource identifier" unless OdpIdentity.local_identifier?(document["id"])
+  errors << "#{relative}: parent_ids must contain unique local identifiers" unless
+    document["parent_ids"].is_a?(Array) && document["parent_ids"].uniq.length == document["parent_ids"].length &&
+    document["parent_ids"].all? { |identifier| OdpIdentity.local_identifier?(identifier) }
+  errors << "#{relative}: localizations must contain language" unless
+    document["localizations"].is_a?(Array) && document["localizations"].include?(document["language"])
   sources = %w[inline linked].select { |field| document.fetch("filter_capabilities", {}).key?(field) }
   errors << "#{relative}: filter_capabilities must contain exactly one of inline or linked" unless sources.length == 1
 end
@@ -87,6 +95,21 @@ Dir[root.join("**/*-filters-page-*.json")].sort.each do |name|
   require_fields(document, %w[items], relative, errors)
   Array(document["items"]).each do |filter|
     require_fields(filter, %w[id title description type operators sortable], relative, errors) if filter.is_a?(Hash)
+  end
+end
+
+Dir[root.join("*")].select { |path| Pathname.new(path).directory? }.sort.each do |directory|
+  directory_path = Pathname.new(directory)
+  collection_ids = Dir[directory_path.join("**/*-collection.json")].filter_map do |name|
+    document = load_json(Pathname.new(name), errors)
+    document["id"] if document.is_a?(Hash)
+  end
+  Dir[directory_path.join("**/*-offering.json")].sort.each do |name|
+    document = load_json(Pathname.new(name), errors)
+    next unless document.is_a?(Hash)
+
+    missing = Array(document["collection_ids"]) - collection_ids
+    errors << "#{Pathname.new(name).relative_path_from(root)}: unknown collection_ids #{missing.join(', ')}" unless missing.empty?
   end
 end
 

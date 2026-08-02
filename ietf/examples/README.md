@@ -24,6 +24,9 @@ normal `attributes` in terse results. Optional `detail_fields` JSON Pointers ide
 are available through full retrieval but omitted from that terse item; they do not enable field
 projection.
 
+Collections form a directed acyclic navigation graph through `parent_ids`. Offering `collection_ids`
+express direct membership; hierarchy does not silently add ancestor membership.
+
 Schema annotations such as `x-odp-unit` and `x-odp-comparison` are exploratory presentation and
 comparison hints. They do not identify protocol-owned compute, flight, retail, or digital terms.
 

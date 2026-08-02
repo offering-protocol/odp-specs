@@ -4,6 +4,7 @@
   "name": "Dedicated NVIDIA A100 80 GB rental",
   "description": "One dedicated A100 accelerator in the us-west-2 region, rented in one-minute increments.",
   "web_url": "/gpu/a100-80gb-us-west",
+  "collection_ids": [],
   "schema": {
     "url": "https://compute.example/schemas/gpu-rental-1.json",
     "media_type": "application/schema+json",
