@@ -61,7 +61,9 @@ def valid_document?(document, source)
   keywords = document["keywords"]
   if keywords
     return false unless keywords.is_a?(Array) && keywords.length <= 32
-    return false unless keywords.all? { |keyword| keyword.is_a?(String) && keyword.length.between?(1, 64) }
+    return false unless keywords.all? do |keyword|
+      keyword.is_a?(String) && keyword.length.between?(1, 64) && keyword.match?(/\A\S(?:.*\S)?\z/m)
+    end
     return false unless keywords.uniq.length == keywords.length && keywords.sum(&:length) <= 1024
   end
 

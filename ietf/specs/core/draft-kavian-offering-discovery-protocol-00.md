@@ -213,6 +213,16 @@ A directory is not an ODP protocol role. It is an optional discovery facility th
 find Services by indexing public Service metadata. A directory can cache Service documents subject
 to its own refresh policy, but it is not authoritative for Service-owned catalog data.
 
+This document defines no directory query, suggestion, filter, facet, count, ranking, or response
+wire format. A directory can index localized Service `name`, `description`, and `keywords` values
+and combine them with directory-owned signals. Those behaviors belong to the directory
+implementation and do not become ODP operations or ODP conformance requirements.
+
+Directory suggestions and facets describe the directory's Service index. Offering-search refinements
+describe candidate values for effective Service-owned Filter Definitions. An Agent MUST NOT treat
+either one as the other, and MUST retrieve the current Service Document and catalog data from a
+selected Service before treating them as authoritative.
+
 ODP conformance does not depend on the use, availability, or implementation of a directory.
 
 # Resource Identity and References
@@ -388,10 +398,17 @@ JSON object and MUST contain `odp_version`, `name`, `description`, `language`, `
 self-asserted Service identifier or `web_url`.
 
 `name` is a non-empty string of at most 128 Unicode code points. `description` is a non-empty string
-of at most 1024 Unicode code points. `keywords` is an array of at most 32 non-empty freeform
-strings, each at most 64 Unicode code points and collectively at most 1024 Unicode code points. A
-Service SHOULD omit `keywords` when it has none. Keywords do not draw from a protocol-defined
-vocabulary.
+of at most 1024 Unicode code points. `keywords` is an array of at most 32 unique freeform strings,
+each containing 1 through 64 Unicode code points and collectively containing at most 1024 Unicode
+code points. A keyword MUST begin and end with a non-whitespace code point. A Service SHOULD omit
+`keywords` when it has none.
+
+Keywords are localized Service-discovery hints in the language identified by `language`. They do not
+draw from a protocol-defined vocabulary, advertise accepted query terms, enumerate a catalog, or
+define filters. ODP defines no case folding, normalization, stemming, or semantic equivalence for
+them; array uniqueness uses JSON string equality. An Agent MUST NOT restrict a Collection or
+Offering search query to Service keywords or assume that a Service supports keyword enumeration or
+query completion.
 
 ## Language Selection
 

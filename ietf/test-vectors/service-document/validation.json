@@ -82,6 +82,79 @@
       }
     },
     {
+      "name": "freeform-keywords-have-no-case-normalization",
+      "valid": true,
+      "document": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "en",
+        "localizations": [
+          "en"
+        ],
+        "keywords": [
+          "GPU",
+          "gpu"
+        ],
+        "operations": {
+          "supported": [
+            "search-offerings"
+          ]
+        },
+        "http": {
+          "endpoint_base": "/odp/"
+        }
+      }
+    },
+    {
+      "name": "keyword-cannot-have-leading-whitespace",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "en",
+        "localizations": [
+          "en"
+        ],
+        "keywords": [
+          " compute"
+        ],
+        "operations": {
+          "supported": [
+            "search-offerings"
+          ]
+        },
+        "http": {
+          "endpoint_base": "/odp/"
+        }
+      }
+    },
+    {
+      "name": "keyword-cannot-have-trailing-whitespace",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "en",
+        "localizations": [
+          "en"
+        ],
+        "keywords": [
+          "compute "
+        ],
+        "operations": {
+          "supported": [
+            "search-offerings"
+          ]
+        },
+        "http": {
+          "endpoint_base": "/odp/"
+        }
+      }
+    },
+    {
       "name": "unknown-operation",
       "valid": false,
       "document": {
