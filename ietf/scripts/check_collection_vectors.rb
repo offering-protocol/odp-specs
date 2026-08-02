@@ -13,14 +13,20 @@ def valid_identifiers?(values)
     values.all? { |value| OdpIdentity.local_identifier?(value) }
 end
 
+def valid_non_empty_identifiers?(values)
+  valid_identifiers?(values) && !values.empty?
+end
+
 def hierarchy_valid?(collections)
   return false unless collections.is_a?(Array)
 
   identifiers = collections.map { |collection| collection["id"] }
   return false unless valid_identifiers?(identifiers)
-  return false unless collections.all? { |collection| valid_identifiers?(collection["parent_ids"]) }
+  return false unless collections.all? do |collection|
+    !collection.key?("parent_ids") || valid_non_empty_identifiers?(collection["parent_ids"])
+  end
 
-  parents = collections.to_h { |collection| [collection.fetch("id"), collection.fetch("parent_ids")] }
+  parents = collections.to_h { |collection| [collection.fetch("id"), collection.fetch("parent_ids", [])] }
   return false unless parents.all? { |id, values| !values.include?(id) && values.all? { |parent| parents.key?(parent) } }
 
   depth = lambda do |identifier, visiting, memo|
@@ -45,27 +51,33 @@ def generated_chain(length)
   (0..length).map do |index|
     {
       "id" => "collection-#{index}",
-      "parent_ids" => index.zero? ? [] : ["collection-#{index - 1}"]
+      **(index.zero? ? {} : { "parent_ids" => ["collection-#{index - 1}"] })
     }
   end
 end
 
 def collection_document_valid?(document)
-  required = %w[odp_version id name description language localizations parent_ids]
+  required = %w[odp_version id name]
   return false unless document.is_a?(Hash) && required.all? { |field| document.key?(field) }
   return false unless document["odp_version"] == "1.0" && OdpIdentity.local_identifier?(document["id"])
   return false unless document["name"].is_a?(String) && !document["name"].empty?
-  return false unless document["description"].is_a?(String) && !document["description"].empty?
+  return false if document.key?("description") &&
+    (!document["description"].is_a?(String) || document["description"].empty?)
 
-  language = document["language"]
-  localizations = document["localizations"]
-  return false unless language.is_a?(String) && language.match?(LANGUAGE_TAG)
-  return false unless localizations.is_a?(Array) && !localizations.empty?
-  return false unless localizations.all? { |tag| tag.is_a?(String) && tag.match?(LANGUAGE_TAG) }
+  if document.key?("language")
+    language = document["language"]
+    return false unless language.is_a?(String) && language.match?(LANGUAGE_TAG)
+  end
+  if document.key?("localizations")
+    localizations = document["localizations"]
+    return false unless localizations.is_a?(Array) && !localizations.empty?
+    return false unless localizations.all? { |tag| tag.is_a?(String) && tag.match?(LANGUAGE_TAG) }
+    folded = localizations.map(&:downcase)
+    return false unless folded.uniq.length == folded.length
+    return false if document.key?("language") && !folded.include?(document["language"].downcase)
+  end
 
-  folded = localizations.map(&:downcase)
-  folded.uniq.length == folded.length && folded.include?(language.downcase) &&
-    valid_identifiers?(document["parent_ids"])
+  !document.key?("parent_ids") || valid_non_empty_identifiers?(document["parent_ids"])
 end
 
 def membership_result(test_case)
@@ -74,13 +86,15 @@ def membership_result(test_case)
 
   offerings = test_case.fetch("offerings")
   valid = offerings.all? do |offering|
-    OdpIdentity.local_identifier?(offering["id"]) && valid_identifiers?(offering["collection_ids"]) &&
-      offering["collection_ids"].all? { |identifier| collections.include?(identifier) }
+    memberships = offering.fetch("collection_ids", [])
+    OdpIdentity.local_identifier?(offering["id"]) &&
+      (!offering.key?("collection_ids") || valid_non_empty_identifiers?(memberships)) &&
+      memberships.all? { |identifier| collections.include?(identifier) }
   end
   return nil unless valid
 
   offerings.filter_map do |offering|
-    offering["id"] if offering["collection_ids"].include?(test_case.fetch("query_collection_id"))
+    offering["id"] if offering.fetch("collection_ids", []).include?(test_case.fetch("query_collection_id"))
   end
 end
 

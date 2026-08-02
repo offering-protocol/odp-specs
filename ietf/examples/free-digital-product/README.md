@@ -6,9 +6,10 @@ physical fulfillment.
 [`free-digital-product-offering.json`](./free-digital-product-offering.json) illustrates:
 
 - a public downloadable handbook with machine and browser links;
+- an explicit `free` Price Preview rather than interpreting a missing price as free;
 - multiple file representations, media types, exact byte sizes, and integrity digests;
 - Service-owned version, license, language, and file metadata; and
-- a public `download` action that requires neither AEP nor a payment protocol.
+- a compact `download` action that advertises its PDF response content type.
 
 [`digital-product-attributes.schema.json`](./digital-product-attributes.schema.json) explains the
 attributes shape to an agent. The example keeps digital-delivery behavior outside ODP: discovery

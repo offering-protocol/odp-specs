@@ -9,8 +9,10 @@ airline-specific fields to the core protocol.
   path-safe `id` locate the machine representation;
 - nested departure and arrival structures with timezone-aware scheduled times;
 - Service-owned carrier, flight, cabin, baggage, and refundability attributes; and
-- a `quote` action because availability, traveler-specific fare, taxes, and conditions must be
-  obtained from a later operation rather than treated as static discovery data.
+- a `starting_at` Price Preview that supports early comparison without replacing the authoritative
+  fare returned later; and
+- an OpenAPI-described `quote` action because traveler parameters, availability, fare, taxes, and
+  conditions require a more complex operation than the compact action form.
 
 [`flight-attributes.schema.json`](./flight-attributes.schema.json) shows how the travel Service
 explains those attributes to an unfamiliar agent using JSON Schema types, constraints, titles, and

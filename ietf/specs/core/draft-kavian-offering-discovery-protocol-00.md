@@ -543,17 +543,21 @@ ODP resource.
 
 ## Collection Envelope
 
-A Full Collection Representation MUST contain `odp_version`, `id`, `name`, `description`,
-`language`, `localizations`, and `parent_ids`. It MAY contain `web_url`. Other Collection
-capabilities are defined by the operation or feature that uses them.
+A Full Collection Representation MUST contain `odp_version`, `id`, and `name`. It MAY contain
+`description`, `language`, `localizations`, `parent_ids`, and `web_url`. Other Collection
+capabilities are defined by the operation or feature that uses them. An optional field with no
+applicable or available value is omitted rather than serialized as an empty value.
 
 `language` and `localizations` have the syntax and meaning defined for Service Document language
-metadata, but describe this Collection. Collection retrieval uses the same `Accept-Language`,
-Lookup, fallback, `Content-Language`, `Vary`, and entity-tag rules as Service Document retrieval.
+metadata, but describe this Collection. They are omitted when the Collection uses the applicable
+language metadata inherited from its containing response or Service Document. Collection retrieval
+uses the same `Accept-Language`, Lookup, fallback, `Content-Language`, `Vary`, and entity-tag rules
+as Service Document retrieval.
 
-`parent_ids` MUST be an array of unique Local Resource Identifiers. Every identifier names a direct
-parent Collection at the same Service. An empty array identifies a root Collection. A Service can
-publish multiple roots or a flat set in which every Collection is a root.
+When present, `parent_ids` MUST be a non-empty array of unique Local Resource Identifiers. Every
+identifier names a direct parent Collection at the same Service. An omitted `parent_ids` identifies
+a root Collection. A Service can publish multiple roots or a flat set in which every Collection is a
+root.
 
 A Terse Collection follows the common Terse Representation contract. It MUST contain `id` and
 `name`; it can omit any other optional terse field, including `parent_ids`, and can use
@@ -581,10 +585,10 @@ edges, Offering memberships, or operations.
 
 ## Offering Membership
 
-A Full Offering Representation MUST contain `collection_ids`, an array of unique Local Resource
-Identifiers. Each identifier names a Collection at the same Service in which the Offering is a
-direct member. An empty array means that the Offering has no Collection membership. A Terse Offering
-MAY omit `collection_ids` under the common Terse Representation rules.
+When present, `collection_ids` MUST be a non-empty array of unique Local Resource Identifiers. Each
+identifier names a Collection at the same Service in which the Offering is a direct member. An
+omitted `collection_ids` means that the Offering has no Collection membership. A Terse Offering MAY
+omit `collection_ids` under the common Terse Representation rules.
 
 The `list-collection-offerings` operation is the inverse query over this relationship: it returns
 Offerings whose `collection_ids` contains the requested Collection identifier. A Service MUST keep
@@ -606,6 +610,105 @@ the complete accessible Offering sequence. A Service can publish an ordinary Col
 equivalent business meaning, and an SDK can label `list-offerings` for user-interface convenience
 without creating an ODP resource.
 
+# Offerings
+
+## Offering Envelope
+
+A Full Offering Representation MUST contain `odp_version`, `id`, and `name`. It MAY contain
+`description`, `language`, `localizations`, `web_url`, `collection_ids`, `price`, `schema`,
+`attributes`, and `actions`. An optional field with no applicable or available value is omitted. In
+particular, a Service MUST NOT serialize empty `attributes`, `collection_ids`, or `actions` merely
+to declare that the capability is unused.
+
+`language` and `localizations` have the syntax and meaning defined for Service Document language
+metadata, but describe this Offering. They are omitted when the Offering uses the applicable
+language metadata inherited from its containing response or Service Document. A containing response
+can establish language metadata for its embedded items. The nearest metadata in the order Offering,
+containing response, then Service Document applies. Offering retrieval uses the same
+`Accept-Language`, Lookup, fallback, `Content-Language`, `Vary`, and entity-tag rules as Service
+Document retrieval. `Content-Language` identifies the language actually selected for the HTTP
+representation.
+
+A Terse Offering follows the common Terse Representation contract. It MUST contain `id` and `name`.
+It MAY include `price` and any other optional terse field except `actions`. Absence of `web_url`,
+`price`, `schema`, `attributes`, or another optional field from a Terse Offering makes no claim that
+the field is absent from the Full Offering. `detail_fields` can identify fields available through
+full retrieval.
+
+## Service-Defined Attributes and Schema
+
+`attributes`, when present, MUST be a non-empty JSON object containing Service-defined Offering
+data. An Offering that contains `attributes` MUST also contain `schema`. A Service MUST omit both
+fields when it has no Service-defined attributes for the Offering.
+
+`schema` identifies a JSON Schema Draft 2020-12 document that validates the complete `attributes`
+object. It contains `url`, and MAY contain `version`. `url` is a Resource Reference whose retrieved
+representation uses `application/schema+json`. `version` is an opaque Service-defined schema
+revision identifier. Multiple Offerings MAY share one Attribute Schema.
+
+When a Terse Offering contains `attributes`, it MUST also contain `schema`. The Attribute Schema
+describes the complete Full Offering attributes. The recursively omitted members of terse
+`attributes` can be identified through `detail_fields`.
+
+## Price Preview
+
+An Offering MAY contain `price`, a discovery-time summary that helps an Agent evaluate and compare
+Offerings before invoking a subsequent operation. Absence of `price` means that the Service has not
+advertised a price. It MUST NOT be interpreted as free.
+
+Every Price Preview contains a `type` discriminator. This specification defines `free`, `fixed`,
+`range`, `starting_at`, `metered`, and `quote`. Monetary values MUST be non-negative decimal strings
+and MUST NOT be represented as JSON numbers. `currency` is the display denomination of the summary;
+it does not select a payment protocol, network, rail, or settlement asset.
+
+| Type          | Required members                         | Meaning                                      |
+| ------------- | ---------------------------------------- | -------------------------------------------- |
+| `free`        | `type`                                   | No price is required.                        |
+| `fixed`       | `type`, `amount`, `currency`             | One advertised display price.                |
+| `range`       | `type`, `minimum`, `maximum`, `currency` | An inclusive advertised display range.       |
+| `starting_at` | `type`, `amount`, `currency`             | The lowest advertised starting price.        |
+| `metered`     | `type`, `amount`, `currency`, `unit`     | An advertised rate per Service-defined unit. |
+| `quote`       | `type`                                   | A later operation determines the price.      |
+
+For `range`, `minimum` MUST be less than or equal to `maximum`. A Price Preview excludes taxes,
+shipping, discounts, buyer-specific terms, fees, availability, and final quote results unless the
+Offering explicitly states otherwise outside the core price object.
+
+A live MPP or x402 challenge, quote response, or other subsequent operation is authoritative for the
+amount and settlement choices presented at execution time. A Price Preview MUST NOT be treated as a
+payment authorization or settlement requirement. If an authoritative subsequent value differs from
+the Price Preview, an Agent MUST use and present the authoritative value rather than silently
+relying on the preview.
+
+An Agent encountering an unknown Price Preview `type` treats only that `price` object as
+unsupported. The Offering and its unrelated fields remain usable. This permits compatible addition
+of future Price Preview discriminators.
+
+## Actions
+
+A Full Offering MAY contain `actions`, a non-empty array of operations that can follow discovery. An
+Offering with no advertised action omits the field. A Terse Offering MUST NOT contain `actions`;
+when permitted by the common representation rules it can advertise `/actions` through
+`detail_fields`.
+
+An action uses exactly one of two description forms: a compact HTTP action for operations whose
+request and response can be described directly, or a reference to one OpenAPI operation for more
+complex parameter, body, response, or security semantics. Both forms contain an action relation and
+can contain a human-readable description. A compact action distinguishes request content type from
+accepted response content types. The Actions contract defines the complete forms, registered
+relations, OpenAPI reference rules, and composition behavior.
+
+Action metadata is descriptive. A live AEP, MPP, x402, or other HTTP challenge is authoritative for
+access and payment. An Agent MUST NOT execute an action whose request, authorization, payment, or
+security consequences it cannot determine.
+
+## Offering Granularity
+
+A Service chooses the granularity of its Offerings. A variant that can be independently retrieved,
+quoted, reserved, acquired, or paid for SHOULD have its own Local Resource Identifier and Offering.
+Attributes can describe variants that are not independently actionable. This guidance does not
+define a universal variant model or require a Service to mirror its internal catalog structure.
+
 # Extensibility Model
 
 ## Core Evolution
@@ -626,8 +729,9 @@ request semantics, or security consequences.
 ## Service-Defined Offering Data
 
 ODP defines stable envelope fields needed for discovery and link traversal. Domain-specific Offering
-data belongs in a Service-defined `attributes` value. The applicable Attribute Schema MUST identify
-the structure, types, and constraints of that value using JSON Schema Draft 2020-12 {{JSON-SCHEMA}}.
+data belongs in the Service-defined `attributes` object. When present, its Attribute Schema MUST
+identify the structure, types, and constraints of that value using JSON Schema Draft 2020-12
+{{JSON-SCHEMA}}.
 
 An Attribute Schema can be shared across multiple Offerings. The schema's titles, descriptions,
 examples, and constraints help an Agent compare unfamiliar attributes without requiring the ODP core

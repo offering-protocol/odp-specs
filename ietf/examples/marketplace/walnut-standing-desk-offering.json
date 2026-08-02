@@ -7,6 +7,11 @@
   "collection_ids": [
     "home-office"
   ],
+  "price": {
+    "type": "starting_at",
+    "amount": "1450.00",
+    "currency": "USD"
+  },
   "schema": {
     "url": "https://market.example/schemas/home-office-furniture-7.json",
     "media_type": "application/schema+json",

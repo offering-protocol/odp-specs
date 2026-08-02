@@ -58,15 +58,21 @@ Dir[root.join("**/*-offering.json")].sort.each do |name|
   document = load_json(path, errors)
   next unless document.is_a?(Hash)
 
-  require_fields(document, %w[odp_version id name description collection_ids schema attributes actions], relative, errors)
+  require_fields(document, %w[odp_version id name], relative, errors)
   errors << "#{relative}: id must be a valid local resource identifier" unless OdpIdentity.local_identifier?(document["id"])
-  schema_url = document.dig("schema", "url")
-  errors << "#{relative}: schema.url must be an absolute HTTPS URL" unless absolute_https?(schema_url)
-  errors << "#{relative}: attributes must be an object" unless document["attributes"].is_a?(Hash)
-  errors << "#{relative}: actions must be an array" unless document["actions"].is_a?(Array)
-  errors << "#{relative}: collection_ids must contain unique local identifiers" unless
-    document["collection_ids"].is_a?(Array) && document["collection_ids"].uniq.length == document["collection_ids"].length &&
-    document["collection_ids"].all? { |identifier| OdpIdentity.local_identifier?(identifier) }
+  if document.key?("attributes")
+    schema_url = document.dig("schema", "url")
+    errors << "#{relative}: schema.url must be an absolute HTTPS URL" unless absolute_https?(schema_url)
+    errors << "#{relative}: attributes must be a non-empty object" unless
+      document["attributes"].is_a?(Hash) && !document["attributes"].empty?
+  end
+  errors << "#{relative}: actions must be a non-empty array" if
+    document.key?("actions") && (!document["actions"].is_a?(Array) || document["actions"].empty?)
+  errors << "#{relative}: collection_ids must contain unique local identifiers" if
+    document.key?("collection_ids") &&
+    (!document["collection_ids"].is_a?(Array) || document["collection_ids"].empty? ||
+      document["collection_ids"].uniq.length != document["collection_ids"].length ||
+      !document["collection_ids"].all? { |identifier| OdpIdentity.local_identifier?(identifier) })
 end
 
 Dir[root.join("**/*-collection.json")].sort.each do |name|
@@ -75,15 +81,20 @@ Dir[root.join("**/*-collection.json")].sort.each do |name|
   document = load_json(path, errors)
   next unless document.is_a?(Hash)
 
-  require_fields(document, %w[odp_version id name description language localizations parent_ids filter_capabilities], relative, errors)
+  require_fields(document, %w[odp_version id name], relative, errors)
   errors << "#{relative}: id must be a valid local resource identifier" unless OdpIdentity.local_identifier?(document["id"])
-  errors << "#{relative}: parent_ids must contain unique local identifiers" unless
-    document["parent_ids"].is_a?(Array) && document["parent_ids"].uniq.length == document["parent_ids"].length &&
-    document["parent_ids"].all? { |identifier| OdpIdentity.local_identifier?(identifier) }
-  errors << "#{relative}: localizations must contain language" unless
-    document["localizations"].is_a?(Array) && document["localizations"].include?(document["language"])
-  sources = %w[inline linked].select { |field| document.fetch("filter_capabilities", {}).key?(field) }
-  errors << "#{relative}: filter_capabilities must contain exactly one of inline or linked" unless sources.length == 1
+  errors << "#{relative}: parent_ids must contain unique local identifiers" if
+    document.key?("parent_ids") &&
+    (!document["parent_ids"].is_a?(Array) || document["parent_ids"].empty? ||
+      document["parent_ids"].uniq.length != document["parent_ids"].length ||
+      !document["parent_ids"].all? { |identifier| OdpIdentity.local_identifier?(identifier) })
+  errors << "#{relative}: localizations must contain language" if
+    document.key?("language") && document.key?("localizations") &&
+    (!document["localizations"].is_a?(Array) || !document["localizations"].include?(document["language"]))
+  if document.key?("filter_capabilities")
+    sources = %w[inline linked].select { |field| document.fetch("filter_capabilities", {}).key?(field) }
+    errors << "#{relative}: filter_capabilities must contain exactly one of inline or linked" unless sources.length == 1
+  end
 end
 
 Dir[root.join("**/*-filters-page-*.json")].sort.each do |name|

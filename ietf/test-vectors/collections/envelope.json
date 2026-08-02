@@ -24,8 +24,7 @@
         "localizations": [
           "en",
           "ja"
-        ],
-        "parent_ids": []
+        ]
       }
     },
     {
@@ -39,22 +38,17 @@
         "language": "ja",
         "localizations": [
           "en"
-        ],
-        "parent_ids": []
+        ]
       }
     },
     {
-      "name": "missing-parent-ids",
-      "valid": false,
+      "name": "inherited-language-root",
+      "valid": true,
       "document": {
         "odp_version": "1.0",
         "id": "gpus",
         "name": "GPUs",
-        "description": "Accelerated computing resources.",
-        "language": "en",
-        "localizations": [
-          "en"
-        ]
+        "description": "Accelerated computing resources."
       }
     },
     {
@@ -69,8 +63,7 @@
         "localizations": [
           "en",
           "EN"
-        ],
-        "parent_ids": []
+        ]
       }
     }
   ]

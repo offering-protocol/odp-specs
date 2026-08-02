@@ -1,0 +1,117 @@
+{
+  "id": "offering-contract",
+  "title": "Offering envelope, attributes, price, and actions",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "offerings",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "profile": "core",
+  "subject": "offering-contract",
+  "cases": [
+    {
+      "name": "minimal-full-offering",
+      "valid": true,
+      "representation": "full",
+      "document": {
+        "odp_version": "1.0",
+        "id": "handbook",
+        "name": "Agent handbook"
+      }
+    },
+    {
+      "name": "attributes-require-schema",
+      "valid": false,
+      "representation": "full",
+      "document": {
+        "odp_version": "1.0",
+        "id": "gpu",
+        "name": "GPU rental",
+        "attributes": {
+          "model": "A100"
+        }
+      }
+    },
+    {
+      "name": "empty-optional-values-are-omitted",
+      "valid": false,
+      "representation": "full",
+      "document": {
+        "odp_version": "1.0",
+        "id": "empty",
+        "name": "Empty fields",
+        "collection_ids": [],
+        "attributes": {},
+        "actions": []
+      }
+    },
+    {
+      "name": "fixed-price-preview",
+      "valid": true,
+      "representation": "terse",
+      "document": {
+        "id": "desk",
+        "name": "Standing desk",
+        "price": {
+          "type": "fixed",
+          "amount": "1450.00",
+          "currency": "USD"
+        }
+      }
+    },
+    {
+      "name": "missing-price-is-not-free",
+      "valid": true,
+      "representation": "terse",
+      "document": {
+        "id": "quote-only",
+        "name": "Quote-only service"
+      }
+    },
+    {
+      "name": "invalid-numeric-price",
+      "valid": false,
+      "representation": "terse",
+      "document": {
+        "id": "desk",
+        "name": "Standing desk",
+        "price": {
+          "type": "fixed",
+          "amount": 1450,
+          "currency": "USD"
+        }
+      }
+    },
+    {
+      "name": "future-price-discriminator",
+      "valid": true,
+      "representation": "terse",
+      "document": {
+        "id": "auction",
+        "name": "Auction lot",
+        "price": {
+          "type": "auction",
+          "current_bid": "25.00",
+          "currency": "USD"
+        }
+      }
+    },
+    {
+      "name": "actions-are-full-only",
+      "valid": false,
+      "representation": "terse",
+      "document": {
+        "id": "download",
+        "name": "Download",
+        "actions": [
+          {
+            "rel": "download"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -9,7 +9,7 @@ The files illustrate a complete sequence:
 1. [`marketplace-service.json`](./marketplace-service.json) is the compact cached Service document.
    It advertises its Collection and Offering operations through a fixed endpoint base.
 2. [`home-office-collection.json`](./home-office-collection.json) is a full Collection root
-   representation with language metadata, an empty `parent_ids` list, and a browser link. Instead of
+   representation with language metadata, omitted root `parent_ids`, and a browser link. Instead of
    embedding every Collection-specific filter, it links to a pageable filter resource.
 3. [`home-office-collection-search-response.json`](./home-office-collection-search-response.json)
    shows the same Collection as a terse search item with its root relationship and exhaustive
@@ -22,8 +22,8 @@ The files illustrate a complete sequence:
    Its refinements reference previously advertised filters; they do not define a third filter
    source.
 6. [`walnut-standing-desk-offering.json`](./walnut-standing-desk-offering.json) expands one terse
-   result into its full Offering, including direct `collection_ids`, Service-owned attributes, and a
-   quote action for current price, tax, shipping/pickup, and availability.
+   result into its full Offering, including direct `collection_ids`, a `starting_at` Price Preview,
+   Service-owned attributes, and a quote action for current tax, shipping/pickup, and availability.
 7. [`home-office-furniture-attributes.schema.json`](./home-office-furniture-attributes.schema.json)
    teaches an agent how to interpret the marketplace's listing attributes without making that retail
    model normative to ODP.

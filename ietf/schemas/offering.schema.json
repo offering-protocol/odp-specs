@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://offeringprotocol.org/schemas/collection.schema.json",
-  "title": "ODP Full Collection Representation",
+  "$id": "https://offeringprotocol.org/schemas/offering.schema.json",
+  "title": "ODP Full Offering Representation",
   "type": "object",
   "required": [
     "odp_version",
@@ -41,7 +41,10 @@
         "maxLength": 35
       }
     },
-    "parent_ids": {
+    "web_url": {
+      "$ref": "resource-reference.schema.json"
+    },
+    "collection_ids": {
       "allOf": [
         {
           "$ref": "local-resource-identifier-list.schema.json"
@@ -51,8 +54,28 @@
         }
       ]
     },
-    "web_url": {
-      "$ref": "resource-reference.schema.json"
+    "price": {
+      "$ref": "price-preview.schema.json"
+    },
+    "schema": {
+      "$ref": "attribute-schema-reference.schema.json"
+    },
+    "attributes": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "minProperties": 1
+      }
     }
+  },
+  "dependentRequired": {
+    "attributes": [
+      "schema"
+    ]
   }
 }

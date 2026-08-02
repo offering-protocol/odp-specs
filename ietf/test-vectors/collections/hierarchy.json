@@ -17,12 +17,10 @@
       "valid": true,
       "collections": [
         {
-          "id": "compute",
-          "parent_ids": []
+          "id": "compute"
         },
         {
-          "id": "machine-learning",
-          "parent_ids": []
+          "id": "machine-learning"
         },
         {
           "id": "gpus",

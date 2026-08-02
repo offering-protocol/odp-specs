@@ -4,7 +4,12 @@
   "name": "Dedicated NVIDIA A100 80 GB rental",
   "description": "One dedicated A100 accelerator in the us-west-2 region, rented in one-minute increments.",
   "web_url": "/gpu/a100-80gb-us-west",
-  "collection_ids": [],
+  "price": {
+    "type": "metered",
+    "amount": "2.40",
+    "currency": "USD",
+    "unit": "gpu-hour"
+  },
   "schema": {
     "url": "https://compute.example/schemas/gpu-rental-1.json",
     "media_type": "application/schema+json",
@@ -30,26 +35,13 @@
       "href": "/quotes",
       "method": "POST",
       "description": "Request current capacity and price for a requested rental interval.",
-      "input_schema": "https://compute.example/schemas/gpu-quote-request-1.json",
-      "access": {
-        "mode": "protected",
-        "steps": [
-          {
-            "protocol": "aep"
-          },
-          {
-            "one_of": [
-              {
-                "protocol": "mpp"
-              },
-              {
-                "protocol": "x402"
-              }
-            ]
-          }
-        ],
-        "authoritative": "live-http-challenges"
-      }
+      "request": {
+        "content_type": "application/json",
+        "schema_url": "https://compute.example/schemas/gpu-quote-request-1.json"
+      },
+      "response_content_types": [
+        "application/json"
+      ]
     }
   ]
 }
