@@ -3,20 +3,13 @@
   "$id": "https://offeringprotocol.org/schemas/attribute-schema-reference.schema.json",
   "title": "ODP Attribute Schema reference",
   "type": "object",
+  "additionalProperties": false,
   "required": [
     "url"
   ],
   "properties": {
     "url": {
       "$ref": "resource-reference.schema.json"
-    },
-    "media_type": {
-      "const": "application/schema+json"
-    },
-    "version": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 128
     }
   }
 }

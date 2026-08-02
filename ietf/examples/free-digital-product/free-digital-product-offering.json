@@ -8,9 +8,7 @@
     "type": "free"
   },
   "schema": {
-    "url": "https://downloads.example/schemas/digital-artifact-2.json",
-    "media_type": "application/schema+json",
-    "version": "2.0"
+    "url": "https://downloads.example/schemas/digital-artifact-2.json"
   },
   "attributes": {
     "version": "2.1.0",

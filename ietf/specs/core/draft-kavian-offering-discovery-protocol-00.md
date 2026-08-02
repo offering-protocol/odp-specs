@@ -642,13 +642,52 @@ data. An Offering that contains `attributes` MUST also contain `schema`. A Servi
 fields when it has no Service-defined attributes for the Offering.
 
 `schema` identifies a JSON Schema Draft 2020-12 document that validates the complete `attributes`
-object. It contains `url`, and MAY contain `version`. `url` is a Resource Reference whose retrieved
-representation uses `application/schema+json`. `version` is an opaque Service-defined schema
-revision identifier. Multiple Offerings MAY share one Attribute Schema.
+object. It contains exactly one member, `url`, a Resource Reference. Multiple Offerings MAY share
+one Attribute Schema. HTTP response metadata and the schema document itself describe the retrieved
+resource; the ODP reference does not repeat a media type, version, digest, or caching metadata.
 
 When a Terse Offering contains `attributes`, it MUST also contain `schema`. The Attribute Schema
 describes the complete Full Offering attributes. The recursively omitted members of terse
 `attributes` can be identified through `detail_fields`.
+
+## Attribute Schema Retrieval and Processing
+
+An Agent resolves `schema.url` against the Offering response URL and retrieves it with `GET`. It
+SHOULD send `Accept: application/schema+json`. A successful response MUST have a `Content-Type`
+whose media-type essence is `application/schema+json` and MUST contain a JSON Schema Draft 2020-12
+document. A missing, malformed, differently typed, or invalid document is an unusable Attribute
+Schema.
+
+An Attribute Schema is an ordinary mutable HTTP resource. HTTP cache directives and validators are
+authoritative, and the Attribute Schema fallback defined in HTTP Caching applies when the response
+provides no freshness information. Neither the schema URL nor a previously retrieved schema makes
+the schema immutable. An Agent revalidates or refreshes it according to ordinary HTTP caching
+semantics.
+
+The schema MUST declare the Draft 2020-12 meta-schema through `$schema`. `$id`, when present, and
+references have their standard JSON Schema meanings. An Agent MUST process references needed to
+interpret or validate the instance. If the schema declares a required vocabulary the Agent does not
+support, the Attribute Schema is unsupported. Optional vocabularies and unknown keywords are handled
+according to JSON Schema Draft 2020-12.
+
+An Agent-oriented SDK SHOULD resolve and cache referenced schema resources and provide its caller a
+locally complete schema representation. The caller MUST NOT be required to perform additional
+network requests merely to interpret the returned Offering. Retrieval limits and protections apply
+to the complete reference graph rather than independently granting every reference unbounded network
+access.
+
+A Service MUST validate the complete `attributes` object in a Full Offering against its Attribute
+Schema. An Agent SHOULD validate Full Offering attributes before relying on them. Terse Offering
+attributes are a partial view of the Full Offering instance and MUST NOT be validated as though they
+were the complete instance. Every included terse value retains the type and meaning assigned by the
+Attribute Schema.
+
+An unavailable, invalid, unsupported, or non-matching Attribute Schema makes the Offering's
+`attributes` uninterpretable. It does not invalidate the Offering's identity, core descriptive
+fields, Price Preview, `web_url`, Collection membership, or actions. Agent-oriented SDKs SHOULD omit
+uninterpretable attributes from their normalized result and report a scoped issue separately. The
+SDK result shape is an implementation contract and does not add an `issues` member to the ODP wire
+representation.
 
 ## Price Preview
 

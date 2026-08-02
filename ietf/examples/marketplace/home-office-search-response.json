@@ -15,9 +15,7 @@
         "currency": "USD"
       },
       "schema": {
-        "url": "https://market.example/schemas/home-office-furniture-7.json",
-        "media_type": "application/schema+json",
-        "version": "7.2"
+        "url": "https://market.example/schemas/home-office-furniture-7.json"
       },
       "attributes": {
         "category": "desk",

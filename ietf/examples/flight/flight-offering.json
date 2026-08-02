@@ -10,9 +10,7 @@
     "currency": "USD"
   },
   "schema": {
-    "url": "https://travel.example/schemas/flight-itinerary-1.json",
-    "media_type": "application/schema+json",
-    "version": "1.0"
+    "url": "https://travel.example/schemas/flight-itinerary-1.json"
   },
   "attributes": {
     "operating_carrier": "IF",
