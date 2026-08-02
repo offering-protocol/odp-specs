@@ -9,7 +9,6 @@
     "agent",
     "service"
   ],
-  "profile": "core",
   "subject": "offering-search-contract",
   "cases": [
     {

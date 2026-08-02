@@ -9,7 +9,6 @@
     "agent",
     "service"
   ],
-  "profile": "core",
   "subject": "filter-sort-contract",
   "cases": [
     {

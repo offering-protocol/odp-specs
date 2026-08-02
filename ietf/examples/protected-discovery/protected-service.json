@@ -18,8 +18,8 @@
   "operations": {
     "supported": [
       "list-offerings",
-      "search-offerings",
-      "get-offering"
+      "get-offering",
+      "search-offerings"
     ]
   },
   "http": {

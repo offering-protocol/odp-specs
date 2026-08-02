@@ -10,7 +10,6 @@
     "agent",
     "service"
   ],
-  "profile": "core-identity",
   "subject": "local-identifier",
   "cases": [
     {

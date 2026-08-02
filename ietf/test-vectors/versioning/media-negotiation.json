@@ -10,7 +10,6 @@
     "agent",
     "service"
   ],
-  "profile": "core-versioning",
   "subject": "media-negotiation",
   "cases": [
     {

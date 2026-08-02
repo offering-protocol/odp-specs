@@ -64,6 +64,18 @@
           "minItems": 1,
           "maxItems": 32,
           "uniqueItems": true,
+          "allOf": [
+            {
+              "contains": {
+                "const": "list-offerings"
+              }
+            },
+            {
+              "contains": {
+                "const": "get-offering"
+              }
+            }
+          ],
           "items": {
             "enum": [
               "list-collections",

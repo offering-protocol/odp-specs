@@ -528,7 +528,9 @@ MUST NOT assume that the Service will increase its page or response limits.
 
 `operations` MUST be an object containing `supported`. `supported` MUST be a non-empty array of no
 more than 32 unique operation identifiers from the preceding table. An Agent MUST NOT invoke an ODP
-operation that the Service Document does not advertise.
+operation that the Service Document does not advertise. Every conformant Service MUST advertise and
+implement `list-offerings` and `get-offering`. The remaining operations are optional and are
+implemented only when advertised.
 
 ## Processing Limits
 
@@ -1472,15 +1474,52 @@ compatibility rules defined in Protocol Versioning.
 
 # Conformance
 
-An implementation claims conformance by role.
+An implementation claims conformance separately for the Agent and Service roles. ODP defines one
+required baseline for each role. It does not define named conformance levels, profiles, or a
+`minimum` capability.
 
-An ODP Agent conforms to this document when it satisfies every requirement designated for an Agent
-for each capability it implements. An Agent is not required to implement an optional capability, but
-it MUST NOT claim support for a capability it does not implement.
+## Service Baseline
 
-An ODP Service conforms to this document when it satisfies every requirement designated for a
-Service, publishes a valid Service Document, and correctly implements each capability it advertises.
-A Service is not required to advertise every optional ODP capability.
+A conformant ODP Service:
+
+1. publishes a valid, publicly retrievable Service Document at `/.well-known/odp`;
+2. advertises and implements `list-offerings` and `get-offering` using its advertised endpoint base;
+3. implements the shared versioning, media type, representation, pagination, localization, caching,
+   error, limit, redirect, and security requirements applicable to those operations; and
+4. satisfies every Service requirement for each additional operation, protocol, search feature, or
+   per-resource feature it advertises or returns.
+
+The Offering sequence can be empty. A Full Offering still requires only `odp_version`, `id`, and
+`name`; Actions, prices, attributes, schemas, Collection membership, and other optional fields do
+not become required by baseline conformance.
+
+## Agent Baseline
+
+A conformant ODP Agent:
+
+1. retrieves and validates the Service Document;
+2. invokes `list-offerings`, follows its continuation sequence, and processes Terse and Full
+   Offering representations;
+3. invokes `get-offering` and processes a Full Offering; and
+4. implements the shared versioning, media type, representation, pagination, localization, caching,
+   error, limit, redirect, compatibility, and security requirements applicable to those operations.
+
+An Agent can omit Collections, search, filters, sorting, refinements, Attribute Schema resolution,
+Actions, and external protocol composition. It MUST ignore or narrowly isolate unsupported optional
+data according to this document and MUST NOT claim support for behavior it does not implement.
+
+## Runtime Advertisement and Evidence
+
+ODP defines no generic `capabilities` member and no secondary runtime conformance manifest. Runtime
+support is advertised through the singular `odp_version`, `operations.supported`, `protocols`,
+`search_capabilities`, and applicable per-resource members such as `schema` and `actions`. An
+implementation MUST NOT add a parallel claim that can contradict those authoritative fields.
+
+A conformance harness can generate release evidence identifying the implementation name and version,
+role, singular ODP version tested, vector revision, suites executed, and passed, failed, and skipped
+results. Such a report describes test evidence for one software release. It is not an ODP wire
+document, is not retrieved during discovery, and does not override runtime advertisement or
+normative requirements.
 
 Directory behavior is outside ODP conformance. Examples, guides, schemas, and test vectors support
 implementation and testing; they do not override normative Internet-Draft prose.

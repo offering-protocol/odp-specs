@@ -9,7 +9,6 @@
   "applies_to": [
     "agent"
   ],
-  "profile": "core-identity",
   "subject": "identity-comparison",
   "cases": [
     {

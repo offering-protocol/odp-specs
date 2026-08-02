@@ -7,7 +7,7 @@ require_relative "odp_identity"
 
 root = Pathname.new(__dir__).join("..", "test-vectors", "identity").expand_path
 errors = []
-required_metadata = %w[id title description drafts category applies_to profile subject cases]
+required_metadata = %w[id title description drafts category applies_to subject cases]
 
 Dir[root.join("*.json")].sort.each do |path|
   vector = JSON.parse(Pathname.new(path).read)

@@ -9,7 +9,6 @@
     "agent",
     "service"
   ],
-  "profile": "core",
   "subject": "collection-hierarchy",
   "cases": [
     {

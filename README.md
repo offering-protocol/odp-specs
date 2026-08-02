@@ -77,9 +77,9 @@ do not replace the specification.
 
 ## Read the Specification
 
-| Document                                                                                            | Scope                  |
-| --------------------------------------------------------------------------------------------------- | ---------------------- |
-| [The Offering Discovery Protocol](./ietf/specs/core/draft-kavian-offering-discovery-protocol-00.md) | The ODP core protocol. |
+| Document                                                                                       | Scope             |
+| ---------------------------------------------------------------------------------------------- | ----------------- |
+| [The Offering Discovery Protocol](./ietf/specs/draft-kavian-offering-discovery-protocol-00.md) | The ODP protocol. |
 
 ## Repository Map
 

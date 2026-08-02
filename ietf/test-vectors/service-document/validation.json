@@ -9,7 +9,6 @@
     "agent",
     "service"
   ],
-  "profile": "core",
   "subject": "service-document",
   "cases": [
     {
@@ -25,8 +24,9 @@
         ],
         "operations": {
           "supported": [
-            "search-offerings",
-            "get-offering"
+            "list-offerings",
+            "get-offering",
+            "search-offerings"
           ]
         },
         "http": {
@@ -52,6 +52,8 @@
         ],
         "operations": {
           "supported": [
+            "list-offerings",
+            "get-offering",
             "list-collections"
           ]
         },
@@ -73,7 +75,8 @@
         ],
         "operations": {
           "supported": [
-            "list-offerings"
+            "list-offerings",
+            "get-offering"
           ]
         },
         "http": {
@@ -103,6 +106,8 @@
         },
         "operations": {
           "supported": [
+            "list-offerings",
+            "get-offering",
             "search-offerings"
           ]
         },
@@ -127,6 +132,8 @@
         },
         "operations": {
           "supported": [
+            "list-offerings",
+            "get-offering",
             "search-offerings"
           ]
         },
@@ -153,6 +160,8 @@
         },
         "operations": {
           "supported": [
+            "list-offerings",
+            "get-offering",
             "search-offerings"
           ]
         },
@@ -178,6 +187,8 @@
         ],
         "operations": {
           "supported": [
+            "list-offerings",
+            "get-offering",
             "search-offerings"
           ]
         },
@@ -202,6 +213,8 @@
         ],
         "operations": {
           "supported": [
+            "list-offerings",
+            "get-offering",
             "search-offerings"
           ]
         },
@@ -226,6 +239,8 @@
         ],
         "operations": {
           "supported": [
+            "list-offerings",
+            "get-offering",
             "search-offerings"
           ]
         },
@@ -247,6 +262,8 @@
         ],
         "operations": {
           "supported": [
+            "list-offerings",
+            "get-offering",
             "buy-offering"
           ]
         },
@@ -268,6 +285,7 @@
         ],
         "operations": {
           "supported": [
+            "list-offerings",
             "get-offering"
           ]
         },
@@ -289,6 +307,7 @@
         ],
         "operations": {
           "supported": [
+            "list-offerings",
             "get-offering"
           ]
         },

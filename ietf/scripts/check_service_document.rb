@@ -83,6 +83,7 @@ def valid_document?(document, source)
   supported = document.dig("operations", "supported")
   return false unless supported.is_a?(Array) && supported.length.between?(1, 32)
   return false unless supported.uniq.length == supported.length && supported.all? { |operation| OPERATIONS.include?(operation) }
+  return false unless %w[list-offerings get-offering].all? { |operation| supported.include?(operation) }
   return false if document.key?("search_capabilities") &&
     !search_capabilities_valid?(document["search_capabilities"], supported)
   return false if document.key?("protocols") && !protocols_valid?(document["protocols"])

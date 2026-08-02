@@ -24,12 +24,13 @@
   },
   "operations": {
     "supported": [
+      "list-offerings",
+      "get-offering",
       "list-collections",
       "search-collections",
       "get-collection",
       "list-collection-offerings",
-      "search-offerings",
-      "get-offering"
+      "search-offerings"
     ]
   },
   "http": {

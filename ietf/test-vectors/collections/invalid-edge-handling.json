@@ -8,7 +8,6 @@
   "applies_to": [
     "agent"
   ],
-  "profile": "core",
   "subject": "invalid-edge-handling",
   "cases": [
     {

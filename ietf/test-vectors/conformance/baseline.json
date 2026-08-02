@@ -1,0 +1,147 @@
+{
+  "id": "conformance-baseline",
+  "title": "ODP role conformance baselines",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "conformance",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "role-baseline",
+  "cases": [
+    {
+      "name": "minimum-service-without-optional-features",
+      "role": "service",
+      "valid": true,
+      "operations": [
+        "list-offerings",
+        "get-offering"
+      ],
+      "list_response": {
+        "odp_version": "1.0",
+        "items": [
+          {
+            "id": "consultation",
+            "name": "One-hour consultation"
+          }
+        ]
+      },
+      "get_response": {
+        "odp_version": "1.0",
+        "id": "consultation",
+        "name": "One-hour consultation"
+      }
+    },
+    {
+      "name": "empty-offering-sequence",
+      "role": "service",
+      "valid": true,
+      "operations": [
+        "list-offerings",
+        "get-offering"
+      ],
+      "list_response": {
+        "odp_version": "1.0",
+        "items": []
+      },
+      "get_response": {
+        "odp_version": "1.0",
+        "id": "example",
+        "name": "Example"
+      }
+    },
+    {
+      "name": "search-does-not-replace-list",
+      "role": "service",
+      "valid": false,
+      "operations": [
+        "search-offerings",
+        "get-offering"
+      ],
+      "list_response": {
+        "odp_version": "1.0",
+        "items": []
+      },
+      "get_response": {
+        "odp_version": "1.0",
+        "id": "example",
+        "name": "Example"
+      }
+    },
+    {
+      "name": "missing-get-offering",
+      "role": "service",
+      "valid": false,
+      "operations": [
+        "list-offerings"
+      ],
+      "list_response": {
+        "odp_version": "1.0",
+        "items": []
+      },
+      "get_response": {
+        "odp_version": "1.0",
+        "id": "example",
+        "name": "Example"
+      }
+    },
+    {
+      "name": "actions-remain-optional",
+      "role": "service",
+      "valid": true,
+      "operations": [
+        "list-offerings",
+        "get-offering"
+      ],
+      "list_response": {
+        "odp_version": "1.0",
+        "items": [
+          {
+            "id": "handbook",
+            "name": "Agent handbook"
+          }
+        ]
+      },
+      "get_response": {
+        "odp_version": "1.0",
+        "id": "handbook",
+        "name": "Agent handbook"
+      }
+    },
+    {
+      "name": "minimum-agent-behavior",
+      "role": "agent",
+      "valid": true,
+      "behaviors": [
+        "inspect-service",
+        "list-offerings",
+        "follow-pagination",
+        "get-offering",
+        "process-representations",
+        "process-localization",
+        "honor-caching",
+        "handle-errors-and-limits",
+        "enforce-redirect-and-security",
+        "enforce-compatibility"
+      ]
+    },
+    {
+      "name": "agent-missing-pagination",
+      "role": "agent",
+      "valid": false,
+      "behaviors": [
+        "inspect-service",
+        "list-offerings",
+        "get-offering",
+        "process-representations",
+        "process-localization",
+        "honor-caching",
+        "handle-errors-and-limits",
+        "enforce-redirect-and-security",
+        "enforce-compatibility"
+      ]
+    }
+  ]
+}

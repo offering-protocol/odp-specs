@@ -1,11 +1,11 @@
 # Test Vectors
 
 This directory contains language-neutral positive and negative ODP conformance cases. Each vector
-identifies the governing draft, capability profile, participating roles, input, and expected
-outcome.
+identifies the governing draft, category, participating roles, subject, input, and expected outcome.
 
 Vectors cover success, malformed input, unsafe references, caching, pagination, filters, search,
-access composition, and compatibility. Implementations publish the profiles and vectors they pass.
+access composition, and compatibility. Generated conformance reports identify the categories and
+vectors executed for one role and ODP version.
 
 | Area                                        | Coverage                                                                                     |
 | ------------------------------------------- | -------------------------------------------------------------------------------------------- |
@@ -13,6 +13,7 @@ access composition, and compatibility. Implementations publish the profiles and 
 | [`attribute-schemas`](./attribute-schemas/) | Reference, retrieval, dialect, validation, and narrow failure behavior.                      |
 | [`collections`](./collections/)             | Directed-acyclic hierarchy, direct membership, depth, and narrow edge failure.               |
 | [`composition`](./composition/)             | Service protocol support and authoritative AEP, MPP, and x402 live signals.                  |
+| [`conformance`](./conformance/)             | Required Service and Agent role baselines.                                                   |
 | [`errors-limits`](./errors-limits/)         | Problem Details, resource ceilings, narrow failures, and bounded retries.                    |
 | [`identity`](./identity/)                   | Service origins, local identifiers, structured identity comparison, and resource references. |
 | [`offerings`](./offerings/)                 | Offering envelope, attributes, Price Preview, and action placement.                          |

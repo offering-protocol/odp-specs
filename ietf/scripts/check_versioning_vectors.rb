@@ -5,7 +5,7 @@ require "json"
 require "pathname"
 require_relative "odp_versioning"
 
-REQUIRED_METADATA = %w[id title description drafts category applies_to profile subject cases].freeze
+REQUIRED_METADATA = %w[id title description drafts category applies_to subject cases].freeze
 
 def expected_media_result(test_case)
   return "serve-odp" if test_case["accept_missing"]

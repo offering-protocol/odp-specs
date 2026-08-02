@@ -1,0 +1,18 @@
+{
+  "odp_version": "1.0",
+  "name": "Consulting Example",
+  "description": "A small Service with one Offering and the required ODP operations.",
+  "language": "en",
+  "localizations": [
+    "en"
+  ],
+  "operations": {
+    "supported": [
+      "list-offerings",
+      "get-offering"
+    ]
+  },
+  "http": {
+    "endpoint_base": "/odp/"
+  }
+}
