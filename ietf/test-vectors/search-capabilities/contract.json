@@ -170,6 +170,18 @@
       "valid": false
     },
     {
+      "name": "linked-source-page-limit-boundary",
+      "operation": "validate-linked-page-count",
+      "page_count": 16,
+      "valid": true
+    },
+    {
+      "name": "linked-source-page-limit-exceeded",
+      "operation": "validate-linked-page-count",
+      "page_count": 17,
+      "valid": false
+    },
+    {
       "name": "selected-collection-only-inheritance",
       "operation": "merge-capabilities",
       "collection_id": "home-office",

@@ -1,4 +1,5 @@
 RUBY ?= ruby
+OUTPUT ?= /tmp/odp-marketplace-scale
 MARKDOWN_FILES := $(shell find .. -type f -name '*.md' \
 	-not -path '../.git/*' \
 	-not -path '../artifacts/*' \
@@ -6,9 +7,9 @@ MARKDOWN_FILES := $(shell find .. -type f -name '*.md' \
 	-not -path '../ietf/.venv/*' | sort)
 DRAFTS := $(shell find specs -type f -name 'draft-*.md' | sort)
 
-.PHONY: check check-attribute-schemas check-collection-search check-collections check-drafts check-error-limits check-filters-sorting check-formatter check-format check-json check-examples check-identity check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-service-document check-versioning format
+.PHONY: check check-attribute-schemas check-collection-search check-collections check-drafts check-error-limits check-filters-sorting check-formatter check-format check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-service-document check-versioning format generate-marketplace-scale
 
-check: check-drafts check-formatter check-format check-json check-attribute-schemas check-collection-search check-collections check-error-limits check-examples check-filters-sorting check-identity check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-service-document check-versioning
+check: check-drafts check-formatter check-format check-json check-attribute-schemas check-collection-search check-collections check-error-limits check-examples check-filters-sorting check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-service-document check-versioning
 
 check-attribute-schemas:
 	$(RUBY) scripts/check_attribute_schema_vectors.rb
@@ -43,6 +44,9 @@ check-filters-sorting:
 check-identity:
 	$(RUBY) scripts/check_identity_vectors.rb
 
+check-marketplace-scale:
+	$(RUBY) scripts/check_marketplace_scale.rb
+
 check-offering-search:
 	$(RUBY) scripts/check_offering_search_vectors.rb
 
@@ -66,6 +70,9 @@ check-service-document:
 
 check-versioning:
 	$(RUBY) scripts/check_versioning_vectors.rb
+
+generate-marketplace-scale:
+	$(RUBY) scripts/check_marketplace_scale.rb --output "$(OUTPUT)"
 
 format:
 	$(RUBY) scripts/format_markdown.rb $(MARKDOWN_FILES)

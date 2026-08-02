@@ -9,6 +9,7 @@ require_relative "odp_identity"
 IDENTIFIER = /\A[A-Za-z0-9._~-]{1,64}\z/
 INLINE_LIMITS = { "filters" => 32, "sorts" => 16 }.freeze
 EFFECTIVE_LIMITS = { "filters" => 1_024, "sorts" => 128 }.freeze
+LINKED_PAGE_LIMIT = 16
 
 def same_origin?(service_origin, reference)
   return false unless OdpIdentity.canonical_origin?(service_origin) && OdpIdentity.resource_reference?(reference)
@@ -51,7 +52,7 @@ end
 def linked_source_valid?(test_case)
   pages = test_case.fetch("pages")
   return false unless test_case.fetch("method") == "GET" && same_origin?(test_case.fetch("service_origin"), test_case.fetch("href"))
-  return false unless pages.is_a?(Array) && !pages.empty?
+  return false unless pages.is_a?(Array) && pages.length.between?(1, LINKED_PAGE_LIMIT)
   return false unless pages.all? { |page| page["odp_version"] == "1.0" && page["items"].is_a?(Array) && page["items"].length <= 100 }
 
   identifiers = pages.flat_map { |page| page["items"].map { |definition| definition["id"] } }
@@ -107,6 +108,8 @@ errors = vector.fetch("cases").filter_map do |test_case|
              advertisement_valid?(test_case.fetch("advertisement"), test_case.fetch("service_origin"), test_case.fetch("operations"))
            when "validate-linked-source"
              linked_source_valid?(test_case)
+           when "validate-linked-page-count"
+             test_case.fetch("page_count").between?(1, LINKED_PAGE_LIMIT)
            when "merge-capabilities"
              merge_capabilities(test_case)
            else

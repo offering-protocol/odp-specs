@@ -1145,18 +1145,20 @@ definitions is omitted rather than represented by an empty array.
 
 A linked source is retrieved with `GET` and uses `application/odp+json`. The response is a standard
 page envelope whose `items` contain only the applicable definition kind and whose `next` links obey
-the common continuation contract. A page contains no more than 100 definitions. The linked operation
-can enforce access policy through live HTTP challenges. It follows the common `Accept-Language`,
-`Content-Language`, `Vary`, validator, redirect, response-limit, and caching rules. The
-advertisement does not contain a redundant pagination flag; only `next` indicates another page.
+the common continuation contract. A page contains no more than 100 definitions, and a complete
+linked source contains no more than 16 pages. The linked operation can enforce access policy through
+live HTTP challenges. It follows the common `Accept-Language`, `Content-Language`, `Vary`,
+validator, redirect, response-limit, and caching rules. The advertisement does not contain a
+redundant pagination flag; only `next` indicates another page.
 
 Each inline or complete linked source is atomic. An Agent MUST retrieve and validate every page,
 enforce source uniqueness and bounds, and only then expose definitions from that source. It MUST NOT
 expose an earlier page while later pages remain unresolved. A failed or invalid source is omitted
 from the normalized capability catalog and reported as a scoped issue. Once a linked source cannot
 fit within the applicable effective-catalog bound, the Agent MUST stop retrieving that source and
-discard it. Failure of a Collection-specific source does not invalidate a valid Service-wide source,
-and capability failure does not prevent text-only Offering search.
+discard it. If page 16 contains `next`, the Agent MUST NOT retrieve page 17 and MUST discard the
+source. Failure of a Collection-specific source does not invalidate a valid Service-wide source, and
+capability failure does not prevent text-only Offering search.
 
 ## Effective Search Capabilities
 
@@ -1270,6 +1272,7 @@ byte limit.
 | Service Document                           | 65,536 bytes    |
 | Service Document nesting depth             | 8               |
 | Items per page                             | 100             |
+| Pages per linked capability source         | 16              |
 | One Attribute Schema document              | 262,144 bytes   |
 | Complete Attribute Schema reference graph  | 1,048,576 bytes |
 | Distinct documents in one schema graph     | 16              |

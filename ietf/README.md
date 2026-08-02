@@ -7,6 +7,7 @@ artifacts.
 | --------------- | --------------------------------------------------------------------------- |
 | `conformance/`  | Profiles, capability manifests, and the language-neutral harness contract.  |
 | `examples/`     | Reviewed, non-normative examples that explain complete discovery scenarios. |
+| `fixtures/`     | Generated scale profiles and reproducible performance checks.               |
 | `guides/`       | Non-normative implementer and author guidance.                              |
 | `schemas/`      | Source JSON Schemas for stable wire objects.                                |
 | `scripts/`      | Validation, formatting, rendering, and publication tooling.                 |

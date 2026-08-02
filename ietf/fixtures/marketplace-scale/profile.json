@@ -1,0 +1,32 @@
+{
+  "odp_version": "1.0",
+  "catalog": {
+    "offerings": 10000000,
+    "collections": 100000
+  },
+  "capabilities": {
+    "filters": 1024,
+    "sorts": 128,
+    "maximum_pages_per_source": 16
+  },
+  "refinements": {
+    "groups": 16,
+    "values_per_group": 32
+  },
+  "pages": {
+    "items": 100,
+    "maximum_decoded_bytes": 524288
+  },
+  "sample_offsets": {
+    "offerings": [
+      0,
+      4999950,
+      9999900
+    ],
+    "collections": [
+      0,
+      49950,
+      99900
+    ]
+  }
+}
