@@ -7,9 +7,9 @@ MARKDOWN_FILES := $(shell find .. -type f -name '*.md' \
 	-not -path '../ietf/.venv/*' | sort)
 DRAFTS := $(shell find specs -type f -name 'draft-*.md' | sort)
 
-.PHONY: check check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-drafts check-error-limits check-filters-sorting check-formatter check-format check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning format generate-marketplace-scale
+.PHONY: check check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-drafts check-error-limits check-filters-sorting check-formatter check-format check-harness check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning format generate-marketplace-scale
 
-check: check-drafts check-formatter check-format check-json check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-error-limits check-examples check-filters-sorting check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning
+check: check-drafts check-formatter check-format check-json check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-error-limits check-examples check-filters-sorting check-harness check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning
 
 check-actions:
 	$(RUBY) scripts/check_action_vectors.rb
@@ -40,6 +40,9 @@ check-formatter:
 
 check-format:
 	$(RUBY) scripts/format_markdown.rb --check $(MARKDOWN_FILES)
+
+check-harness:
+	$(RUBY) scripts/check_conformance_harness.rb
 
 check-json:
 	$(RUBY) scripts/check_json.rb

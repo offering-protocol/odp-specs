@@ -1,0 +1,32 @@
+{
+  "index_version": "1",
+  "vectors": [
+    "actions/contract.json",
+    "attribute-schemas/retrieval.json",
+    "collection-search/contract.json",
+    "collections/envelope.json",
+    "collections/hierarchy.json",
+    "collections/invalid-edge-handling.json",
+    "collections/membership.json",
+    "composition/contract.json",
+    "conformance/baseline.json",
+    "errors-limits/contract.json",
+    "filters-sorting/contract.json",
+    "identity/identity-comparison.json",
+    "identity/local-identifier.json",
+    "identity/resource-reference.json",
+    "identity/service-origin.json",
+    "offering-search/contract.json",
+    "offerings/contract.json",
+    "pagination/contract.json",
+    "refinements/contract.json",
+    "representation/detail-fields.json",
+    "representation/selection.json",
+    "search-capabilities/contract.json",
+    "security/contract.json",
+    "service-document/validation.json",
+    "versioning/media-negotiation.json",
+    "versioning/protocol-version.json",
+    "versioning/top-level-version.json"
+  ]
+}
