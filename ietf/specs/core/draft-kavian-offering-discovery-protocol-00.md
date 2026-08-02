@@ -1248,6 +1248,24 @@ The following signals belong to their defining protocols and are not redefined b
 | MPP      | `402 Payment Required` with a `Payment` challenge in `WWW-Authenticate`. |
 | x402     | `402 Payment Required` with payment requirements in `PAYMENT-REQUIRED`.  |
 
+A Service that requires both AEP and payment for an ODP operation MUST authenticate the Agent before
+processing payment. Its response to a request without acceptable AEP credentials has status 401 and
+carries the AEP challenge, even if the request also lacks payment. After AEP authentication
+succeeds, the Service can return the applicable live payment challenge.
+
+An Agent begins with the requested ODP operation in its current authentication context. A valid AEP
+challenge causes it to complete the AEP flow and retry the same operation with an AEP credential.
+When payment can follow, the Agent SHOULD use the dedicated `AEP-Authorization` field defined by AEP
+so that `Authorization` remains available for an MPP credential. The Agent fulfills payment only
+after the authenticated retry returns a live payment challenge. It then retries with the AEP
+credential and either the MPP `Authorization: Payment` credential or the x402 `PAYMENT-SIGNATURE`
+field, as defined by the selected payment protocol.
+
+This sequence does not require AEP where the Service does not require onboarding. A public operation
+can succeed immediately, and a payment-only operation can return `402 Payment Required` directly.
+Each retry remains subject to the credential handling, request binding, redirect, replay, and error
+rules of the protocol that caused it.
+
 A successful response means that the request did not require another challenge at that point,
 regardless of the Service-wide advertisement. A live challenge for an unadvertised protocol is still
 authoritative. An advertised protocol without a corresponding live challenge MUST NOT cause an Agent

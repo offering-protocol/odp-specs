@@ -30,6 +30,14 @@ def live_protocols(response)
   protocols
 end
 
+def sequence_valid?(requires, responses)
+  expected = []
+  expected << 401 if requires.include?("aep")
+  expected << 402 if (requires & %w[mpp x402]).any?
+  expected << 200
+  responses == expected
+end
+
 path = Pathname.new(__dir__).join("..", "test-vectors", "composition", "contract.json").expand_path
 vector = JSON.parse(path.read)
 errors = vector.fetch("cases").filter_map do |test_case|
@@ -38,6 +46,8 @@ errors = vector.fetch("cases").filter_map do |test_case|
              advertisement_valid?(test_case.fetch("protocols"))
            when "classify-live-response"
              live_protocols(test_case.fetch("response"))
+           when "validate-sequence"
+             sequence_valid?(test_case.fetch("requires"), test_case.fetch("responses"))
            else
              :unknown
            end

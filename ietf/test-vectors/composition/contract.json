@@ -136,6 +136,81 @@
       "expected": [
         "x402"
       ]
+    },
+    {
+      "name": "public-operation-succeeds-without-challenge",
+      "operation": "validate-sequence",
+      "requires": [],
+      "responses": [
+        200
+      ],
+      "valid": true
+    },
+    {
+      "name": "payment-only-operation-challenges-directly",
+      "operation": "validate-sequence",
+      "requires": [
+        "mpp"
+      ],
+      "responses": [
+        402,
+        200
+      ],
+      "valid": true
+    },
+    {
+      "name": "aep-only-operation-authenticates-directly",
+      "operation": "validate-sequence",
+      "requires": [
+        "aep"
+      ],
+      "responses": [
+        401,
+        200
+      ],
+      "valid": true
+    },
+    {
+      "name": "aep-precedes-mpp",
+      "operation": "validate-sequence",
+      "requires": [
+        "aep",
+        "mpp"
+      ],
+      "responses": [
+        401,
+        402,
+        200
+      ],
+      "valid": true
+    },
+    {
+      "name": "aep-precedes-x402",
+      "operation": "validate-sequence",
+      "requires": [
+        "aep",
+        "x402"
+      ],
+      "responses": [
+        401,
+        402,
+        200
+      ],
+      "valid": true
+    },
+    {
+      "name": "payment-must-not-precede-required-aep",
+      "operation": "validate-sequence",
+      "requires": [
+        "aep",
+        "mpp"
+      ],
+      "responses": [
+        402,
+        401,
+        200
+      ],
+      "valid": false
     }
   ]
 }
