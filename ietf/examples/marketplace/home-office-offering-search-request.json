@@ -3,5 +3,20 @@
   "query": "standing desk",
   "collection_id": "home-office",
   "include_descendants": true,
+  "filters": [
+    {
+      "id": "material",
+      "operator": "in",
+      "value": [
+        "walnut",
+        "oak"
+      ]
+    },
+    {
+      "id": "processing_days",
+      "operator": "lte",
+      "value": 14
+    }
+  ],
   "limit": 50
 }

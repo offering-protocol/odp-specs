@@ -10,9 +10,15 @@ checked for drift.
 | Schema                                                                                       | Contract                                              |
 | -------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | [`attribute-schema-reference.schema.json`](./attribute-schema-reference.schema.json)         | Reference to a Service-defined Attribute Schema.      |
+| [`capability-identifier.schema.json`](./capability-identifier.schema.json)                   | Service-local filter and sort identifiers.            |
 | [`collection-search-request.schema.json`](./collection-search-request.schema.json)           | Collection text and direct-parent search request.     |
 | [`collection.schema.json`](./collection.schema.json)                                         | Full Collection Representation envelope.              |
 | [`detail-fields.schema.json`](./detail-fields.schema.json)                                   | Omitted fields available in a Full Representation.    |
+| [`filter-definition.schema.json`](./filter-definition.schema.json)                           | Search Filter Definition.                             |
+| [`filter-expression.schema.json`](./filter-expression.schema.json)                           | Filter request expression.                            |
+| [`filter-operator.schema.json`](./filter-operator.schema.json)                               | Core filter operators.                                |
+| [`filter-type.schema.json`](./filter-type.schema.json)                                       | Core filter value types.                              |
+| [`filter-unit.schema.json`](./filter-unit.schema.json)                                       | UCUM and Service-defined units.                       |
 | [`invalid-parameter.schema.json`](./invalid-parameter.schema.json)                           | Structured invalid request parameter.                 |
 | [`local-resource-identifier.schema.json`](./local-resource-identifier.schema.json)           | Service-created Collection and Offering identifiers.  |
 | [`local-resource-identifier-list.schema.json`](./local-resource-identifier-list.schema.json) | Unique Service-local resource identifier arrays.      |
@@ -28,5 +34,7 @@ checked for drift.
 | [`resource-identity.schema.json`](./resource-identity.schema.json)                           | Structured identity composed by an Agent.             |
 | [`resource-reference.schema.json`](./resource-reference.schema.json)                         | Origin-relative and absolute resource references.     |
 | [`service-origin.schema.json`](./service-origin.schema.json)                                 | Canonical Service-origin serialization.               |
+| [`sort-definition.schema.json`](./sort-definition.schema.json)                               | Advertised indexed sorting recipe.                    |
+| [`sort-key.schema.json`](./sort-key.schema.json)                                             | One fixed key in a sorting recipe.                    |
 | [`service-document.schema.json`](./service-document.schema.json)                             | Well-known Service discovery metadata and operations. |
 | [`top-level-document.schema.json`](./top-level-document.schema.json)                         | Shared version-bearing ODP document envelope.         |

@@ -8,8 +8,7 @@
       "type": "boolean",
       "operators": [
         "eq"
-      ],
-      "sortable": false
+      ]
     },
     {
       "id": "processing_days",
@@ -17,13 +16,13 @@
       "description": "Number of days before the item is ready to ship or collect.",
       "type": "integer",
       "unit": {
+        "system": "ucum",
         "code": "d"
       },
       "operators": [
         "gte",
         "lte"
-      ],
-      "sortable": true
+      ]
     }
   ]
 }

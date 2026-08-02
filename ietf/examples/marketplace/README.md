@@ -18,7 +18,7 @@ The files illustrate a complete sequence:
    `detail_fields`. The Service owns matching and ordering.
 5. [`home-office-filters-page-1.json`](./home-office-filters-page-1.json) and
    [`home-office-filters-page-2.json`](./home-office-filters-page-2.json) show short Service-local
-   filter identifiers, types, operators, units, sorting capability, and cursor-style continuation.
+   filter identifiers, types, operators, units, and cursor-style continuation.
 6. [`home-office-offering-search-request.json`](./home-office-offering-search-request.json) combines
    a Service-interpreted text query with explicit descendant expansion below the selected
    Collection.

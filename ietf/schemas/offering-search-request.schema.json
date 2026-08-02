@@ -4,8 +4,19 @@
   "title": "ODP Offering search request",
   "type": "object",
   "required": [
-    "odp_version",
-    "query"
+    "odp_version"
+  ],
+  "anyOf": [
+    {
+      "required": [
+        "query"
+      ]
+    },
+    {
+      "required": [
+        "filters"
+      ]
+    }
   ],
   "dependentRequired": {
     "include_descendants": [
@@ -22,12 +33,24 @@
       "maxLength": 256,
       "pattern": "\\S"
     },
+    "filters": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "filter-expression.schema.json"
+      }
+    },
     "collection_id": {
       "$ref": "local-resource-identifier.schema.json"
     },
     "include_descendants": {
       "type": "boolean",
       "default": false
+    },
+    "sort": {
+      "$ref": "capability-identifier.schema.json"
     },
     "limit": {
       "$ref": "page-limit.schema.json"

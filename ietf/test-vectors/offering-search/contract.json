@@ -53,6 +53,21 @@
       "valid": false
     },
     {
+      "name": "filters-as-alternative-criterion",
+      "operation": "validate-request",
+      "request": {
+        "odp_version": "1.0",
+        "filters": [
+          {
+            "id": "material",
+            "operator": "eq",
+            "value": "walnut"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
       "name": "descendants-without-collection",
       "operation": "validate-request",
       "request": {

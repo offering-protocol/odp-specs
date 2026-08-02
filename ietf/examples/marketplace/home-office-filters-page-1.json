@@ -9,8 +9,7 @@
       "operators": [
         "eq",
         "in"
-      ],
-      "sortable": false
+      ]
     },
     {
       "id": "material",
@@ -20,8 +19,7 @@
       "operators": [
         "eq",
         "in"
-      ],
-      "sortable": false
+      ]
     }
   ],
   "next": "/odp/collections/home-office/filters?limit=2&cursor=cGFnZTI"

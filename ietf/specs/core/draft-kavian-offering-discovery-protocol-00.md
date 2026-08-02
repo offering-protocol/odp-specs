@@ -30,6 +30,12 @@ normative:
   RFC9110:
   RFC9111:
   RFC9457:
+  UCUM:
+    title: The Unified Code for Units of Measure
+    target: https://ucum.org/ucum
+    author:
+      -
+        org: Regenstrief Institute, Inc.
 
 informative:
   JSON-SCHEMA:
@@ -730,10 +736,9 @@ without creating an ODP resource.
 
 ## Offering Search
 
-The `search-offerings` operation accepts an ODP Top-Level Document containing `odp_version` and
-`query`. It MAY also contain `collection_id`, `include_descendants`, and `limit`. A request without
-`query` is invalid unless another advertised search capability explicitly defines an alternative
-criterion. An Agent uses `list-offerings` for an unconstrained sequence and
+The `search-offerings` operation accepts an ODP Top-Level Document containing `odp_version` and at
+least one of `query` or `filters`. It MAY also contain `collection_id`, `include_descendants`,
+`sort`, and `limit`. An Agent uses `list-offerings` for an unconstrained sequence and
 `list-collection-offerings` for the unconstrained direct members of one Collection.
 
 `query` is a non-empty string of no more than 256 Unicode code points and MUST contain at least one
@@ -743,6 +748,10 @@ semantic, or other matching over Offering metadata and Service-defined attribute
 request's access and language context. ODP does not define tokenization, stemming, case folding,
 searchable fields, or a portable relevance algorithm. An Agent MUST NOT assume that the same query
 produces equivalent matches at different Services.
+
+`filters` and `sort` use the Filter Expression and Sort Definition contracts in this document. When
+`query` and `filters` are both present, an Offering MUST satisfy the Service-interpreted query and
+every Filter Expression. An omitted `sort` preserves the Service's preferred ordering.
 
 `collection_id` is a Local Resource Identifier that constrains results to Offerings in the named
 Collection. The Collection MUST resolve under the current access context. Otherwise, the Service
@@ -942,6 +951,126 @@ advertised for the operation and scope in which the filter is used.
 A Service Document SHOULD contain only Service-level discovery metadata and operation advertisement.
 Collection-specific or high-cardinality definitions SHOULD be linked from the narrowest applicable
 Collection or operation so that a Service Document remains bounded as the catalog grows.
+
+# Filters and Sorting
+
+## Capability Identifiers
+
+A Filter Definition and Sort Definition contains a Service-created capability identifier. It is a
+case-sensitive ASCII string of 1 through 64 characters from `ALPHA`, `DIGIT`, `.`, `_`, `~`, and
+`-`. It is compared byte for byte and is not percent-decoded or Unicode-normalized.
+
+A capability identifier is not a Local Resource Identifier and does not identify an independently
+retrievable ODP resource. Its meaning is scoped by the Service Origin, operation, capability source,
+definition kind, and identifier. The same spelling can have different meanings at different Services
+or scopes. Capability advertisement, inheritance, and conflict rules define the effective scope in
+which a reference is resolved.
+
+## Filter Value Model
+
+A Filter Definition maps each Offering to a set containing zero or more scalar values of one
+declared type. The mapping can use core Offering metadata, Service-defined attributes, computed
+catalog data, an external index, or another Service implementation detail. It does not expose a
+storage path and need not correspond to a serialized Offering field.
+
+The core filter types and their wire values are:
+
+| Type        | Wire value                                                                   |
+| ----------- | ---------------------------------------------------------------------------- |
+| `string`    | JSON string.                                                                 |
+| `boolean`   | JSON Boolean.                                                                |
+| `integer`   | JSON integer.                                                                |
+| `number`    | JSON number.                                                                 |
+| `decimal`   | Base-10 JSON string without an exponent.                                     |
+| `date`      | RFC 3339 `full-date` JSON string.                                            |
+| `date-time` | RFC 3339 `date-time` JSON string identifying an instant on the UTC timeline. |
+
+A decimal value matches `-?(0|[1-9][0-9]*)(\\.[0-9]+)?`. Decimal equality and ordering are numeric,
+not lexical, so `1.0` and `1.00` compare equal. Integer and number comparison is numeric. Boolean
+equality follows JSON Boolean equality. Date comparison follows calendar order. Date-time equality
+and ordering use the represented instant. String equality is case-sensitive Unicode scalar-value
+equality; ODP performs no normalization or locale folding.
+
+## Filter Definitions
+
+A Filter Definition contains `id`, `title`, `description`, `type`, and `operators`. `title` is a
+non-empty string of no more than 128 Unicode code points. `description` is a non-empty string of no
+more than 1024 Unicode code points. `operators` is a non-empty array of unique supported core
+operators. A numeric Filter Definition MAY contain `unit`; other types MUST omit it.
+
+Every operator advertised by a Filter Definition MUST be compatible with its type:
+
+| Operator | Compatible types                                         |
+| -------- | -------------------------------------------------------- |
+| `eq`     | All core filter types.                                   |
+| `in`     | All core filter types.                                   |
+| `lt`     | `integer`, `number`, `decimal`, `date`, and `date-time`. |
+| `lte`    | `integer`, `number`, `decimal`, `date`, and `date-time`. |
+| `gt`     | `integer`, `number`, `decimal`, `date`, and `date-time`. |
+| `gte`    | `integer`, `number`, `decimal`, `date`, and `date-time`. |
+| `exists` | All core filter types.                                   |
+
+## Units
+
+A unit is an inline object whose `system` is `ucum` or `service`. A UCUM unit contains `system` and
+`code`; `code` is a valid case-sensitive UCUM code as defined by {{UCUM}}. A Service-defined unit
+also contains `title`, a non-empty human-readable name of no more than 128 Unicode code points. Its
+code uses the capability-identifier syntax.
+
+Every value supplied to a Filter Expression uses the unit declared by its Filter Definition, so the
+request does not repeat the unit. A missing unit means that the values are categorical or
+dimensionless. Agents can interpret and convert compatible UCUM values. A Service-defined unit is
+meaningful only in that Service and capability scope; an Agent MUST NOT infer equivalence or
+conversion from similar codes or titles. A unit is fully defined inline and does not require URL
+retrieval.
+
+## Filter Expressions
+
+`filters` is a non-empty array of no more than 32 Filter Expressions. Each expression contains `id`,
+`operator`, and `value`. `id` MUST resolve to an effective Filter Definition for the operation and
+scope. The operator MUST be advertised by that definition, and the value MUST conform to the
+definition's type and the following shape:
+
+| Operator                       | Request value                                                             |
+| ------------------------------ | ------------------------------------------------------------------------- |
+| `eq`, `lt`, `lte`, `gt`, `gte` | One scalar of the Filter Definition's type.                               |
+| `in`                           | An array of 1 through 100 unique scalars of the Filter Definition's type. |
+| `exists`                       | A JSON Boolean.                                                           |
+
+For `eq`, an Offering matches when at least one mapped value equals the request value. For `in`, it
+matches when its mapped set and the request set intersect. For a comparison operator, it matches
+when at least one mapped value satisfies the comparison. For `exists: true`, it matches when the
+mapped set is non-empty; for `exists: false`, it matches when that set is empty.
+
+Every Filter Expression in one request combines with logical AND. The same identifier can appear
+more than once, which permits bounded ranges such as `gte` and `lte`. `in` expresses logical OR
+among accepted values for one Filter Definition. ODP version 1.0 defines no general Boolean
+expression tree, negative operator, substring operator, or regular-expression operator.
+
+An unknown identifier, unadvertised or incompatible operator, invalid value, excessive expression
+count, or excessive `in` cardinality produces an `INVALID_REQUEST` problem.
+
+## Sort Definitions
+
+A Sort Definition advertises one complete ordering recipe that the Service can execute. It contains
+`id`, `title`, `description`, and `keys`. `title` and `description` use the Filter Definition string
+limits. `keys` is an array of 1 through 3 Sort Keys. Each Sort Key contains `filter_id`,
+`direction`, and `missing`. Every `filter_id` MUST be distinct and resolve to an effective Filter
+Definition in the same operation and scope. `direction` is `ascending` or `descending`; `missing` is
+`first` or `last`.
+
+For a Sort Key whose Filter Definition maps an Offering to multiple values, `ascending` selects the
+minimum value and `descending` selects the maximum value before ordering Offerings. Numeric,
+decimal, date, and date-time values use the comparison semantics defined for filters. The Service
+defines type-appropriate string collation and MUST describe non-obvious collation in the Sort
+Definition. The advertised key sequence, directions, and missing-value placement are fixed. The
+Agent selects a recipe through the search request's `sort` member and MUST NOT add, remove, reverse,
+or reorder its keys.
+
+The Service MUST append Offering `id` as the final ascending tie-breaker after all advertised keys.
+The resulting order is subject to the common stable-pagination contract. An absent `sort` selects
+the Service's preferred ordering and does not require a Sort Definition. An unknown or unavailable
+Sort Definition identifier produces an `INVALID_REQUEST` problem.
 
 # Composition Boundaries
 

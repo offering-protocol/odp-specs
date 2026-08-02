@@ -10,8 +10,17 @@ MAXIMUM_DEPTH = 32
 def request_valid?(request)
   return false unless request.is_a?(Hash) && request["odp_version"] == "1.0"
 
-  query = request["query"]
-  return false unless query.is_a?(String) && query.length.between?(1, 256) && query.match?(/\S/)
+  return false unless request.key?("query") || request.key?("filters")
+  if request.key?("query")
+    query = request["query"]
+    return false unless query.is_a?(String) && query.length.between?(1, 256) && query.match?(/\S/)
+  end
+  if request.key?("filters")
+    filters = request["filters"]
+    return false unless filters.is_a?(Array) && filters.length.between?(1, 32) && filters.all?(Hash)
+  end
+  return false if request.key?("sort") &&
+    (!request["sort"].is_a?(String) || !request["sort"].match?(/\A[A-Za-z0-9._~-]{1,64}\z/))
   return false if request.key?("collection_id") && !OdpIdentity.local_identifier?(request["collection_id"])
   if request.key?("include_descendants")
     return false unless [true, false].include?(request["include_descendants"]) && request.key?("collection_id")

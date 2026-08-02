@@ -105,7 +105,7 @@ Dir[root.join("**/*-filters-page-*.json")].sort.each do |name|
 
   require_fields(document, %w[items], relative, errors)
   Array(document["items"]).each do |filter|
-    require_fields(filter, %w[id title description type operators sortable], relative, errors) if filter.is_a?(Hash)
+    require_fields(filter, %w[id title description type operators], relative, errors) if filter.is_a?(Hash)
   end
 end
 
