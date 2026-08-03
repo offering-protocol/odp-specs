@@ -16,12 +16,14 @@ missing title, or a `$id` that does not equal its canonical published URL.
 | [`action-relation.schema.json`](./action-relation.schema.json)                               | Action semantic relation identifier.                  |
 | [`action-request.schema.json`](./action-request.schema.json)                                 | Compact Action request-body description.              |
 | [`action.schema.json`](./action.schema.json)                                                 | Offering Action and exclusive target union.           |
+| [`authentication-requirement.schema.json`](./authentication-requirement.schema.json)         | Authentication requirement for an operation.          |
 | [`attribute-schema-reference.schema.json`](./attribute-schema-reference.schema.json)         | Reference to a Service-defined Attribute Schema.      |
 | [`capability-identifier.schema.json`](./capability-identifier.schema.json)                   | Service-local filter and sort identifiers.            |
 | [`capability-link.schema.json`](./capability-link.schema.json)                               | Link to a pageable capability source.                 |
 | [`collection-search-request.schema.json`](./collection-search-request.schema.json)           | Collection text and direct-parent search request.     |
 | [`collection.schema.json`](./collection.schema.json)                                         | Full Collection Representation envelope.              |
 | [`detail-fields.schema.json`](./detail-fields.schema.json)                                   | Omitted fields available in a Full Representation.    |
+| [`enrollment-protocol.schema.json`](./enrollment-protocol.schema.json)                       | Service enrollment protocol descriptor.               |
 | [`filter-capability-source.schema.json`](./filter-capability-source.schema.json)             | Inline or linked Filter Definition source.            |
 | [`filter-definition-page.schema.json`](./filter-definition-page.schema.json)                 | Pageable Filter Definition sequence.                  |
 | [`filter-definition.schema.json`](./filter-definition.schema.json)                           | Search Filter Definition.                             |
@@ -37,8 +39,10 @@ missing title, or a `$id` that does not equal its canonical published URL.
 | [`offering-search-response.schema.json`](./offering-search-response.schema.json)             | Offering search results and requested refinements.    |
 | [`offering.schema.json`](./offering.schema.json)                                             | Full Offering Representation envelope.                |
 | [`openapi-action-target.schema.json`](./openapi-action-target.schema.json)                   | Exact OpenAPI 3.1 operation reference.                |
+| [`operation-descriptor.schema.json`](./operation-descriptor.schema.json)                     | ODP operation and authentication policy.              |
 | [`page-envelope.schema.json`](./page-envelope.schema.json)                                   | Shared list and search response envelope.             |
 | [`page-limit.schema.json`](./page-limit.schema.json)                                         | Requested maximum items per page.                     |
+| [`payment-protocol.schema.json`](./payment-protocol.schema.json)                             | Payment rail and authentication prerequisite.         |
 | [`price-preview.schema.json`](./price-preview.schema.json)                                   | Discovery-time Offering price summary.                |
 | [`problem-code.schema.json`](./problem-code.schema.json)                                     | Stable machine-readable problem identifier.           |
 | [`problem-details.schema.json`](./problem-details.schema.json)                               | ODP RFC 9457 error response.                          |
@@ -56,5 +60,5 @@ missing title, or a `$id` that does not equal its canonical published URL.
 | [`sort-definition.schema.json`](./sort-definition.schema.json)                               | Advertised indexed sorting recipe.                    |
 | [`sort-key.schema.json`](./sort-key.schema.json)                                             | One fixed key in a sorting recipe.                    |
 | [`service-document.schema.json`](./service-document.schema.json)                             | Well-known Service discovery metadata and operations. |
-| [`service-protocols.schema.json`](./service-protocols.schema.json)                           | Service-wide onboarding and payment support.          |
+| [`service-protocols.schema.json`](./service-protocols.schema.json)                           | Service-wide enrollment and payment support.          |
 | [`top-level-document.schema.json`](./top-level-document.schema.json)                         | Shared version-bearing ODP document envelope.         |

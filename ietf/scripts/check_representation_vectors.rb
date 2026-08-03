@@ -74,6 +74,9 @@ Dir[root.join("*.json")].sort.each do |path|
                end
              when "detail-fields"
                valid_detail_fields?(test_case.fetch("terse"), test_case.fetch("full"))
+             when "auth-expands"
+               document = test_case.fetch("document")
+               !document.key?("auth_expands") || document["auth_expands"] == true
              else
                errors << "#{path}: unknown subject #{vector['subject']}"
                next

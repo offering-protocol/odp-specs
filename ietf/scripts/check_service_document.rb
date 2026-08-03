@@ -9,6 +9,7 @@ OPERATIONS = %w[
   list-collections search-collections get-collection list-collection-offerings
   list-offerings search-offerings get-offering
 ].freeze
+AUTHENTICATION_REQUIREMENTS = %w[not-required optional required].freeze
 LANGUAGE_TAG = /\A[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*\z/
 ENDPOINT_BASE = %r{\A/(?!/)[A-Za-z0-9._~!$&'()*+,;=:@%/-]*\z}
 
@@ -26,9 +27,9 @@ def capability_source_valid?(source, maximum)
   end
 end
 
-def search_capabilities_valid?(capabilities, supported)
+def search_capabilities_valid?(capabilities, operation_names)
   return false unless capabilities.is_a?(Hash) && (capabilities.key?("filters") || capabilities.key?("sorts"))
-  return false unless supported.include?("search-offerings")
+  return false unless operation_names.include?("search-offerings")
   return false if capabilities.key?("filters") && !capability_source_valid?(capabilities["filters"], 32)
   return false if capabilities.key?("sorts") && !capability_source_valid?(capabilities["sorts"], 16)
 
@@ -37,15 +38,34 @@ end
 
 def protocols_valid?(protocols)
   return false unless protocols.is_a?(Hash) && !protocols.empty?
-  return false unless (protocols.keys - %w[onboarding payments]).empty?
+  return false unless (protocols.keys - %w[enrollment payments]).empty?
 
-  return false if protocols.key?("onboarding") && protocols["onboarding"] != ["aep"]
+  enrollment = protocols["enrollment"]
+  return false if enrollment && enrollment != [{ "name" => "aep" }]
   payments = protocols["payments"]
   return false if protocols.key?("payments") &&
-    (!payments.is_a?(Array) || payments.empty? || payments.length > 2 || payments.uniq.length != payments.length ||
-      !(payments - %w[mpp x402]).empty?)
+    (!payments.is_a?(Array) || payments.empty? || payments.length > 2 ||
+      payments.any? do |payment|
+        !payment.is_a?(Hash) || (payment.keys - %w[authentication name]).any? ||
+          !%w[authentication name].all? { |key| payment.key?(key) } ||
+          !%w[not-required required].include?(payment["authentication"]) || !%w[mpp x402].include?(payment["name"])
+      end || payments.map { |payment| payment["name"] }.uniq.length != payments.length)
+
+  return false if payments&.any? { |payment| payment["authentication"] == "required" } && enrollment.nil?
 
   true
+end
+
+def operations_valid?(operations)
+  return false unless operations.is_a?(Array) && operations.length.between?(2, OPERATIONS.length)
+  return false if operations.any? do |operation|
+    !operation.is_a?(Hash) || (operation.keys - %w[authentication name]).any? ||
+      !%w[authentication name].all? { |key| operation.key?(key) } ||
+      !AUTHENTICATION_REQUIREMENTS.include?(operation["authentication"]) || !OPERATIONS.include?(operation["name"])
+  end
+
+  names = operations.map { |operation| operation["name"] }
+  names.uniq.length == names.length && %w[list-offerings get-offering].all? { |name| names.include?(name) }
 end
 
 def depth(value)
@@ -80,12 +100,13 @@ def valid_document?(document, source)
     return false unless keywords.uniq.length == keywords.length && keywords.sum(&:length) <= 1024
   end
 
-  supported = document.dig("operations", "supported")
-  return false unless supported.is_a?(Array) && supported.length.between?(1, 32)
-  return false unless supported.uniq.length == supported.length && supported.all? { |operation| OPERATIONS.include?(operation) }
-  return false unless %w[list-offerings get-offering].all? { |operation| supported.include?(operation) }
+  operations = document["operations"]
+  return false unless operations_valid?(operations)
+  operation_names = operations.map { |operation| operation["name"] }
+  requires_authentication = operations.any? { |operation| operation["authentication"] != "not-required" }
+  return false if requires_authentication && document.dig("protocols", "enrollment").nil?
   return false if document.key?("search_capabilities") &&
-    !search_capabilities_valid?(document["search_capabilities"], supported)
+    !search_capabilities_valid?(document["search_capabilities"], operation_names)
   return false if document.key?("protocols") && !protocols_valid?(document["protocols"])
 
   endpoint_base = document.dig("http", "endpoint_base")

@@ -14,25 +14,52 @@
     "retail"
   ],
   "protocols": {
-    "onboarding": [
-      "aep"
+    "enrollment": [
+      {
+        "name": "aep"
+      }
     ],
     "payments": [
-      "mpp",
-      "x402"
+      {
+        "authentication": "required",
+        "name": "mpp"
+      },
+      {
+        "authentication": "not-required",
+        "name": "x402"
+      }
     ]
   },
-  "operations": {
-    "supported": [
-      "list-offerings",
-      "get-offering",
-      "list-collections",
-      "search-collections",
-      "get-collection",
-      "list-collection-offerings",
-      "search-offerings"
-    ]
-  },
+  "operations": [
+    {
+      "authentication": "optional",
+      "name": "get-collection"
+    },
+    {
+      "authentication": "optional",
+      "name": "get-offering"
+    },
+    {
+      "authentication": "optional",
+      "name": "list-collection-offerings"
+    },
+    {
+      "authentication": "optional",
+      "name": "list-collections"
+    },
+    {
+      "authentication": "optional",
+      "name": "list-offerings"
+    },
+    {
+      "authentication": "optional",
+      "name": "search-collections"
+    },
+    {
+      "authentication": "optional",
+      "name": "search-offerings"
+    }
+  ],
   "http": {
     "endpoint_base": "/odp/"
   }

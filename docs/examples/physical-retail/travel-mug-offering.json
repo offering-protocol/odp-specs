@@ -45,7 +45,8 @@
         "response_content_types": [
           "application/json"
         ]
-      }
+      },
+      "authentication": "required"
     }
   ]
 }

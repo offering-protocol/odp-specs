@@ -40,7 +40,8 @@
         "response_content_types": [
           "application/pdf"
         ]
-      }
+      },
+      "authentication": "not-required"
     }
   ]
 }

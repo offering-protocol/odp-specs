@@ -38,7 +38,8 @@
       "http": {
         "href": "/quotes",
         "method": "POST"
-      }
+      },
+      "authentication": "required"
     }
   ]
 }

@@ -28,7 +28,7 @@
       <h1>Protected Discovery</h1>
       <p class="intro">A descriptive, non-normative ODP example.</p>
       <a class="back" href="../">All examples</a>
-<p><a href="./protected-service.json">protected-service.json</a> advertises Service-wide AEP onboarding and a preference for MPP over x402 payment. The advertisement is intentionally not an access policy: it does not assign protocols to ODP operations or tell an agent to authenticate or pay.</p>
+<p><a href="./protected-service.json">protected-service.json</a> advertises AEP enrollment, authentication before each ODP operation, and authentication before either supported payment rail. Its payment descriptor order expresses a preference for MPP over x402.</p>
 
 <p>For any operation, the anonymous or current-context request determines the next step:</p>
 
@@ -39,9 +39,9 @@ WWW-Authenticate: AEP service_did=&quot;did:web:catalog.example&quot;, inspect=&
 WWW-Authenticate: Payment realm=&quot;catalog.example&quot;, id=&quot;challenge-1&quot;, method=&quot;inflow&quot;
 PAYMENT-REQUIRED: &lt;x402 payment requirements&gt;</pre>
 
-<p>A successful response requires no speculative enrollment or payment even though the Service advertises support. Conversely, a valid live challenge remains authoritative when cached metadata omits or disagrees with the challenged protocol.</p>
+<p>A valid live challenge supplies the credentials or payment requirements needed to continue and remains authoritative when cached metadata disagrees with the response.</p>
 
-<p>When both onboarding and payment protect an operation, the exchanges occur in this order:</p>
+<p>When both enrollment authentication and payment protect an operation, the exchanges occur in this order:</p>
 
 <pre>POST /odp/search-offerings HTTP/1.1
 Host: catalog.example

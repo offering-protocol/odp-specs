@@ -28,10 +28,11 @@ The files illustrate a complete sequence:
    Collection, indexed filtering and sorting, and an explicit request for two advertised
    refinements.
 7. [`home-office-search-response.json`](./home-office-search-response.json) shows terse Offering
-   results with Service-selected ordering and attributes, exhaustive `detail_fields`, and requested
-   contextual value counts. Its refinements reference previously advertised refinable filters; they
-   do not define a third filter source. Exact and lower-bound counts demonstrate how a marketplace
-   can expose useful navigation without requiring expensive exact aggregation for every bucket.
+   results with Service-selected ordering and attributes, exhaustive `detail_fields`, requested
+   contextual value counts, and `auth_expands` to signal that authentication can expose more
+   content. Its refinements reference previously advertised refinable filters; they do not define a
+   third filter source. Exact and lower-bound counts demonstrate how a marketplace can expose useful
+   navigation without requiring expensive exact aggregation for every bucket.
 8. [`walnut-standing-desk-offering.json`](./walnut-standing-desk-offering.json) expands one terse
    result into its full Offering, including direct `collection_ids`, a `starting_at` Price Preview,
    Service-owned attributes, and a quote action for current tax, shipping/pickup, and availability.

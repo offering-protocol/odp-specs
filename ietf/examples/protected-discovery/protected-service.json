@@ -1,27 +1,42 @@
 {
   "odp_version": "1.0",
   "name": "Protected Catalog Example",
-  "description": "A catalog that supports agent onboarding and agentic payment.",
+  "description": "A catalog that supports agent enrollment and agentic payment.",
   "language": "en",
   "localizations": [
     "en"
   ],
   "protocols": {
-    "onboarding": [
-      "aep"
+    "enrollment": [
+      {
+        "name": "aep"
+      }
     ],
     "payments": [
-      "mpp",
-      "x402"
+      {
+        "authentication": "required",
+        "name": "mpp"
+      },
+      {
+        "authentication": "required",
+        "name": "x402"
+      }
     ]
   },
-  "operations": {
-    "supported": [
-      "list-offerings",
-      "get-offering",
-      "search-offerings"
-    ]
-  },
+  "operations": [
+    {
+      "authentication": "required",
+      "name": "get-offering"
+    },
+    {
+      "authentication": "required",
+      "name": "list-offerings"
+    },
+    {
+      "authentication": "required",
+      "name": "search-offerings"
+    }
+  ],
   "http": {
     "endpoint_base": "/odp/"
   }

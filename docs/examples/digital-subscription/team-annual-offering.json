@@ -34,7 +34,8 @@
       "openapi": {
         "url": "https://software.example/openapi.json",
         "operation_id": "createTeamSubscriptionQuote"
-      }
+      },
+      "authentication": "required"
     }
   ]
 }

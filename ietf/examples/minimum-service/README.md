@@ -1,7 +1,7 @@
 # Minimum Service Integration
 
 This example shows the complete catalog surface required for ODP Service conformance. It does not
-use Collections, search, prices, attributes, schemas, Actions, onboarding, or payments.
+use Collections, search, prices, attributes, schemas, Actions, enrollment, or payments.
 
 [`minimum-service.json`](./minimum-service.json) publishes the public Service Document and
 advertises the two required operations. [`offerings-page.json`](./offerings-page.json) is the first

@@ -12,29 +12,58 @@
   "subject": "composition-contract",
   "cases": [
     {
-      "name": "onboarding-and-payment-support",
+      "name": "enrollment-and-payment-support",
       "operation": "validate-advertisement",
       "protocols": {
-        "onboarding": [
-          "aep"
-        ],
         "payments": [
-          "mpp",
-          "x402"
+          {
+            "authentication": "not-required",
+            "name": "mpp"
+          },
+          {
+            "authentication": "not-required",
+            "name": "x402"
+          }
+        ],
+        "enrollment": [
+          {
+            "name": "aep"
+          }
         ]
       },
       "valid": true
     },
     {
+      "name": "payment-authentication-requires-enrollment",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "payments": [
+          {
+            "authentication": "required",
+            "name": "mpp"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
       "name": "successful-request-does-not-trigger-advertised-protocols",
       "operation": "classify-live-response",
       "advertised": {
-        "onboarding": [
-          "aep"
-        ],
         "payments": [
-          "mpp",
-          "x402"
+          {
+            "authentication": "not-required",
+            "name": "mpp"
+          },
+          {
+            "authentication": "not-required",
+            "name": "x402"
+          }
+        ],
+        "enrollment": [
+          {
+            "name": "aep"
+          }
         ]
       },
       "response": {
@@ -47,8 +76,10 @@
       "name": "aep-live-challenge",
       "operation": "classify-live-response",
       "advertised": {
-        "onboarding": [
-          "aep"
+        "enrollment": [
+          {
+            "name": "aep"
+          }
         ]
       },
       "response": {
@@ -66,7 +97,10 @@
       "operation": "classify-live-response",
       "advertised": {
         "payments": [
-          "mpp"
+          {
+            "authentication": "not-required",
+            "name": "mpp"
+          }
         ]
       },
       "response": {
@@ -84,7 +118,10 @@
       "operation": "classify-live-response",
       "advertised": {
         "payments": [
-          "x402"
+          {
+            "authentication": "not-required",
+            "name": "x402"
+          }
         ]
       },
       "response": {
@@ -102,8 +139,14 @@
       "operation": "classify-live-response",
       "advertised": {
         "payments": [
-          "mpp",
-          "x402"
+          {
+            "authentication": "not-required",
+            "name": "mpp"
+          },
+          {
+            "authentication": "not-required",
+            "name": "x402"
+          }
         ]
       },
       "response": {
@@ -123,7 +166,10 @@
       "operation": "classify-live-response",
       "advertised": {
         "payments": [
-          "mpp"
+          {
+            "authentication": "not-required",
+            "name": "mpp"
+          }
         ]
       },
       "response": {

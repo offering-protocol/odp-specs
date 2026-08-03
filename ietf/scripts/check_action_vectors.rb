@@ -6,7 +6,7 @@ require "pathname"
 require_relative "odp_identity"
 
 RELATION = /\A[a-z][a-z0-9]*(?:-[a-z0-9]+)*\z/
-COMMON_KEYS = %w[id rel description http openapi].freeze
+COMMON_KEYS = %w[authentication id rel description http openapi].freeze
 HTTP_KEYS = %w[href method request response_content_types].freeze
 REQUEST_KEYS = %w[content_type schema].freeze
 OPENAPI_KEYS = %w[url operation_id].freeze
@@ -44,6 +44,7 @@ end
 def action_valid?(action)
   return false unless action.is_a?(Hash) && (action.keys - COMMON_KEYS).empty?
   return false unless OdpIdentity.local_identifier?(action["id"])
+  return false unless %w[not-required optional required].include?(action["authentication"])
   return false unless non_empty_string?(action["rel"], 64) && action["rel"].match?(RELATION)
   return false if action.key?("description") && !non_empty_string?(action["description"], 512)
 

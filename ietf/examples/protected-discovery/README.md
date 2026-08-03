@@ -1,8 +1,8 @@
 # Protected Discovery
 
-[`protected-service.json`](./protected-service.json) advertises Service-wide AEP onboarding and a
-preference for MPP over x402 payment. The advertisement is intentionally not an access policy: it
-does not assign protocols to ODP operations or tell an agent to authenticate or pay.
+[`protected-service.json`](./protected-service.json) advertises AEP enrollment, authentication
+before each ODP operation, and authentication before either supported payment rail. Its payment
+descriptor order expresses a preference for MPP over x402.
 
 For any operation, the anonymous or current-context request determines the next step:
 
@@ -17,11 +17,11 @@ WWW-Authenticate: Payment realm="catalog.example", id="challenge-1", method="inf
 PAYMENT-REQUIRED: <x402 payment requirements>
 ```
 
-A successful response requires no speculative enrollment or payment even though the Service
-advertises support. Conversely, a valid live challenge remains authoritative when cached metadata
-omits or disagrees with the challenged protocol.
+A valid live challenge supplies the credentials or payment requirements needed to continue and
+remains authoritative when cached metadata disagrees with the response.
 
-When both onboarding and payment protect an operation, the exchanges occur in this order:
+When both enrollment authentication and payment protect an operation, the exchanges occur in this
+order:
 
 ```http
 POST /odp/search-offerings HTTP/1.1

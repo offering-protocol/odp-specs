@@ -6,12 +6,16 @@
   "localizations": [
     "en"
   ],
-  "operations": {
-    "supported": [
-      "list-offerings",
-      "get-offering"
-    ]
-  },
+  "operations": [
+    {
+      "authentication": "not-required",
+      "name": "get-offering"
+    },
+    {
+      "authentication": "not-required",
+      "name": "list-offerings"
+    }
+  ],
   "http": {
     "endpoint_base": "/odp/"
   }

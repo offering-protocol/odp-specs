@@ -1,0 +1,41 @@
+{
+  "id": "auth-expands",
+  "title": "Authentication-expanded content signal",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-00"
+  ],
+  "category": "representation",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "auth-expands",
+  "cases": [
+    {
+      "name": "omitted-makes-no-claim",
+      "document": {
+        "odp_version": "1.0",
+        "items": []
+      },
+      "valid": true
+    },
+    {
+      "name": "true-advertises-expanded-content",
+      "document": {
+        "auth_expands": true,
+        "odp_version": "1.0",
+        "items": []
+      },
+      "valid": true
+    },
+    {
+      "name": "false-is-prohibited",
+      "document": {
+        "auth_expands": false,
+        "odp_version": "1.0",
+        "items": []
+      },
+      "valid": false
+    }
+  ]
+}

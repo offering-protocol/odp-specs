@@ -37,7 +37,8 @@
       "openapi": {
         "url": "https://travel.example/openapi.json",
         "operation_id": "createFlightQuote"
-      }
+      },
+      "authentication": "required"
     }
   ]
 }

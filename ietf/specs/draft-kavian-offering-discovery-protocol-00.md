@@ -453,19 +453,26 @@ them; array uniqueness uses JSON string equality. An Agent MUST NOT restrict a C
 Offering search query to Service keywords or assume that a Service supports keyword enumeration or
 query completion.
 
-`protocols` advertises Service-wide support for onboarding and payment protocols. It contains at
-least one of `onboarding` or `payments`. `onboarding`, when present, is the single-item array
-`["aep"]`, identifying AEP {{AEP}}. `payments`, when present, is a non-empty array containing `mpp`,
-identifying the `Payment` HTTP Authentication Scheme {{MPP}}, `x402`, identifying the x402 protocol
-{{X402}}, or both without duplicates. When both payment protocols are present, their array order
-expresses Service preference. An unsupported category is omitted rather than serialized as an empty
-array.
+`protocols` advertises Service-wide support for enrollment and payment protocols. It contains at
+least one of `enrollment` or `payments`. An unsupported category is omitted rather than serialized
+as an empty array.
 
-Protocol advertisement does not state that a protocol is required or accepted by every ODP
-operation, catalog resource, or Action. It does not describe access order or policy. A missing
-category means only that support is not advertised. An Agent and directory MAY derive a
-Service-support summary from this field, but a live HTTP response remains authoritative for the
-request that produced it.
+`enrollment`, when present, is the single-item array `[{"name":"aep"}]`, identifying AEP {{AEP}}. An
+enrollment descriptor contains only `name`.
+
+`payments`, when present, is a non-empty array of no more than two payment descriptors. Each
+descriptor contains `name` and `authentication`. `name` is `mpp`, identifying the `Payment` HTTP
+Authentication Scheme {{MPP}}, or `x402`, identifying the x402 protocol {{X402}}. Names MUST NOT be
+duplicated. When both descriptors are present, their array order expresses Service preference.
+`authentication` is `not-required` or `required` and states whether the Agent must authenticate to
+the Service before using that payment protocol. A `required` value requires the Service Document to
+advertise an enrollment protocol.
+
+Protocol advertisement describes support and the authentication prerequisite for each payment rail;
+it does not guarantee that a payment protocol is accepted by every ODP operation, catalog resource,
+or Action. A missing category means only that support is not advertised. An Agent and directory MAY
+derive a Service-support summary from this field, but a live HTTP response remains authoritative for
+the request that produced it.
 
 ## Language Selection
 
@@ -531,10 +538,25 @@ MUST NOT assume that the Service will increase its page or response limits.
 
 ## Operation Advertisement
 
-`operations` MUST be an object containing `supported`. `supported` MUST be a non-empty array of no
-more than 32 unique operation identifiers from the preceding table. An Agent MUST NOT invoke an ODP
-operation that the Service Document does not advertise. Every conformant Service MUST advertise and
-implement `list-offerings` and `get-offering`. The remaining operations are optional and are
+`operations` MUST be an array of no more than seven Operation Descriptors. Every descriptor MUST
+contain exactly `name` and `authentication`. `name` is an operation identifier from the preceding
+table and MUST be unique in the array. `authentication` is one of `not-required`, `optional`, or
+`required`:
+
+| Value          | Meaning                                                                 |
+| -------------- | ----------------------------------------------------------------------- |
+| `not-required` | The operation is usable without Service authentication.                 |
+| `optional`     | The operation is usable anonymously; authentication can expand content. |
+| `required`     | The operation requires Service authentication before it can succeed.    |
+
+An `optional` or `required` value requires the Service Document to advertise an enrollment protocol.
+`optional` does not require every anonymous response to differ from an authenticated response. It
+states that the operation supports both contexts and that authentication can affect the visible
+catalog content.
+
+An Agent MUST NOT invoke an ODP operation that the Service Document does not advertise. Every
+conformant Service MUST advertise and implement `list-offerings` and `get-offering`; consequently,
+the array contains at least two descriptors. The remaining operations are optional and are
 implemented only when advertised.
 
 ## Processing Limits
@@ -558,6 +580,11 @@ one hour for Filter and Sort Definitions, and 24 hours for Attribute Schemas. Ea
 MUST be configurable independently. A fallback does not override `Cache-Control`, `Expires`,
 validators, or other HTTP caching semantics.
 
+An Agent cache MUST partition anonymous responses from responses obtained with Service
+authentication. It MUST NOT reuse an authenticated representation, page, schema, or capability
+document for an anonymous request or for a different authentication context. This requirement
+applies even when the URI and selected representation are identical.
+
 # Pagination
 
 ## Page Envelope
@@ -566,6 +593,11 @@ Every successful list or search response is an ODP Top-Level Document containing
 `items`. `items` is an array and can be empty. A response containing another page MUST also contain
 `next`. The final page MUST omit `next`; an empty `items` array alone does not prove that the
 sequence ended.
+
+A page MAY contain `auth_expands` with the only valid value `true`. Its presence states that
+retrying the operation with acceptable Service authentication can expose additional items or
+additional fields in returned items under the current query. It does not identify, count, or
+describe protected content. A Service MUST omit the member rather than serialize `false`.
 
 `next` is a Resource Reference of no more than 2048 ASCII characters. It MUST resolve to the same
 origin as the initial operation. An Agent MUST preserve it exactly and MUST NOT decode, modify,
@@ -671,6 +703,12 @@ contract explicitly defines truncation, pagination, or summary semantics follows
 A Full Representation MUST contain every ODP field available for that resource under the request's
 current access policy. This completeness requirement does not require inapplicable optional fields,
 fields withheld by access policy, or data that the Service does not possess.
+
+A Collection or Offering representation MAY contain `auth_expands` with the only valid value `true`.
+Its presence states that retrying its retrieval with acceptable Service authentication can expose
+additional fields for that resource. The member does not identify protected fields, promise access
+to a particular principal, or replace a live authentication challenge. A Service MUST omit the
+member rather than serialize `false`.
 
 ## Detail Fields
 
@@ -979,10 +1017,15 @@ when permitted by the common representation rules it can advertise `/actions` th
 
 An Action describes an executable HTTP transition associated with its Offering. It does not define a
 commerce workflow, payment behavior, or the domain-specific shape of the operation's successful
-result. An Action has required `id` and `rel` members, can contain `description`, and contains
-exactly one of `http` or `openapi`. An Offering contains at most 16 Actions, and their `id` values
-MUST be unique within that Offering. Action identifiers use the Local Resource Identifier syntax and
-remain stable while the Action exists on that Offering.
+result. An Action has required `authentication`, `id`, and `rel` members, can contain `description`,
+and contains exactly one of `http` or `openapi`. An Offering contains at most 16 Actions, and their
+`id` values MUST be unique within that Offering. Action identifiers use the Local Resource
+Identifier syntax and remain stable while the Action exists on that Offering.
+
+`authentication` is `not-required`, `optional`, or `required` and has the same meanings as on an
+Operation Descriptor, applied to execution of that Action at the Action target. The Action target
+remains the authority for execution semantics; OpenAPI metadata is optional enrichment and is not
+required to express authentication or payment behavior.
 
 `rel` states the broad result sought from the operation. It is a lower-case token of at most 64
 characters using letters, digits, and internal hyphens. This specification defines five values:
@@ -1314,7 +1357,8 @@ semantics of those operations.
 A Service MAY make ODP resources public, require AEP {{AEP}} enrollment before some or all ODP
 operations, require MPP {{MPP}} or x402 {{X402}} payment, or combine these protocols in a
 Service-selected order. Capability metadata is descriptive. Live HTTP authentication and payment
-challenges are authoritative for the request being made.
+challenges are authoritative for the credentials, payment requirements, and retry mechanics of the
+request being made. An advertised authentication requirement does not replace those challenges.
 
 The following signals belong to their defining protocols and are not redefined by ODP:
 
@@ -1337,7 +1381,7 @@ after the authenticated retry returns a live payment challenge. It then retries 
 credential and either the MPP `Authorization: Payment` credential or the x402 `PAYMENT-SIGNATURE`
 field, as defined by the selected payment protocol.
 
-This sequence does not require AEP where the Service does not require onboarding. A public operation
+This sequence does not require AEP where the Service does not require enrollment. A public operation
 can succeed immediately, and a payment-only operation can return `402 Payment Required` directly.
 Each retry remains subject to the credential handling, request binding, redirect, replay, and error
 rules of the protocol that caused it.
@@ -1516,7 +1560,7 @@ data according to this document and MUST NOT claim support for behavior it does 
 ## Runtime Advertisement and Evidence
 
 ODP defines no generic `capabilities` member and no secondary runtime conformance manifest. Runtime
-support is advertised through the singular `odp_version`, `operations.supported`, `protocols`,
+support is advertised through the singular `odp_version`, `operations`, `protocols`,
 `search_capabilities`, and applicable per-resource members such as `schema` and `actions`. An
 implementation MUST NOT add a parallel claim that can contradict those authoritative fields.
 
@@ -1688,6 +1732,11 @@ tenants, or Problem Details intended for another party.
 Services SHOULD minimize data returned in Terse Representations and apply access controls before
 returning sensitive Offering attributes. Directories SHOULD limit indexed data to public Service
 metadata and document their retention and refresh policies.
+
+`auth_expands` reveals only that authentication can expand the current result. A Service MUST NOT
+use `detail_fields`, result counts, identifiers, refinement counts, errors, timing differences, or
+other metadata to disclose the nature or quantity of protected content to a principal that is not
+permitted to learn it.
 
 --- back
 

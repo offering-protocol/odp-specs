@@ -6,15 +6,20 @@ require "pathname"
 
 def advertisement_valid?(protocols)
   return false unless protocols.is_a?(Hash) && !protocols.empty?
-  return false unless (protocols.keys - %w[onboarding payments]).empty?
-  return false if protocols.key?("onboarding") && protocols["onboarding"] != ["aep"]
+  return false unless (protocols.keys - %w[enrollment payments]).empty?
+  return false if protocols.key?("enrollment") && protocols["enrollment"] != [{ "name" => "aep" }]
 
   payments = protocols["payments"]
   return false if payments &&
-    (!payments.is_a?(Array) || payments.empty? || payments.length > 2 || payments.uniq.length != payments.length ||
-      !(payments - %w[mpp x402]).empty?)
+    (!payments.is_a?(Array) || payments.empty? || payments.length > 2 ||
+      payments.any? do |payment|
+        !payment.is_a?(Hash) || payment.keys.sort != %w[authentication name] ||
+          !%w[not-required required].include?(payment["authentication"]) || !%w[mpp x402].include?(payment["name"])
+      end || payments.map { |payment| payment["name"] }.uniq.length != payments.length)
 
-  protocols.key?("onboarding") || protocols.key?("payments")
+  return false if payments&.any? { |payment| payment["authentication"] == "required" } && !protocols.key?("enrollment")
+
+  protocols.key?("enrollment") || protocols.key?("payments")
 end
 
 def live_protocols(response)

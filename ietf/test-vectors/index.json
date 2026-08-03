@@ -20,6 +20,7 @@
     "offerings/contract.json",
     "pagination/contract.json",
     "refinements/contract.json",
+    "representation/auth-expands.json",
     "representation/detail-fields.json",
     "representation/selection.json",
     "search-capabilities/contract.json",
