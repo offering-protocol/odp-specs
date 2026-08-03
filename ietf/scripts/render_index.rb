@@ -61,6 +61,22 @@ resource_rows = [
   "<tr><td><a href=\"#{href}\">#{h(name)}</a></td><td>#{h(description)}</td></tr>"
 end.join("\n")
 
+sdk_rows = [
+  ["Node.js SDK", "TypeScript and Node.js", "npm", "https://github.com/offering-protocol/odp-node"],
+  ["Go SDK", "Go", "Go modules", "https://github.com/offering-protocol/odp-go"],
+  ["Java SDK", "Java", "Maven Central", "https://github.com/offering-protocol/odp-java"],
+  ["Python SDK", "Python", "PyPI", "https://github.com/offering-protocol/odp-python"],
+  ["Rust SDK", "Rust", "crates.io", "https://github.com/offering-protocol/odp-rust"]
+].map do |name, language, ecosystem, href|
+  <<~HTML
+    <tr>
+      <td><a href="#{h(href)}">#{h(name)}</a></td>
+      <td>#{h(language)}</td>
+      <td>#{h(ecosystem)}</td>
+    </tr>
+  HTML
+end.join
+
 html = <<~HTML
   <!doctype html>
   <html lang="en">
@@ -98,6 +114,13 @@ html = <<~HTML
         <table>
           <thead><tr><th>Draft</th><th>Description</th><th>Formats</th></tr></thead>
           <tbody>#{draft_rows}</tbody>
+        </table>
+
+        <h2>SDKs</h2>
+        <p>Official, released SDKs for building ODP Agents, Services, and directory integrations.</p>
+        <table>
+          <thead><tr><th>SDK</th><th>Language</th><th>Ecosystem</th></tr></thead>
+          <tbody>#{sdk_rows}</tbody>
         </table>
 
         <h2>Implementation Support</h2>
