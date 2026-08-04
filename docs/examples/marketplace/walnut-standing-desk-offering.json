@@ -1,45 +1,44 @@
 {
-  "odp_version": "1.0",
-  "id": "walnut-standing-desk-4821",
-  "name": "Handmade walnut standing desk",
-  "description": "Height-adjustable desk made to order by a verified workshop.",
-  "web_url": "/listing/walnut-standing-desk-4821",
-  "collection_ids": [
-    "home-office"
+  "actions": [
+    {
+      "authentication": "required",
+      "description": "Request current price, tax, shipping or pickup options, and production availability.",
+      "id": "request-quote",
+      "openapi": {
+        "operation_id": "requestDeskQuote"
+      },
+      "rel": "quote"
+    }
   ],
-  "price": {
-    "type": "starting_at",
-    "amount": "1450.00",
-    "currency": "USD"
-  },
-  "schema": {
-    "url": "https://market.example/schemas/home-office-furniture-7.json"
-  },
   "attributes": {
     "category": "desk",
+    "dimensions": {
+      "depth_cm": 76.2,
+      "maximum_height_cm": 122.0,
+      "minimum_height_cm": 68.5,
+      "width_cm": 152.4
+    },
+    "made_to_order": true,
     "materials": [
       "walnut",
       "steel"
     ],
-    "made_to_order": true,
-    "processing_days": 14,
-    "dimensions": {
-      "width_cm": 152.4,
-      "depth_cm": 76.2,
-      "minimum_height_cm": 68.5,
-      "maximum_height_cm": 122.0
-    }
+    "processing_days": 14
   },
-  "actions": [
-    {
-      "id": "request-quote",
-      "rel": "quote",
-      "description": "Request current price, tax, shipping or pickup options, and production availability.",
-      "http": {
-        "href": "/quotes",
-        "method": "POST"
-      },
-      "authentication": "required"
-    }
-  ]
+  "collection_ids": [
+    "home-office"
+  ],
+  "description": "Height-adjustable desk made to order by a verified workshop.",
+  "id": "walnut-standing-desk-4821",
+  "name": "Handmade walnut standing desk",
+  "odp_version": "1.0",
+  "price": {
+    "amount": "1450.00",
+    "currency": "USD",
+    "type": "starting_at"
+  },
+  "schema": {
+    "url": "https://market.example/schemas/home-office-furniture-7.json"
+  },
+  "web_url": "/listing/walnut-standing-desk-4821"
 }

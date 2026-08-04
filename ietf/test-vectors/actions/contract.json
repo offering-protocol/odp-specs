@@ -237,6 +237,35 @@
       "valid": true
     },
     {
+      "name": "openapi-operation-inherits-service-document-url",
+      "operation": "resolve-openapi",
+      "service_openapi": "/openapi.json",
+      "target": {
+        "operation_id": "purchaseItem"
+      },
+      "document": {
+        "openapi": "3.1.1",
+        "operation_ids": [
+          "purchaseItem"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "name": "openapi-operation-requires-a-document-url",
+      "operation": "resolve-openapi",
+      "target": {
+        "operation_id": "purchaseItem"
+      },
+      "document": {
+        "openapi": "3.1.1",
+        "operation_ids": [
+          "purchaseItem"
+        ]
+      },
+      "valid": false
+    },
+    {
       "name": "openapi-operation-is-missing",
       "operation": "resolve-openapi",
       "target": {

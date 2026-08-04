@@ -37,8 +37,10 @@ def http_valid?(target)
 end
 
 def openapi_valid?(target)
-  target.is_a?(Hash) && (target.keys - OPENAPI_KEYS).empty? && target.keys.sort == OPENAPI_KEYS.sort &&
-    OdpIdentity.resource_reference?(target["url"]) && non_empty_string?(target["operation_id"], 128)
+  return false unless target.is_a?(Hash) && (target.keys - OPENAPI_KEYS).empty?
+  return false unless non_empty_string?(target["operation_id"], 128)
+
+  !target.key?("url") || OdpIdentity.resource_reference?(target["url"])
 end
 
 def action_valid?(action)
@@ -72,8 +74,9 @@ def validate_actions(actions)
   { "usable" => usable, "issues" => issues }
 end
 
-def openapi_resolves?(target, document)
+def openapi_resolves?(target, document, service_openapi)
   return false unless openapi_valid?(target) && document.is_a?(Hash)
+  return false unless OdpIdentity.resource_reference?(target["url"] || service_openapi)
   return false unless document["openapi"].is_a?(String) && document["openapi"].match?(/\A3\.1(?:\.|\z)/)
 
   Array(document["operation_ids"]).count(target["operation_id"]) == 1
@@ -86,7 +89,11 @@ errors = vector.fetch("cases").filter_map do |test_case|
            when "validate-actions"
              validate_actions(test_case.fetch("actions"))
            when "resolve-openapi"
-             openapi_resolves?(test_case.fetch("target"), test_case.fetch("document"))
+             openapi_resolves?(
+               test_case.fetch("target"),
+               test_case.fetch("document"),
+               test_case["service_openapi"]
+             )
            end
   expected = if test_case.fetch("operation") == "validate-actions"
                { "usable" => test_case.fetch("expected_usable"), "issues" => test_case.fetch("expected_issues") }

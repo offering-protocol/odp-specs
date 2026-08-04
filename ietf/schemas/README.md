@@ -54,11 +54,14 @@ missing title, or a `$id` that does not equal its canonical published URL.
 | [`resource-reference.schema.json`](./resource-reference.schema.json)                         | Origin-relative and absolute resource references.     |
 | [`schema-reference.schema.json`](./schema-reference.schema.json)                             | Reusable JSON Schema reference.                       |
 | [`search-capabilities.schema.json`](./search-capabilities.schema.json)                       | Search capability advertisement container.            |
+| [`service-branding-image.schema.json`](./service-branding-image.schema.json)                 | Service branding image reference.                     |
+| [`service-branding.schema.json`](./service-branding.schema.json)                             | Square and wide Service branding.                     |
+| [`service-document.schema.json`](./service-document.schema.json)                             | Well-known Service discovery metadata and operations. |
+| [`service-openapi.schema.json`](./service-openapi.schema.json)                               | Reusable Service OpenAPI reference.                   |
 | [`service-origin.schema.json`](./service-origin.schema.json)                                 | Canonical Service-origin serialization.               |
+| [`service-protocols.schema.json`](./service-protocols.schema.json)                           | Service-wide enrollment and payment support.          |
 | [`sort-capability-source.schema.json`](./sort-capability-source.schema.json)                 | Inline or linked Sort Definition source.              |
 | [`sort-definition-page.schema.json`](./sort-definition-page.schema.json)                     | Pageable Sort Definition sequence.                    |
 | [`sort-definition.schema.json`](./sort-definition.schema.json)                               | Advertised indexed sorting recipe.                    |
 | [`sort-key.schema.json`](./sort-key.schema.json)                                             | One fixed key in a sorting recipe.                    |
-| [`service-document.schema.json`](./service-document.schema.json)                             | Well-known Service discovery metadata and operations. |
-| [`service-protocols.schema.json`](./service-protocols.schema.json)                           | Service-wide enrollment and payment support.          |
 | [`top-level-document.schema.json`](./top-level-document.schema.json)                         | Shared version-bearing ODP document envelope.         |

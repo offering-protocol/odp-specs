@@ -7,10 +7,11 @@ scalable protocol shape rather than filling the repository with hundreds of repe
 The files illustrate a complete sequence:
 
 1. [`marketplace-service.json`](./marketplace-service.json) is the compact cached Service document.
-   It advertises its Collection and Offering operations through a fixed endpoint base. Its localized
-   freeform keywords help a directory index the Service but do not advertise catalog query terms,
-   filters, suggestions, or facets. Its protocol summary advertises Service-wide AEP, MPP, and x402
-   support without claiming that any particular catalog request requires them.
+   It advertises its Collection and Offering operations through a fixed endpoint base, reusable
+   OpenAPI document, and square and wide branding resources. Its localized freeform keywords help a
+   directory index the Service but do not advertise catalog query terms, filters, suggestions, or
+   facets. Its protocol summary advertises Service-wide AEP, MPP, and x402 support without claiming
+   that any particular catalog request requires them.
 2. [`home-office-collection.json`](./home-office-collection.json) is a full Collection root
    representation with language metadata, omitted root `parent_ids`, and a browser link. Instead of
    embedding every Collection-specific filter, it links to a pageable filter resource while
@@ -35,7 +36,8 @@ The files illustrate a complete sequence:
    navigation without requiring expensive exact aggregation for every bucket.
 8. [`walnut-standing-desk-offering.json`](./walnut-standing-desk-offering.json) expands one terse
    result into its full Offering, including direct `collection_ids`, a `starting_at` Price Preview,
-   Service-owned attributes, and a quote action for current tax, shipping/pickup, and availability.
+   Service-owned attributes, and a quote action that inherits the Service-wide OpenAPI document for
+   current tax, shipping/pickup, and availability.
 9. [`home-office-furniture-attributes.schema.json`](./home-office-furniture-attributes.schema.json)
    teaches an agent how to interpret the marketplace's listing attributes without making that retail
    model normative to ODP.

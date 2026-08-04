@@ -1,35 +1,34 @@
 {
-  "odp_version": "1.0",
-  "name": "Market Example",
+  "branding": {
+    "icon": {
+      "src": "/branding/icon.svg",
+      "type": "image/svg+xml"
+    },
+    "logo": {
+      "src": "/branding/logo.webp",
+      "type": "image/webp"
+    }
+  },
   "description": "A marketplace with millions of independent listings across a large taxonomy.",
-  "language": "en",
-  "localizations": [
-    "en",
-    "ja"
-  ],
+  "http": {
+    "endpoint_base": "/odp/",
+    "openapi": {
+      "url": "/openapi.json"
+    }
+  },
   "keywords": [
     "marketplace",
     "handmade",
     "vintage",
     "retail"
   ],
-  "protocols": {
-    "enrollment": [
-      {
-        "name": "aep"
-      }
-    ],
-    "payments": [
-      {
-        "authentication": "required",
-        "name": "mpp"
-      },
-      {
-        "authentication": "not-required",
-        "name": "x402"
-      }
-    ]
-  },
+  "language": "en",
+  "localizations": [
+    "en",
+    "ja"
+  ],
+  "name": "Market Example",
+  "odp_version": "1.0",
   "operations": [
     {
       "authentication": "optional",
@@ -60,7 +59,21 @@
       "name": "search-offerings"
     }
   ],
-  "http": {
-    "endpoint_base": "/odp/"
+  "protocols": {
+    "enrollment": [
+      {
+        "name": "aep"
+      }
+    ],
+    "payments": [
+      {
+        "authentication": "required",
+        "name": "mpp"
+      },
+      {
+        "authentication": "not-required",
+        "name": "x402"
+      }
+    ]
   }
 }

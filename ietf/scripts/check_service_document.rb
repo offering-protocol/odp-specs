@@ -4,14 +4,29 @@
 require "json"
 require "pathname"
 require_relative "odp_identity"
+require_relative "odp_language"
 
 OPERATIONS = %w[
   list-collections search-collections get-collection list-collection-offerings
   list-offerings search-offerings get-offering
 ].freeze
 AUTHENTICATION_REQUIREMENTS = %w[not-required optional required].freeze
-LANGUAGE_TAG = /\A[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*\z/
+BRANDING_TYPES = %w[image/png image/svg+xml image/webp].freeze
 ENDPOINT_BASE = %r{\A/(?!/)[A-Za-z0-9._~!$&'()*+,;=:@%/-]*\z}
+
+def branding_image_valid?(image)
+  image.is_a?(Hash) && image.keys.sort == %w[src type] &&
+    OdpIdentity.resource_reference?(image["src"]) && BRANDING_TYPES.include?(image["type"])
+end
+
+def branding_valid?(branding)
+  branding.is_a?(Hash) && branding.keys.sort == %w[icon logo] &&
+    %w[icon logo].all? { |role| branding_image_valid?(branding[role]) }
+end
+
+def service_openapi_valid?(openapi)
+  openapi.is_a?(Hash) && openapi.keys == ["url"] && OdpIdentity.resource_reference?(openapi["url"])
+end
 
 def capability_source_valid?(source, maximum)
   return false unless source.is_a?(Hash)
@@ -85,9 +100,9 @@ def valid_document?(document, source)
 
   language = document["language"]
   localizations = document["localizations"]
-  return false unless language.is_a?(String) && language.match?(LANGUAGE_TAG)
+  return false unless OdpLanguage.tag?(language)
   return false unless localizations.is_a?(Array) && localizations.length.between?(1, 16)
-  return false unless localizations.all? { |tag| tag.is_a?(String) && tag.match?(LANGUAGE_TAG) }
+  return false unless localizations.all? { |tag| OdpLanguage.tag?(tag) }
   folded = localizations.map(&:downcase)
   return false unless folded.uniq.length == folded.length && folded.include?(language.downcase)
 
@@ -108,8 +123,13 @@ def valid_document?(document, source)
   return false if document.key?("search_capabilities") &&
     !search_capabilities_valid?(document["search_capabilities"], operation_names)
   return false if document.key?("protocols") && !protocols_valid?(document["protocols"])
+  return false if document.key?("branding") && !branding_valid?(document["branding"])
 
-  endpoint_base = document.dig("http", "endpoint_base")
+  http = document["http"]
+  return false unless http.is_a?(Hash) && (http.keys - %w[endpoint_base openapi]).empty?
+  return false if http.key?("openapi") && !service_openapi_valid?(http["openapi"])
+
+  endpoint_base = http["endpoint_base"]
   endpoint_base.is_a?(String) && endpoint_base.ascii_only? && endpoint_base.length <= 2048 && endpoint_base.match?(ENDPOINT_BASE)
 end
 

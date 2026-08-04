@@ -98,17 +98,24 @@ odp-specs/
 
 ## Build and Validate
 
-Run the complete repository check:
+Install the rendering dependencies once:
 
 ```sh
-make -C ietf check
+bundle install --gemfile ietf/Gemfile
+python3 -m venv ietf/.venv
+ietf/.venv/bin/python -m pip install -r ietf/requirements.txt
 ```
 
-Format Markdown tables and wrap prose to 100 columns:
+Format the sources, regenerate every committed artifact, and run the complete pull-request gate:
 
 ```sh
 make -C ietf format
+make -C ietf render
+make -C ietf check
 ```
+
+Commit the resulting source and `docs/` changes together. Continuous integration reruns the render
+and rejects the pull request when `git diff --exit-code -- docs` finds uncommitted generated drift.
 
 The IETF workspace provides formatting, support-artifact publication, conformance, draft rendering,
 idnits, and drift checks as described in [`ietf/README.md`](./ietf/README.md).

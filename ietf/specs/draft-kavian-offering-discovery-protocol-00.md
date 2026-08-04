@@ -437,8 +437,8 @@ operations advertised by the document.
 
 The successful response MUST be an ODP JSON Top-Level Document. The Service Document MUST be a flat
 JSON object and MUST contain `odp_version`, `name`, `description`, `language`, `localizations`,
-`operations`, and `http`. It MAY contain `keywords`, `protocols`, and `search_capabilities`. It MUST
-NOT contain a self-asserted Service identifier or `web_url`.
+`operations`, and `http`. It MAY contain `branding`, `keywords`, `protocols`, and
+`search_capabilities`. It MUST NOT contain a self-asserted Service identifier or `web_url`.
 
 `name` is a non-empty string of at most 128 Unicode code points. `description` is a non-empty string
 of at most 1024 Unicode code points. `keywords` is an array of at most 32 unique freeform strings,
@@ -452,6 +452,22 @@ define filters. ODP defines no case folding, normalization, stemming, or semanti
 them; array uniqueness uses JSON string equality. An Agent MUST NOT restrict a Collection or
 Offering search query to Service keywords or assume that a Service supports keyword enumeration or
 query completion.
+
+## Branding
+
+`branding`, when present, contains exactly `icon` and `logo`. Each member contains a required
+Resource Reference `src` and a required `type` of `image/svg+xml`, `image/png`, or `image/webp`.
+`icon` identifies a square Service mark. A raster icon MUST have a square aspect ratio and
+dimensions of at least 200 by 200 pixels. `logo` identifies a horizontal Service mark. A raster logo
+MUST have a 4:1 aspect ratio and dimensions of at least 400 by 100 pixels. SVG resources MUST
+provide an intrinsic or view-box aspect ratio matching the member's role.
+
+Branding retrieval is anonymous. A client MUST NOT attach AEP credentials, payment credentials,
+cookies, or authorization fields. The successful response media-type essence MUST equal the
+advertised `type`. A branding response body is limited to 1,048,576 bytes and five redirects.
+Redirect and network-address policy follows Supporting Resource Retrieval. Branding content is
+untrusted input. A client that displays SVG MUST either sanitize and safely isolate it or render it
+to a non-active raster representation before display.
 
 `protocols` advertises Service-wide support for enrollment and payment protocols. It contains at
 least one of `enrollment` or `payments`. An unsupported category is omitted rather than serialized
@@ -489,9 +505,14 @@ representation variants. ODP does not define a language query parameter.
 
 ## HTTP Endpoint Base
 
-`http` MUST be an object containing exactly one core member, `endpoint_base`. Its value MUST be an
+`http` MUST be an object containing `endpoint_base` and MAY contain `openapi`. `endpoint_base` is an
 origin-relative absolute-path reference beginning with exactly one `/`, MUST NOT contain a query or
 fragment, and MUST contain no more than 2048 ASCII characters. The value MAY end in `/`.
+
+`openapi`, when present, contains exactly one member, `url`, whose value is a Resource Reference to
+a reusable OpenAPI 3.1 document. It supplies the default OpenAPI document for Actions whose OpenAPI
+target omits `url`. An Action-level `url` overrides this Service-wide value. Advertising `openapi`
+does not require an Action to use it and does not make OpenAPI a dependency of ODP navigation.
 
 An Agent constructs an operation URL by removing any trailing slash from `endpoint_base`, appending
 one `/`, and appending the fixed path from the following table. Identifier placeholders are replaced
@@ -1064,12 +1085,14 @@ live response `Content-Type` remains authoritative.
 
 ### OpenAPI Target
 
-`openapi` identifies exactly one operation in an OpenAPI 3.1 document {{OPENAPI31}}. It contains a
-required Resource Reference `url` and a required case-sensitive `operation_id` of at most 128
-Unicode code points. The referenced document MUST use an `openapi` version in the `3.1.x` line and
-MUST contain exactly one Operation Object whose `operationId` equals `operation_id`. An Agent MUST
-NOT guess an operation from a path, method, summary, description, or similar identifier when that
-lookup fails or is ambiguous.
+`openapi` identifies exactly one operation in an OpenAPI 3.1 document {{OPENAPI31}}. It contains an
+optional Resource Reference `url` and a required case-sensitive `operation_id` of at most 128
+Unicode code points. When `url` is absent, the Service Document MUST contain `http.openapi.url`, and
+that value is used. An Action-level `url` overrides the Service-wide value. An Action is unusable if
+neither reference exists. The referenced document MUST use an `openapi` version in the `3.1.x` line
+and MUST contain exactly one Operation Object whose `operationId` equals `operation_id`. An Agent
+MUST NOT guess an operation from a path, method, summary, description, or similar identifier when
+that lookup fails or is ambiguous.
 
 OpenAPI retrieval is anonymous. An Agent MUST NOT attach AEP credentials, payment credentials,
 cookies, or authorization fields copied from the Offering request. Agents accept JSON represented as
