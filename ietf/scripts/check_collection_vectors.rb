@@ -3,10 +3,10 @@
 
 require "json"
 require "pathname"
+require_relative "odp_language"
 require_relative "odp_identity"
 
 MAXIMUM_DEPTH = 32
-LANGUAGE_TAG = /\A[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*\z/
 
 def valid_identifiers?(values)
   values.is_a?(Array) && values.uniq.length == values.length &&
@@ -66,12 +66,12 @@ def collection_document_valid?(document)
 
   if document.key?("language")
     language = document["language"]
-    return false unless language.is_a?(String) && language.match?(LANGUAGE_TAG)
+    return false unless OdpLanguage.tag?(language)
   end
   if document.key?("localizations")
     localizations = document["localizations"]
     return false unless localizations.is_a?(Array) && !localizations.empty?
-    return false unless localizations.all? { |tag| tag.is_a?(String) && tag.match?(LANGUAGE_TAG) }
+    return false unless localizations.all? { |tag| OdpLanguage.tag?(tag) }
     folded = localizations.map(&:downcase)
     return false unless folded.uniq.length == folded.length
     return false if document.key?("language") && !folded.include?(document["language"].downcase)

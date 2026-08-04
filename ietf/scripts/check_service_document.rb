@@ -4,13 +4,13 @@
 require "json"
 require "pathname"
 require_relative "odp_identity"
+require_relative "odp_language"
 
 OPERATIONS = %w[
   list-collections search-collections get-collection list-collection-offerings
   list-offerings search-offerings get-offering
 ].freeze
 AUTHENTICATION_REQUIREMENTS = %w[not-required optional required].freeze
-LANGUAGE_TAG = /\A[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*\z/
 ENDPOINT_BASE = %r{\A/(?!/)[A-Za-z0-9._~!$&'()*+,;=:@%/-]*\z}
 
 def capability_source_valid?(source, maximum)
@@ -85,9 +85,9 @@ def valid_document?(document, source)
 
   language = document["language"]
   localizations = document["localizations"]
-  return false unless language.is_a?(String) && language.match?(LANGUAGE_TAG)
+  return false unless OdpLanguage.tag?(language)
   return false unless localizations.is_a?(Array) && localizations.length.between?(1, 16)
-  return false unless localizations.all? { |tag| tag.is_a?(String) && tag.match?(LANGUAGE_TAG) }
+  return false unless localizations.all? { |tag| OdpLanguage.tag?(tag) }
   folded = localizations.map(&:downcase)
   return false unless folded.uniq.length == folded.length && folded.include?(language.downcase)
 
