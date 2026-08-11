@@ -18,11 +18,20 @@
         "payments": [
           {
             "authentication": "not-required",
-            "name": "mpp"
+            "name": "mpp",
+            "options": [
+              "card",
+              "inflow",
+              "solana"
+            ]
           },
           {
             "authentication": "not-required",
-            "name": "x402"
+            "name": "x402",
+            "options": [
+              "base",
+              "solana"
+            ]
           }
         ],
         "enrollment": [
@@ -32,6 +41,53 @@
         ]
       },
       "valid": true
+    },
+    {
+      "name": "unknown-payment-option",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "mpp",
+            "options": [
+              "future-option"
+            ]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "duplicate-payment-option",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "mpp",
+            "options": [
+              "solana",
+              "solana"
+            ]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "empty-payment-options",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "x402",
+            "options": []
+          }
+        ]
+      },
+      "valid": false
     },
     {
       "name": "payment-authentication-requires-enrollment",

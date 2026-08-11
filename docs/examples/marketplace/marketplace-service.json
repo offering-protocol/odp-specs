@@ -68,11 +68,21 @@
     "payments": [
       {
         "authentication": "required",
-        "name": "mpp"
+        "name": "mpp",
+        "options": [
+          "card",
+          "inflow",
+          "solana",
+          "tempo"
+        ]
       },
       {
         "authentication": "not-required",
-        "name": "x402"
+        "name": "x402",
+        "options": [
+          "base",
+          "solana"
+        ]
       }
     ]
   }

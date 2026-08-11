@@ -4,6 +4,11 @@
 require "json"
 require "pathname"
 
+PAYMENT_OPTIONS = %w[
+  algorand aptos arbitrum avalanche base card ethereum hedera inflow lightning polygon solana
+  stellar stripe tempo ton
+].freeze
+
 def advertisement_valid?(protocols)
   return false unless protocols.is_a?(Hash) && !protocols.empty?
   return false unless (protocols.keys - %w[enrollment payments]).empty?
@@ -13,8 +18,13 @@ def advertisement_valid?(protocols)
   return false if payments &&
     (!payments.is_a?(Array) || payments.empty? || payments.length > 2 ||
       payments.any? do |payment|
-        !payment.is_a?(Hash) || payment.keys.sort != %w[authentication name] ||
-          !%w[not-required required].include?(payment["authentication"]) || !%w[mpp x402].include?(payment["name"])
+        !payment.is_a?(Hash) || (payment.keys - %w[authentication name options]).any? ||
+          !%w[authentication name].all? { |key| payment.key?(key) } ||
+          !%w[not-required required].include?(payment["authentication"]) || !%w[mpp x402].include?(payment["name"]) ||
+          (payment.key?("options") &&
+            (!payment["options"].is_a?(Array) || !payment["options"].length.between?(1, 16) ||
+              payment["options"].uniq.length != payment["options"].length ||
+              payment["options"].any? { |option| !PAYMENT_OPTIONS.include?(option) }))
       end || payments.map { |payment| payment["name"] }.uniq.length != payments.length)
 
   return false if payments&.any? { |payment| payment["authentication"] == "required" } && !protocols.key?("enrollment")

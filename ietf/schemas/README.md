@@ -43,6 +43,7 @@ missing title, or a `$id` that does not equal its canonical published URL.
 | [`page-envelope.schema.json`](./page-envelope.schema.json)                                   | Shared list and search response envelope.             |
 | [`page-limit.schema.json`](./page-limit.schema.json)                                         | Requested maximum items per page.                     |
 | [`payment-protocol.schema.json`](./payment-protocol.schema.json)                             | Payment rail and authentication prerequisite.         |
+| [`payment-option.schema.json`](./payment-option.schema.json)                                 | Human-consumable payment compatibility label.         |
 | [`price-preview.schema.json`](./price-preview.schema.json)                                   | Discovery-time Offering price summary.                |
 | [`problem-code.schema.json`](./problem-code.schema.json)                                     | Stable machine-readable problem identifier.           |
 | [`problem-details.schema.json`](./problem-details.schema.json)                               | ODP RFC 9457 error response.                          |

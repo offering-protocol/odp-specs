@@ -15,11 +15,18 @@
     "payments": [
       {
         "authentication": "required",
-        "name": "mpp"
+        "name": "mpp",
+        "options": [
+          "inflow",
+          "tempo"
+        ]
       },
       {
         "authentication": "required",
-        "name": "x402"
+        "name": "x402",
+        "options": [
+          "base"
+        ]
       }
     ]
   },

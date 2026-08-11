@@ -477,18 +477,27 @@ as an empty array.
 enrollment descriptor contains only `name`.
 
 `payments`, when present, is a non-empty array of no more than two payment descriptors. Each
-descriptor contains `name` and `authentication`. `name` is `mpp`, identifying the `Payment` HTTP
-Authentication Scheme {{MPP}}, or `x402`, identifying the x402 protocol {{X402}}. Names MUST NOT be
-duplicated. When both descriptors are present, their array order expresses Service preference.
-`authentication` is `not-required` or `required` and states whether the Agent must authenticate to
-the Service before using that payment protocol. A `required` value requires the Service Document to
-advertise an enrollment protocol.
+descriptor contains `name` and `authentication` and MAY contain `options`. `name` is `mpp`,
+identifying the `Payment` HTTP Authentication Scheme {{MPP}}, or `x402`, identifying the x402
+protocol {{X402}}. Names MUST NOT be duplicated. When both descriptors are present, their array
+order expresses Service preference. `authentication` is `not-required` or `required` and states
+whether the Agent must authenticate to the Service before using that payment protocol. A `required`
+value requires the Service Document to advertise an enrollment protocol.
+
+`options`, when present, is a non-empty array of no more than 16 unique payment-option names drawn
+from `algorand`, `aptos`, `arbitrum`, `avalanche`, `base`, `card`, `ethereum`, `hedera`, `inflow`,
+`lightning`, `polygon`, `solana`, `stellar`, `stripe`, `tempo`, and `ton`. Each name is a compact,
+human-consumable compatibility label. It does not replace protocol-specific method, scheme, network,
+chain, asset, or settlement terms. A Service MUST advertise an option only under a payment protocol
+through which it accepts that option. Omitting `options` means that the Service advertises the
+payment protocol without advertising detailed option compatibility.
 
 Protocol advertisement describes support and the authentication prerequisite for each payment rail;
 it does not guarantee that a payment protocol is accepted by every ODP operation, catalog resource,
 or Action. A missing category means only that support is not advertised. An Agent and directory MAY
-derive a Service-support summary from this field, but a live HTTP response remains authoritative for
-the request that produced it.
+derive a Service-support summary from this field. Recognition of an option by ODP does not imply
+that an Agent implementation supports or is configured to use it. A live HTTP response remains
+authoritative for the request that produced it.
 
 ## Language Selection
 

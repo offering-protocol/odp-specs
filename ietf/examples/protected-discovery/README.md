@@ -2,7 +2,9 @@
 
 [`protected-service.json`](./protected-service.json) advertises AEP enrollment, authentication
 before each ODP operation, and authentication before either supported payment rail. Its payment
-descriptor order expresses a preference for MPP over x402.
+descriptor order expresses a preference for MPP over x402. The optional payment-option labels
+summarize that this Service accepts InFlow and Tempo through MPP and Base through x402. Live
+challenges provide the exact protocol-specific payment terms.
 
 For any operation, the anonymous or current-context request determines the next step:
 
