@@ -326,8 +326,8 @@ itself change Resource Identity.
 
 ## Resource References
 
-Fields defined as Resource References, including `web_url` and subsequent-operation `href` values,
-MUST contain one of:
+Fields defined as Resource References, including Service links, Collection and Offering `web_url`,
+and subsequent-operation `href` values, MUST contain one of:
 
 * an origin-relative absolute-path reference beginning with exactly one `/`, resolved against the
   Service Origin according to {{RFC3986}}; or
@@ -437,8 +437,9 @@ operations advertised by the document.
 
 The successful response MUST be an ODP JSON Top-Level Document. The Service Document MUST be a flat
 JSON object and MUST contain `odp_version`, `name`, `description`, `language`, `localizations`,
-`operations`, and `http`. It MAY contain `branding`, `keywords`, `protocols`, and
-`search_capabilities`. It MUST NOT contain a self-asserted Service identifier or `web_url`.
+`operations`, and `http`. It MAY contain `branding`, `documentation_url`, `keywords`, `protocols`,
+`search_capabilities`, `status_url`, `support_url`, and `website_url`. It MUST NOT contain a
+self-asserted Service identifier or `web_url`.
 
 `name` is a non-empty string of at most 128 Unicode code points. `description` is a non-empty string
 of at most 1024 Unicode code points. `keywords` is an array of at most 32 unique freeform strings,
@@ -452,6 +453,21 @@ define filters. ODP defines no case folding, normalization, stemming, or semanti
 them; array uniqueness uses JSON string equality. An Agent MUST NOT restrict a Collection or
 Offering search query to Service keywords or assume that a Service supports keyword enumeration or
 query completion.
+
+## Service Links
+
+The Service Document MAY include the following Resource References:
+
+* `website_url` identifies the human-facing Service website or storefront;
+* `documentation_url` identifies human-readable documentation for using the Service;
+* `support_url` identifies the Service's support destination; and
+* `status_url` identifies the Service's operational status page.
+
+These links are descriptive metadata. Their presence does not advertise an ODP operation, alter an
+operation's access policy, or replace the machine-readable OpenAPI reference in `http.openapi`.
+`website_url` is not a base URL for other Resource References. In particular, a Collection or
+Offering `web_url` is resolved against the Service Origin. A Service whose browser resources use a
+different origin supplies an absolute URL in each applicable Resource Reference.
 
 ## Branding
 

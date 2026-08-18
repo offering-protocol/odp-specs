@@ -10,6 +10,7 @@
     }
   },
   "description": "A marketplace with millions of independent listings across a large taxonomy.",
+  "documentation_url": "/developers/",
   "http": {
     "endpoint_base": "/odp/",
     "openapi": {
@@ -85,5 +86,8 @@
         ]
       }
     ]
-  }
+  },
+  "status_url": "https://status.market.example/",
+  "support_url": "/support/",
+  "website_url": "/marketplace/"
 }

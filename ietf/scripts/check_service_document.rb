@@ -133,6 +133,10 @@ def valid_document?(document, source)
   return false if document.key?("protocols") && !protocols_valid?(document["protocols"])
   return false if document.key?("branding") && !branding_valid?(document["branding"])
 
+  %w[documentation_url status_url support_url website_url].each do |field|
+    return false if document.key?(field) && !OdpIdentity.resource_reference?(document[field])
+  end
+
   http = document["http"]
   return false unless http.is_a?(Hash) && (http.keys - %w[endpoint_base openapi]).empty?
   return false if http.key?("openapi") && !service_openapi_valid?(http["openapi"])

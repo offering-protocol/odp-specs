@@ -10,9 +10,10 @@ The files illustrate a complete sequence:
    It advertises its Collection and Offering operations through a fixed endpoint base, reusable
    OpenAPI document, and square and wide branding resources. Its localized freeform keywords help a
    directory index the Service but do not advertise catalog query terms, filters, suggestions, or
-   facets. Its protocol summary advertises Service-wide AEP, MPP, and x402 support, including the
-   compact payment options accepted through each rail, without claiming that any particular catalog
-   request requires them.
+   facets. Its website, documentation, support, and status links identify distinct human-facing
+   destinations without replacing the machine-readable OpenAPI document. Its protocol summary
+   advertises Service-wide AEP, MPP, and x402 support, including the compact payment options
+   accepted through each rail, without claiming that any particular catalog request requires them.
 2. [`home-office-collection.json`](./home-office-collection.json) is a full Collection root
    representation with language metadata, omitted root `parent_ids`, and a browser link. Instead of
    embedding every Collection-specific filter, it links to a pageable filter resource while
