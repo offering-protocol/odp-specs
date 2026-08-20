@@ -54,11 +54,55 @@
       "document": {
         "id": "desk",
         "name": "Standing desk",
+        "images": [
+          {
+            "alt": "Walnut standing desk",
+            "height": 900,
+            "src": "/images/desk.webp",
+            "type": "image/webp",
+            "width": 1200
+          }
+        ],
         "price": {
           "type": "fixed",
           "amount": "1450.00",
           "currency": "USD"
         }
+      }
+    },
+    {
+      "name": "duplicate-image-source",
+      "valid": false,
+      "representation": "full",
+      "document": {
+        "odp_version": "1.0",
+        "id": "desk",
+        "name": "Standing desk",
+        "images": [
+          {
+            "src": "/images/desk.webp"
+          },
+          {
+            "alt": "Another view",
+            "src": "/images/desk.webp"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unsupported-image-type",
+      "valid": false,
+      "representation": "full",
+      "document": {
+        "odp_version": "1.0",
+        "id": "desk",
+        "name": "Standing desk",
+        "images": [
+          {
+            "src": "/images/desk.gif",
+            "type": "image/gif"
+          }
+        ]
       }
     },
     {

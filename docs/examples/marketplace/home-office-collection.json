@@ -3,6 +3,13 @@
   "id": "home-office",
   "name": "Home office",
   "description": "Furniture, lighting, and accessories for home workspaces.",
+  "images": [
+    {
+      "alt": "A furnished home office workspace",
+      "src": "/images/collections/home-office.jpg",
+      "type": "image/jpeg"
+    }
+  ],
   "language": "en",
   "localizations": [
     "en"

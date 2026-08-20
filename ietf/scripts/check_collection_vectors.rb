@@ -5,6 +5,7 @@ require "json"
 require "pathname"
 require_relative "odp_language"
 require_relative "odp_identity"
+require_relative "odp_image"
 
 MAXIMUM_DEPTH = 32
 
@@ -76,6 +77,8 @@ def collection_document_valid?(document)
     return false unless folded.uniq.length == folded.length
     return false if document.key?("language") && !folded.include?(document["language"].downcase)
   end
+
+  return false if document.key?("images") && !OdpImage.list?(document["images"])
 
   !document.key?("parent_ids") || valid_non_empty_identifiers?(document["parent_ids"])
 end

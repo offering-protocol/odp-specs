@@ -327,7 +327,7 @@ itself change Resource Identity.
 ## Resource References
 
 Fields defined as Resource References, including Service links, Collection and Offering `web_url`,
-and subsequent-operation `href` values, MUST contain one of:
+image `src`, and subsequent-operation `href` values, MUST contain one of:
 
 * an origin-relative absolute-path reference beginning with exactly one `/`, resolved against the
   Service Origin according to {{RFC3986}}; or
@@ -472,18 +472,26 @@ different origin supplies an absolute URL in each applicable Resource Reference.
 ## Branding
 
 `branding`, when present, contains exactly `icon` and `logo`. Each member contains a required
-Resource Reference `src` and a required `type` of `image/svg+xml`, `image/png`, or `image/webp`.
-`icon` identifies a square Service mark. A raster icon MUST have a square aspect ratio and
-dimensions of at least 200 by 200 pixels. `logo` identifies a horizontal Service mark. A raster logo
-MUST have a 4:1 aspect ratio and dimensions of at least 400 by 100 pixels. SVG resources MUST
-provide an intrinsic or view-box aspect ratio matching the member's role.
+Resource Reference `src` and MAY contain a `type` of `image/svg+xml`, `image/png`, or `image/webp`.
+`type` is a media-type hint available before retrieval. A Service SHOULD provide it when the
+Resource Reference does not have a filename extension that identifies the image format. `icon`
+identifies a Service mark intended for a square presentation canvas. `logo` identifies a Service
+mark intended for a horizontal 4:1 presentation canvas. Services SHOULD provide sufficient source
+resolution to avoid upscaling. SVG resources MUST provide positive intrinsic dimensions or a
+positive view-box width and height.
+
+A client that normalizes branding for storage or presentation MUST preserve the source aspect ratio
+and MUST NOT crop or stretch the source. The client fits and centers `icon` within a square canvas
+and `logo` within a 4:1 canvas. Unused canvas pixels MUST be transparent when the normalized format
+supports transparency. The RECOMMENDED normalized dimensions are 200 by 200 pixels for `icon` and
+400 by 100 pixels for `logo`.
 
 Branding retrieval is anonymous. A client MUST NOT attach AEP credentials, payment credentials,
-cookies, or authorization fields. The successful response media-type essence MUST equal the
-advertised `type`. A branding response body is limited to 1,048,576 bytes and five redirects.
-Redirect and network-address policy follows Supporting Resource Retrieval. Branding content is
-untrusted input. A client that displays SVG MUST either sanitize and safely isolate it or render it
-to a non-active raster representation before display.
+cookies, or authorization fields. When `type` is present, the successful response media-type essence
+MUST equal the advertised value. A branding response body is limited to 1,048,576 bytes and five
+redirects. Redirect and network-address policy follows Supporting Resource Retrieval. Branding
+content is untrusted input. A client that displays SVG MUST either sanitize and safely isolate it or
+render it to a non-active raster representation before display.
 
 `protocols` advertises Service-wide support for enrollment and payment protocols. It contains at
 least one of `enrollment` or `payments`. An unsupported category is omitted rather than serialized
@@ -788,6 +796,29 @@ Collections and Offerings MAY include a `web_url` link for a human-facing browse
 browser representation is informative for Agent operation and does not replace the machine-readable
 ODP resource.
 
+## Resource Images
+
+A Collection or Offering MAY contain `images`, a non-empty ordered array of no more than 16 image
+descriptors. The first descriptor identifies the primary image. Each descriptor MUST contain `src`,
+a Resource Reference, and MAY contain `alt`, `height`, `type`, and `width`. Two descriptors in one
+array MUST NOT contain the same `src` value.
+
+`alt`, when present, is non-empty alternative text of no more than 1024 Unicode code points in the
+language of the containing representation. `height` and `width`, when present, are positive integer
+intrinsic dimensions in CSS pixels no greater than 65535. `type`, when present, is a media-type hint
+of `image/avif`, `image/jpeg`, `image/png`, `image/svg+xml`, or `image/webp`.
+
+A Terse Representation MAY include only the primary image even when the Full Representation contains
+additional images. This is the sole summary behavior of `images`; descriptors themselves MUST NOT be
+partially serialized. Omitting `images` from a Terse Representation makes no claim that the Full
+Representation has no images.
+
+Image retrieval is anonymous. A client MUST NOT attach AEP credentials, payment credentials,
+cookies, or caller authorization fields. The response `Content-Type` is authoritative. When an
+advertised `type` differs from the response media-type essence or the response is not a supported
+image type, a client rejects only that image. Image content is untrusted input and remains subject
+to the client's network, decoding, rendering, and resource limits.
+
 # Collections
 
 ## Collection Search
@@ -827,9 +858,10 @@ request and response use `application/odp+json`.
 ## Collection Envelope
 
 A Full Collection Representation MUST contain `odp_version`, `id`, and `name`. It MAY contain
-`description`, `language`, `localizations`, `parent_ids`, `web_url`, and `search_capabilities`.
-Other Collection capabilities are defined by the operation or feature that uses them. An optional
-field with no applicable or available value is omitted rather than serialized as an empty value.
+`description`, `images`, `language`, `localizations`, `parent_ids`, `web_url`, and
+`search_capabilities`. Other Collection capabilities are defined by the operation or feature that
+uses them. An optional field with no applicable or available value is omitted rather than serialized
+as an empty value.
 
 `language` and `localizations` have the syntax and meaning defined for Service Document language
 metadata, but describe this Collection. They are omitted when the Collection uses the applicable
@@ -946,10 +978,10 @@ for the initial request, not only the Offerings serialized on its first page.
 ## Offering Envelope
 
 A Full Offering Representation MUST contain `odp_version`, `id`, and `name`. It MAY contain
-`description`, `language`, `localizations`, `web_url`, `collection_ids`, `price`, `schema`,
-`attributes`, and `actions`. An optional field with no applicable or available value is omitted. In
-particular, a Service MUST NOT serialize empty `attributes`, `collection_ids`, or `actions` merely
-to declare that the capability is unused.
+`description`, `images`, `language`, `localizations`, `web_url`, `collection_ids`, `price`,
+`schema`, `attributes`, and `actions`. An optional field with no applicable or available value is
+omitted. In particular, a Service MUST NOT serialize empty `attributes`, `collection_ids`, or
+`actions` merely to declare that the capability is unused.
 
 `language` and `localizations` have the syntax and meaning defined for Service Document language
 metadata, but describe this Offering. They are omitted when the Offering uses the applicable

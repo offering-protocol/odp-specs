@@ -15,9 +15,9 @@ The files illustrate a complete sequence:
    advertises Service-wide AEP, MPP, and x402 support, including the compact payment options
    accepted through each rail, without claiming that any particular catalog request requires them.
 2. [`home-office-collection.json`](./home-office-collection.json) is a full Collection root
-   representation with language metadata, omitted root `parent_ids`, and a browser link. Instead of
-   embedding every Collection-specific filter, it links to a pageable filter resource while
-   embedding one supported indexed sort recipe.
+   representation with a primary image, language metadata, omitted root `parent_ids`, and a browser
+   link. Instead of embedding every Collection-specific filter, it links to a pageable filter
+   resource while embedding one supported indexed sort recipe.
 3. [`home-office-collection-search-request.json`](./home-office-collection-search-request.json)
    combines a Service-interpreted text query with the exact root-Collection constraint.
 4. [`home-office-collection-search-response.json`](./home-office-collection-search-response.json)

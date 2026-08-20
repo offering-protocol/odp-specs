@@ -6,6 +6,7 @@
       "name": "Home office",
       "detail_fields": [
         "/description",
+        "/images",
         "/language",
         "/localizations",
         "/search_capabilities",

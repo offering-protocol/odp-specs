@@ -19,11 +19,27 @@
         "id": "gpus",
         "name": "GPUs",
         "description": "Accelerated computing resources.",
+        "images": [
+          {
+            "alt": "GPU compute hardware",
+            "src": "/images/collections/gpus.jpg"
+          }
+        ],
         "language": "en",
         "localizations": [
           "en",
           "ja"
         ]
+      }
+    },
+    {
+      "name": "empty-images",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "id": "gpus",
+        "name": "GPUs",
+        "images": []
       }
     },
     {

@@ -3,6 +3,15 @@
   "id": "travel-mug-20oz-blue",
   "name": "Insulated travel mug, 20 oz, blue",
   "description": "A vacuum-insulated stainless-steel travel mug with a leak-resistant lid.",
+  "images": [
+    {
+      "alt": "Blue 20-ounce insulated travel mug",
+      "height": 1200,
+      "src": "/images/products/travel-mug-20oz-blue.webp",
+      "type": "image/webp",
+      "width": 1200
+    }
+  ],
   "web_url": "/products/travel-mug-20oz-blue",
   "price": {
     "type": "fixed",

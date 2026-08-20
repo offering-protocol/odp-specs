@@ -8,6 +8,10 @@ variant: a 20-ounce blue travel mug. Its Service-local `id` belongs to that exac
 agent does not need a second protocol-specific option-selection step before requesting a quote.
 Other colors or sizes would be separate Offerings when they can be purchased independently.
 
+The ordered `images` array gives agents a primary product image with alternative text, intrinsic
+dimensions, and an optional media-type hint without requiring interpretation of the retailer's
+attribute schema.
+
 The Price Preview is the advertised item price. The quote action determines current tax, shipping,
 pickup, inventory, and final price for the buyer's circumstances. ODP does not calculate or settle
 those values.

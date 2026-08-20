@@ -25,7 +25,7 @@ def validate_references(value, relative, errors, path = "$")
   case value
   when Hash
     value.each do |key, child|
-      if %w[href web_url next].include?(key) && !OdpIdentity.resource_reference?(child)
+      if %w[href next src web_url].include?(key) && !OdpIdentity.resource_reference?(child)
         errors << "#{relative}: #{path}.#{key} must be a valid resource reference"
       end
       validate_references(child, relative, errors, "#{path}.#{key}")

@@ -19,8 +19,9 @@ PAYMENT_OPTIONS = %w[
 ENDPOINT_BASE = %r{\A/(?!/)[A-Za-z0-9._~!$&'()*+,;=:@%/-]*\z}
 
 def branding_image_valid?(image)
-  image.is_a?(Hash) && image.keys.sort == %w[src type] &&
-    OdpIdentity.resource_reference?(image["src"]) && BRANDING_TYPES.include?(image["type"])
+  image.is_a?(Hash) && (image.keys - %w[src type]).empty? && image.key?("src") &&
+    OdpIdentity.resource_reference?(image["src"]) &&
+    (!image.key?("type") || BRANDING_TYPES.include?(image["type"]))
 end
 
 def branding_valid?(branding)

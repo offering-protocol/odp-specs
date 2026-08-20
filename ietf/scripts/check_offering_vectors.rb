@@ -5,6 +5,7 @@ require "bigdecimal"
 require "json"
 require "pathname"
 require_relative "odp_identity"
+require_relative "odp_image"
 
 KNOWN_PRICE_TYPES = %w[free fixed range starting_at metered quote].freeze
 DECIMAL = /\A(?:0|[1-9][0-9]*)(?:\.[0-9]+)?\z/
@@ -47,6 +48,7 @@ def offering_valid?(document, representation)
   return false if document.key?("actions") &&
     (!document["actions"].is_a?(Array) || document["actions"].empty?)
   return false if document.key?("price") && !price_valid?(document["price"])
+  return false if document.key?("images") && !OdpImage.list?(document["images"])
 
   true
 end
