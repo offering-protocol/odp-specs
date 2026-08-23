@@ -2,7 +2,7 @@
 title: The Offering Discovery Protocol
 abbrev: ODP
 docname: draft-kavian-offering-discovery-protocol-00
-date: 2026-08-01
+date: 2026-08-23
 category: std
 ipr: trust200902
 submissiontype: IETF
@@ -72,6 +72,12 @@ informative:
         ins: H. Andrews
       -
         ins: B. Hutton
+  MCP:
+    title: Model Context Protocol
+    target: https://modelcontextprotocol.io/specification/2026-07-28
+    date: 2026-07-28
+    author:
+      - org: Model Context Protocol
   MPP:
     title: 'The "Payment" HTTP Authentication Scheme'
     target: https://datatracker.ietf.org/doc/draft-ryan-httpauth-payment/
@@ -139,7 +145,8 @@ ODP defines:
 * Service-defined structured Offering attributes described by JSON Schema;
 * discovery of deterministic search terms, filters, and pagination capabilities;
 * terse representations for result sets and full representations for inspection;
-* optional links from discovery resources to browser experiences and subsequent operations; and
+* optional links from discovery resources to browser experiences and subsequent operations;
+* optional discovery of remote Model Context Protocol endpoints; and
 * Agent and Service conformance requirements.
 
 ODP is applicable whether access is public or subject to authentication, enrollment, payment, or
@@ -152,6 +159,7 @@ ODP does not define:
 * a universal taxonomy or rigid domain model for products and services;
 * a protocol for enrollment, authentication, payment, checkout, tax calculation, shipping, pickup,
   fulfillment, or delivery;
+* MCP transport, capability, tool, resource, prompt, version-negotiation, or authorization behavior;
 * a requirement to replicate a Service's full catalog into a directory;
 * ranking policy, recommendation policy, or natural-language interpretation;
 * a directory protocol or a requirement that a directory exist; or
@@ -219,6 +227,10 @@ Resource Reference
 : An origin-relative absolute-path reference or an absolute URL that locates a browser
   representation, schema, subsequent operation, or other referenced resource. A Resource Reference
   does not define Resource Identity.
+
+MCP Endpoint
+: A remote Model Context Protocol Streamable HTTP connection target advertised by a Service. An MCP
+  Endpoint is not a browser link, ODP operation, or ODP Action.
 
 Top-Level Document
 : The outermost JSON object carried by one ODP request or response body. Objects nested within that
@@ -437,9 +449,9 @@ operations advertised by the document.
 
 The successful response MUST be an ODP JSON Top-Level Document. The Service Document MUST be a flat
 JSON object and MUST contain `odp_version`, `name`, `description`, `language`, `localizations`,
-`operations`, and `http`. It MAY contain `branding`, `documentation_url`, `keywords`, `protocols`,
-`search_capabilities`, `status_url`, `support_url`, and `website_url`. It MUST NOT contain a
-self-asserted Service identifier or `web_url`.
+`operations`, and `http`. It MAY contain `branding`, `documentation_url`, `keywords`, `mcp`,
+`protocols`, `search_capabilities`, `status_url`, `support_url`, and `website_url`. It MUST NOT
+contain a self-asserted Service identifier or `web_url`.
 
 `name` is a non-empty string of at most 128 Unicode code points. `description` is a non-empty string
 of at most 1024 Unicode code points. `keywords` is an array of at most 32 unique freeform strings,
@@ -468,6 +480,29 @@ operation's access policy, or replace the machine-readable OpenAPI reference in 
 `website_url` is not a base URL for other Resource References. In particular, a Collection or
 Offering `web_url` is resolved against the Service Origin. A Service whose browser resources use a
 different origin supplies an absolute URL in each applicable Resource Reference.
+
+## MCP Endpoints
+
+`mcp`, when present, is a non-empty array of remote MCP Endpoint descriptors. A Service with no MCP
+Endpoint omits `mcp` rather than serializing an empty array.
+
+Each descriptor MUST contain `type` and `url` and MAY contain `name` and `description`. `type` MUST
+be `streamable-http`, identifying the MCP Streamable HTTP transport {{MCP}}. `url` is a Resource
+Reference to the remote MCP Endpoint. `name`, when present, is a non-empty human-readable label of
+no more than 128 Unicode code points. `description`, when present, is a non-empty explanation of the
+endpoint's purpose containing no more than 1024 Unicode code points. `name` and `description` use
+the Service Document's `language` and localization rules.
+
+An MCP descriptor locates a connection surface; it does not describe an individual MCP tool. A
+Service SHOULD use one descriptor for tools exposed through one MCP connection surface and SHOULD
+use multiple descriptors only for distinct connection surfaces. Array order has no protocol
+semantics.
+
+Retrieving, validating, or indexing a Service Document MUST NOT invoke an advertised MCP Endpoint.
+An MCP-capable client connects only when its caller's operation requires that interface. MCP remains
+authoritative for capability discovery, version negotiation, tools, resources, prompts,
+authorization, and request behavior. The presence of an MCP descriptor does not state that the
+endpoint is public and does not authorize an Agent to send ODP, AEP, payment, or other credentials.
 
 ## Branding
 
@@ -1641,7 +1676,7 @@ data according to this document and MUST NOT claim support for behavior it does 
 
 ODP defines no generic `capabilities` member and no secondary runtime conformance manifest. Runtime
 support is advertised through the singular `odp_version`, `operations`, `protocols`,
-`search_capabilities`, and applicable per-resource members such as `schema` and `actions`. An
+`search_capabilities`, `mcp`, and applicable per-resource members such as `schema` and `actions`. An
 implementation MUST NOT add a parallel claim that can contradict those authoritative fields.
 
 A conformance harness can generate release evidence identifying the implementation name and version,
@@ -1770,6 +1805,15 @@ An Agent MUST NOT automatically retry a state-changing Action after an ambiguous
 operation defines an applicable idempotency mechanism and the retry preserves it. AEP, MPP, and x402
 challenge-response retries remain governed by their defining protocols and the exact request
 binding.
+
+## MCP Endpoint Safety
+
+An advertised MCP Endpoint is an untrusted network destination. A client that elects to connect MUST
+apply the Resource Reference, destination-address, redirect, and credential-isolation requirements
+to the resolved endpoint. A cross-origin MCP Endpoint starts without credentials belonging to the
+ODP Service Origin. The client follows MCP's current transport and authorization requirements and
+MUST NOT infer authentication state, supported capabilities, or safe tool behavior from the ODP
+descriptor.
 
 ## Resource Exhaustion and Abuse
 

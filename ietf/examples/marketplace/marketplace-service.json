@@ -28,6 +28,14 @@
     "en",
     "ja"
   ],
+  "mcp": [
+    {
+      "description": "Browse marketplace Collections and Offerings through MCP.",
+      "name": "Storefront",
+      "type": "streamable-http",
+      "url": "/mcp"
+    }
+  ],
   "name": "Market Example",
   "odp_version": "1.0",
   "operations": [

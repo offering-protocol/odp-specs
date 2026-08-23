@@ -35,6 +35,7 @@ missing title, or a `$id` that does not equal its canonical published URL.
 | [`invalid-parameter.schema.json`](./invalid-parameter.schema.json)                           | Structured invalid request parameter.                 |
 | [`local-resource-identifier.schema.json`](./local-resource-identifier.schema.json)           | Service-created Collection and Offering identifiers.  |
 | [`local-resource-identifier-list.schema.json`](./local-resource-identifier-list.schema.json) | Unique Service-local resource identifier arrays.      |
+| [`mcp-endpoint.schema.json`](./mcp-endpoint.schema.json)                                     | Remote MCP Streamable HTTP endpoint descriptor.       |
 | [`offering-search-request.schema.json`](./offering-search-request.schema.json)               | Offering text and Collection-scope search request.    |
 | [`offering-search-response.schema.json`](./offering-search-response.schema.json)             | Offering search results and requested refinements.    |
 | [`offering.schema.json`](./offering.schema.json)                                             | Full Offering Representation envelope.                |

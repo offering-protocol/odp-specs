@@ -18,6 +18,17 @@ PAYMENT_OPTIONS = %w[
 ].freeze
 ENDPOINT_BASE = %r{\A/(?!/)[A-Za-z0-9._~!$&'()*+,;=:@%/-]*\z}
 
+def mcp_endpoint_valid?(endpoint)
+  return false unless endpoint.is_a?(Hash) &&
+    (endpoint.keys - %w[description name type url]).empty? && %w[type url].all? { |key| endpoint.key?(key) }
+  return false unless endpoint["type"] == "streamable-http" && OdpIdentity.resource_reference?(endpoint["url"])
+
+  %w[name description].all? do |field|
+    !endpoint.key?(field) ||
+      (endpoint[field].is_a?(String) && endpoint[field].length.between?(1, field == "name" ? 128 : 1024))
+  end
+end
+
 def branding_image_valid?(image)
   image.is_a?(Hash) && (image.keys - %w[src type]).empty? && image.key?("src") &&
     OdpIdentity.resource_reference?(image["src"]) &&
@@ -133,6 +144,9 @@ def valid_document?(document, source)
     !search_capabilities_valid?(document["search_capabilities"], operation_names)
   return false if document.key?("protocols") && !protocols_valid?(document["protocols"])
   return false if document.key?("branding") && !branding_valid?(document["branding"])
+  return false if document.key?("mcp") &&
+    (!document["mcp"].is_a?(Array) || document["mcp"].empty? ||
+      document["mcp"].any? { |endpoint| !mcp_endpoint_valid?(endpoint) })
 
   %w[documentation_url status_url support_url website_url].each do |field|
     return false if document.key?(field) && !OdpIdentity.resource_reference?(document[field])

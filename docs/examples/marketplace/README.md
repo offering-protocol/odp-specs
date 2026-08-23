@@ -14,6 +14,8 @@ The files illustrate a complete sequence:
    destinations without replacing the machine-readable OpenAPI document. Its protocol summary
    advertises Service-wide AEP, MPP, and x402 support, including the compact payment options
    accepted through each rail, without claiming that any particular catalog request requires them.
+   Its MCP descriptor locates a remote Storefront connection surface without duplicating MCP tool,
+   capability, version, or authorization metadata.
 2. [`home-office-collection.json`](./home-office-collection.json) is a full Collection root
    representation with a primary image, language metadata, omitted root `parent_ids`, and a browser
    link. Instead of embedding every Collection-specific filter, it links to a pageable filter
