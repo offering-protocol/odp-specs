@@ -2,7 +2,7 @@
 title: The Offering Discovery Protocol
 abbrev: ODP
 docname: draft-kavian-offering-discovery-protocol-00
-date: 2026-08-23
+date: 2026-08-24
 category: std
 ipr: trust200902
 submissiontype: IETF
@@ -56,9 +56,9 @@ informative:
   AEP:
     title: "The Agent Enrollment Protocol"
     target: https://datatracker.ietf.org/doc/draft-kavian-agent-enrollment-protocol/
-    date: 2026-07-23
+    date: 2026-08-24
     seriesinfo:
-      Internet-Draft: draft-kavian-agent-enrollment-protocol-02
+      Internet-Draft: draft-kavian-agent-enrollment-protocol-03
     author:
       - ins: N. Kavian
         name: Nas Kavian
@@ -402,7 +402,7 @@ parameters. Parameters do not select or modify the ODP protocol version. The `od
 the sole protocol-version authority.
 
 An Agent SHOULD send `Accept: application/odp+json` when requesting an ODP resource. A Service MAY
-return an ODP representation when `Accept` is absent, permits `*/*`, or permits
+return an ODP representation when `Accept` is absent, includes the wildcard media range, or permits
 `application/odp+json`. If the request's `Accept` field excludes `application/odp+json`, the Service
 MUST respond with `406 Not Acceptable`.
 
@@ -1293,11 +1293,13 @@ The core filter types and their wire values are:
 | `date`      | RFC 3339 `full-date` JSON string.                                            |
 | `date-time` | RFC 3339 `date-time` JSON string identifying an instant on the UTC timeline. |
 
-A decimal value matches `-?(0|[1-9][0-9]*)(\\.[0-9]+)?`. Decimal equality and ordering are numeric,
-not lexical, so `1.0` and `1.00` compare equal. Integer and number comparison is numeric. Boolean
-equality follows JSON Boolean equality. Date comparison follows calendar order. Date-time equality
-and ordering use the represented instant. String equality is case-sensitive Unicode scalar-value
-equality; ODP performs no normalization or locale folding.
+A decimal value contains an optional minus sign, an integer part that is either zero or a nonzero
+digit followed by zero or more digits, and an optional fractional part containing a period followed
+by one or more digits. Decimal equality and ordering are numeric, not lexical, so `1.0` and `1.00`
+compare equal. Integer and number comparison is numeric. Boolean equality follows JSON Boolean
+equality. Date comparison follows calendar order. Date-time equality and ordering use the
+represented instant. String equality is case-sensitive Unicode scalar-value equality; ODP performs
+no normalization or locale folding.
 
 ## Filter Definitions
 
@@ -1869,8 +1871,6 @@ metadata and document their retention and refresh policies.
 use `detail_fields`, result counts, identifiers, refinement counts, errors, timing differences, or
 other metadata to disclose the nature or quantity of protected content to a principal that is not
 permitted to learn it.
-
---- back
 
 # Acknowledgements
 
