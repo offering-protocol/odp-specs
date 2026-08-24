@@ -450,8 +450,8 @@ operations advertised by the document.
 The successful response MUST be an ODP JSON Top-Level Document. The Service Document MUST be a flat
 JSON object and MUST contain `odp_version`, `name`, `description`, `language`, `localizations`,
 `operations`, and `http`. It MAY contain `branding`, `documentation_url`, `keywords`, `mcp`,
-`protocols`, `search_capabilities`, `status_url`, `support_url`, and `website_url`. It MUST NOT
-contain a self-asserted Service identifier or `web_url`.
+`payment_origins`, `protocols`, `search_capabilities`, `status_url`, `support_url`, and
+`website_url`. It MUST NOT contain a self-asserted Service identifier or `web_url`.
 
 `name` is a non-empty string of at most 128 Unicode code points. `description` is a non-empty string
 of at most 1024 Unicode code points. `keywords` is an array of at most 32 unique freeform strings,
@@ -465,6 +465,14 @@ define filters. ODP defines no case folding, normalization, stemming, or semanti
 them; array uniqueness uses JSON string equality. An Agent MUST NOT restrict a Collection or
 Offering search query to Service keywords or assume that a Service supports keyword enumeration or
 query completion.
+
+## Payment Origins
+
+`payment_origins`, when present, is a non-empty array of at most 16 Service Origins at which the
+Service can issue payment challenges. A Service omits `payment_origins` when it issues payment
+challenges only from its canonical Service Origin. Declaring an origin does not prove control of it;
+a directory can require independent verification before associating payments from that origin with
+the Service. A directory treats duplicate origins and the canonical Service Origin as redundant.
 
 ## Service Links
 

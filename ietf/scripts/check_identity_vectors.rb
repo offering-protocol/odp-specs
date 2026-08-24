@@ -16,7 +16,7 @@ Dir[root.join("*.json")].sort.each do |path|
   next if vector["subject"] == "identity-comparison"
 
   predicate = case vector.fetch("subject")
-              when "service-origin" then OdpIdentity.method(:canonical_origin?)
+              when "service-origin" then OdpIdentity.method(:service_origin?)
               when "local-identifier" then OdpIdentity.method(:local_identifier?)
               when "resource-reference" then OdpIdentity.method(:resource_reference?)
               else abort "#{path}: unknown subject"

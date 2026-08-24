@@ -12,7 +12,7 @@ module OdpIdentity
       value.match?(/\A(?!\.{1,2}\z)[A-Za-z0-9._~-]{1,128}\z/)
   end
 
-  def canonical_origin?(value)
+  def service_origin?(value)
     return false unless value.is_a?(String) && value.ascii_only?
 
     uri = URI.parse(value)

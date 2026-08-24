@@ -13,7 +13,7 @@ def page_valid?(page)
 end
 
 def same_origin_next?(service_origin, reference)
-  return false unless OdpIdentity.canonical_origin?(service_origin) && OdpIdentity.resource_reference?(reference)
+  return false unless OdpIdentity.service_origin?(service_origin) && OdpIdentity.resource_reference?(reference)
 
   resolved = URI.join("#{service_origin}/", reference)
   origin = URI.parse(service_origin)

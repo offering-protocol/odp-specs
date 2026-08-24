@@ -147,6 +147,9 @@ def valid_document?(document, source)
   return false if document.key?("mcp") &&
     (!document["mcp"].is_a?(Array) || document["mcp"].empty? ||
       document["mcp"].any? { |endpoint| !mcp_endpoint_valid?(endpoint) })
+  return false if document.key?("payment_origins") &&
+    (!document["payment_origins"].is_a?(Array) || !document["payment_origins"].length.between?(1, 16) ||
+      document["payment_origins"].any? { |origin| !OdpIdentity.service_origin?(origin) })
 
   %w[documentation_url status_url support_url website_url].each do |field|
     return false if document.key?(field) && !OdpIdentity.resource_reference?(document[field])

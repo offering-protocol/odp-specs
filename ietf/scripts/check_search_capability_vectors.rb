@@ -12,7 +12,7 @@ EFFECTIVE_LIMITS = { "filters" => 1_024, "sorts" => 128 }.freeze
 LINKED_PAGE_LIMIT = 16
 
 def same_origin?(service_origin, reference)
-  return false unless OdpIdentity.canonical_origin?(service_origin) && OdpIdentity.resource_reference?(reference)
+  return false unless OdpIdentity.service_origin?(service_origin) && OdpIdentity.resource_reference?(reference)
 
   origin = URI.parse(service_origin)
   resolved = URI.join("#{service_origin}/", reference)
