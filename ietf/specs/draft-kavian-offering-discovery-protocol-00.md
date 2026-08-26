@@ -95,6 +95,11 @@ informative:
         name: Jeff Weinstein
       - ins: S. Kaliski
         name: Steve Kaliski
+  TAP:
+    title: Visa Trusted Agent Protocol Specifications
+    target: https://developer.visa.com/capabilities/trusted-agent-protocol/trusted-agent-protocol-specifications/
+    author:
+      - org: Visa
   X402:
     title: x402 Specification
     target: https://github.com/x402-foundation/x402/tree/main/specs
@@ -536,12 +541,17 @@ redirects. Redirect and network-address policy follows Supporting Resource Retri
 content is untrusted input. A client that displays SVG MUST either sanitize and safely isolate it or
 render it to a non-active raster representation before display.
 
-`protocols` advertises Service-wide support for enrollment and payment protocols. It contains at
-least one of `enrollment` or `payments`. An unsupported category is omitted rather than serialized
-as an empty array.
+`protocols` advertises Service-wide support for enrollment, payment, and trust protocols. It
+contains at least one of `enrollment`, `payments`, or `trust`. An unsupported category is omitted
+rather than serialized as an empty array.
 
 `enrollment`, when present, is the single-item array `[{"name":"aep"}]`, identifying AEP {{AEP}}. An
 enrollment descriptor contains only `name`.
+
+`trust`, when present, is the single-item array `[{"name":"tap"}]`, identifying Visa Trusted Agent
+Protocol {{TAP}}. A trust descriptor contains only `name`. Advertisement states that the Service
+accepts and verifies requests using the named trust protocol. It does not prove Service ownership,
+authorize disclosure of consumer information, or replace the trust protocol's request validation.
 
 `payments`, when present, is a non-empty array of no more than two payment descriptors. Each
 descriptor contains `name` and `authentication` and MAY contain `options`. `name` is `mpp`,
@@ -560,11 +570,11 @@ through which it accepts that option. Omitting `options` means that the Service 
 payment protocol without advertising detailed option compatibility.
 
 Protocol advertisement describes support and the authentication prerequisite for each payment rail;
-it does not guarantee that a payment protocol is accepted by every ODP operation, catalog resource,
-or Action. A missing category means only that support is not advertised. An Agent and directory MAY
-derive a Service-support summary from this field. Recognition of an option by ODP does not imply
-that an Agent implementation supports or is configured to use it. A live HTTP response remains
-authoritative for the request that produced it.
+it does not guarantee that a payment or trust protocol is accepted by every ODP operation, catalog
+resource, or Action. A missing category means only that support is not advertised. An Agent and
+directory MAY derive a Service-support summary from this field. Recognition of a protocol or option
+by ODP does not imply that an Agent implementation supports or is configured to use it. A live HTTP
+response remains authoritative for the request that produced it.
 
 ## Language Selection
 

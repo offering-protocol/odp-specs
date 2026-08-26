@@ -42,8 +42,9 @@ reference those advertised definitions.
 
 ## Protocol Composition
 
-ODP composes with AEP, MPP, and x402. Discovery may be public or protected by enrollment, payment,
-or both. Live HTTP authentication and payment challenges are authoritative.
+ODP composes with AEP, MPP, x402, and trust protocols such as TAP. Discovery may be public or
+protected by enrollment, payment, or both. Live HTTP authentication and payment challenges are
+authoritative.
 
 ODP does not define enrollment, payment, checkout, tax calculation, shipping, pickup, fulfillment,
 or digital delivery. It describes discoverable resources and links agents to the appropriate

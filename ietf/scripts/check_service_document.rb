@@ -69,7 +69,7 @@ end
 
 def protocols_valid?(protocols)
   return false unless protocols.is_a?(Hash) && !protocols.empty?
-  return false unless (protocols.keys - %w[enrollment payments]).empty?
+  return false unless (protocols.keys - %w[enrollment payments trust]).empty?
 
   enrollment = protocols["enrollment"]
   return false if enrollment && enrollment != [{ "name" => "aep" }]
@@ -87,6 +87,9 @@ def protocols_valid?(protocols)
       end || payments.map { |payment| payment["name"] }.uniq.length != payments.length)
 
   return false if payments&.any? { |payment| payment["authentication"] == "required" } && enrollment.nil?
+
+  trust = protocols["trust"]
+  return false if protocols.key?("trust") && trust != [{ "name" => "tap" }]
 
   true
 end

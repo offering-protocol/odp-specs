@@ -61,7 +61,7 @@ missing title, or a `$id` that does not equal its canonical published URL.
 | [`service-document.schema.json`](./service-document.schema.json)                             | Well-known Service discovery metadata and operations. |
 | [`service-openapi.schema.json`](./service-openapi.schema.json)                               | Reusable Service OpenAPI reference.                   |
 | [`service-origin.schema.json`](./service-origin.schema.json)                                 | Canonical Service-origin serialization.               |
-| [`service-protocols.schema.json`](./service-protocols.schema.json)                           | Service-wide enrollment and payment support.          |
+| [`service-protocols.schema.json`](./service-protocols.schema.json)                           | Service-wide enrollment, payment, and trust support.  |
 | [`sort-capability-source.schema.json`](./sort-capability-source.schema.json)                 | Inline or linked Sort Definition source.              |
 | [`sort-definition-page.schema.json`](./sort-definition-page.schema.json)                     | Pageable Sort Definition sequence.                    |
 | [`sort-definition.schema.json`](./sort-definition.schema.json)                               | Advertised indexed sorting recipe.                    |
