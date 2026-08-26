@@ -1071,10 +1071,12 @@ the schema immutable. An Agent revalidates or refreshes it according to ordinary
 semantics.
 
 The schema MUST declare the Draft 2020-12 meta-schema through `$schema`. `$id`, when present, and
-references have their standard JSON Schema meanings. An Agent MUST process references needed to
-interpret or validate the instance. If the schema declares a required vocabulary the Agent does not
-support, the Attribute Schema is unsupported. Optional vocabularies and unknown keywords are handled
-according to JSON Schema Draft 2020-12.
+references have their standard JSON Schema meanings subject to one interoperability restriction: the
+value of `$dynamicRef` MUST be a fragment-only URI-reference beginning with `#`. Cross-document
+references use `$ref`. An Attribute Schema containing a non-fragment `$dynamicRef` is unsupported.
+An Agent MUST process references needed to interpret or validate the instance. If the schema
+declares a required vocabulary the Agent does not support, the Attribute Schema is unsupported.
+Optional vocabularies and unknown keywords are handled according to JSON Schema Draft 2020-12.
 
 An Agent-oriented SDK SHOULD resolve and cache referenced schema resources and provide its caller a
 locally complete schema representation. The caller MUST NOT be required to perform additional

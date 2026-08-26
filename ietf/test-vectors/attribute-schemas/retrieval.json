@@ -62,6 +62,65 @@
       "valid": false
     },
     {
+      "name": "external-ref-to-recursive-schema",
+      "operation": "validate-schema-reference-profile",
+      "documents": [
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://schemas.example/offering.json",
+          "$ref": "https://schemas.example/common.json"
+        },
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://schemas.example/common.json",
+          "$dynamicAnchor": "node",
+          "type": "object",
+          "properties": {
+            "children": {
+              "type": "array",
+              "items": {
+                "$dynamicRef": "#node"
+              }
+            }
+          }
+        }
+      ],
+      "valid": true
+    },
+    {
+      "name": "external-dynamic-ref-is-unsupported",
+      "operation": "validate-schema-reference-profile",
+      "documents": [
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$dynamicRef": "https://schemas.example/common.json#node"
+        }
+      ],
+      "valid": false
+    },
+    {
+      "name": "relative-cross-document-dynamic-ref-is-unsupported",
+      "operation": "validate-schema-reference-profile",
+      "documents": [
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$dynamicRef": "common.json#node"
+        }
+      ],
+      "valid": false
+    },
+    {
+      "name": "non-string-dynamic-ref-is-unsupported",
+      "operation": "validate-schema-reference-profile",
+      "documents": [
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$dynamicRef": null
+        }
+      ],
+      "valid": false
+    },
+    {
       "name": "full-attributes-validate",
       "operation": "validation-scope",
       "representation": "full",

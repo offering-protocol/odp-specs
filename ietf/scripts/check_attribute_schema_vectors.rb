@@ -18,6 +18,20 @@ def response_valid?(test_case)
     document.is_a?(Hash) && document["$schema"] == DRAFT_2020_12
 end
 
+def dynamic_references_valid?(value)
+  case value
+  when Array
+    value.all? { |item| dynamic_references_valid?(item) }
+  when Hash
+    dynamic_reference = value["$dynamicRef"]
+    (!value.key?("$dynamicRef") ||
+      (dynamic_reference.is_a?(String) && dynamic_reference.start_with?("#"))) &&
+      value.values.all? { |item| dynamic_references_valid?(item) }
+  else
+    true
+  end
+end
+
 def evaluate(test_case)
   case test_case.fetch("operation")
   when "validate-reference"
@@ -32,6 +46,8 @@ def evaluate(test_case)
       "attributes_usable" => false,
       "report_issue" => true
     }
+  when "validate-schema-reference-profile"
+    test_case.fetch("documents").all? { |document| dynamic_references_valid?(document) }
   end
 end
 
