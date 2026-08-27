@@ -43,5 +43,11 @@ Rendering derives RFC bibliography dependencies from draft frontmatter and seeds
 cache from the official `ietf-tools/bibxml-data-archive` before invoking kramdown-rfc. The source
 draft remains the reference manifest; no separate RFC list is maintained.
 
+The manual interoperability workflow runs every official Agent SDK against every official Service
+SDK and publishes JSON and Markdown matrix artifacts. It is intentionally excluded from pull request
+and merge checks. With prepared SDK repositories beside `odp-specs`, run it locally with `make -C
+ietf interoperability`; `ODP_NODE_DIR`, `ODP_GO_DIR`, `ODP_JAVA_DIR`, `ODP_PYTHON_DIR`, and
+`ODP_RUST_DIR` can select other checkouts.
+
 Normative Internet-Draft prose is authoritative. Supporting artifacts make the contract testable but
 do not override the drafts.

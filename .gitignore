@@ -4,4 +4,5 @@ ietf/.venv/
 ietf/.cache/
 ietf/vendor/
 artifacts/
+.interoperability/
 .DS_Store

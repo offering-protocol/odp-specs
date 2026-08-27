@@ -8,15 +8,16 @@ XML2RFC_CACHE := .cache/xml2rfc
 IDNITS := idnits
 MARKDOWN_FILES := $(shell find .. -type f -name '*.md' \
 	-not -path '../.git/*' \
+	-not -path '../.interoperability/*' \
 	-not -path '../artifacts/*' \
 	-not -path '../docs/*' \
 	-not -path '../ietf/vendor/*' \
 	-not -path '../ietf/.venv/*' | sort)
 DRAFTS := $(shell find specs -type f -name 'draft-*.md' | sort)
 
-.PHONY: check check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-drafts check-error-limits check-external-section-refs check-filters-sorting check-formatter check-format check-harness check-index check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning clean format generate-marketplace-scale idnits prepare-references render render-drafts render-examples render-index render-problems render-schemas render-support
+.PHONY: check check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-drafts check-error-limits check-external-section-refs check-filters-sorting check-formatter check-format check-harness check-index check-interoperability check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning clean format generate-marketplace-scale idnits interoperability prepare-references render render-drafts render-examples render-index render-problems render-schemas render-support
 
-check: check-drafts check-external-section-refs check-formatter check-format check-json check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-error-limits check-examples check-filters-sorting check-harness check-identity check-index check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning
+check: check-drafts check-external-section-refs check-formatter check-format check-json check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-error-limits check-examples check-filters-sorting check-harness check-identity check-index check-interoperability check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning
 
 check-actions:
 	$(RUBY) scripts/check_action_vectors.rb
@@ -68,6 +69,9 @@ check-identity:
 
 check-index:
 	$(RUBY) scripts/render_index.rb --check $(DRAFTS) "$(INDEX_ARTIFACT)"
+
+check-interoperability:
+	$(RUBY) -c scripts/run_interoperability_matrix.rb
 
 check-marketplace-scale:
 	$(RUBY) scripts/check_marketplace_scale.rb
@@ -147,6 +151,9 @@ idnits: render-drafts
 		$(IDNITS) "$(ARTIFACTS)/$$docname.txt"; \
 		echo; \
 	done
+
+interoperability:
+	$(RUBY) scripts/run_interoperability_matrix.rb
 
 clean:
 	@for draft in $(DRAFTS); do \
