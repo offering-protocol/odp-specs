@@ -11,8 +11,9 @@ PAYMENT_OPTIONS = %w[
 
 def advertisement_valid?(protocols)
   return false unless protocols.is_a?(Hash) && !protocols.empty?
-  return false unless (protocols.keys - %w[enrollment payments]).empty?
+  return false unless (protocols.keys - %w[enrollment payments trust]).empty?
   return false if protocols.key?("enrollment") && protocols["enrollment"] != [{ "name" => "aep" }]
+  return false if protocols.key?("trust") && protocols["trust"] != [{ "name" => "tap" }]
 
   payments = protocols["payments"]
   return false if payments &&
@@ -29,7 +30,7 @@ def advertisement_valid?(protocols)
 
   return false if payments&.any? { |payment| payment["authentication"] == "required" } && !protocols.key?("enrollment")
 
-  protocols.key?("enrollment") || protocols.key?("payments")
+  protocols.key?("enrollment") || protocols.key?("payments") || protocols.key?("trust")
 end
 
 def live_protocols(response)

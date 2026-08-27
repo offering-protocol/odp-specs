@@ -43,6 +43,30 @@
       "valid": true
     },
     {
+      "name": "tap-trust-support",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "trust": [
+          {
+            "name": "tap"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "name": "unknown-trust-protocol",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "trust": [
+          {
+            "name": "future-trust"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
       "name": "unknown-payment-option",
       "operation": "validate-advertisement",
       "protocols": {
