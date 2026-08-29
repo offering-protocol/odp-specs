@@ -2,7 +2,7 @@
 
 This directory contains the ODP Internet-Draft Markdown source.
 
-[`draft-kavian-offering-discovery-protocol-00.md`](./draft-kavian-offering-discovery-protocol-00.md)
+[`draft-kavian-offering-discovery-protocol-01.md`](./draft-kavian-offering-discovery-protocol-01.md)
 defines scope, terminology, roles, architecture, wire representations, operations, composition
 boundaries, security, privacy, and conformance.
 

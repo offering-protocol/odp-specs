@@ -3,7 +3,7 @@
   "title": "Canonical Service origin",
   "description": "Service identity uses canonical HTTPS origin serialization with explicit loopback development exceptions.",
   "drafts": [
-    "draft-kavian-offering-discovery-protocol-00"
+    "draft-kavian-offering-discovery-protocol-01"
   ],
   "category": "identity",
   "applies_to": [

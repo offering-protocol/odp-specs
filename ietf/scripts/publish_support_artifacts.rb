@@ -150,7 +150,7 @@ def example_artifacts
 end
 
 def problem_definitions
-  draft = IETF_ROOT.join("specs", "draft-kavian-offering-discovery-protocol-00.md")
+  draft = IETF_ROOT.join("specs", "draft-kavian-offering-discovery-protocol-01.md")
   source = draft.read.split("The initial core problem codes are:", 2).fetch(1, "")
   definitions = source.lines.filter_map do |line|
     match = line.match(/^\| `([A-Z][A-Z0-9_]*)`\s+\|\s+(\d{3})\s+\|\s+(.+?)\s+\|$/)

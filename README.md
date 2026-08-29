@@ -80,7 +80,7 @@ do not replace the specification.
 
 | Document                                                                                       | Scope             |
 | ---------------------------------------------------------------------------------------------- | ----------------- |
-| [The Offering Discovery Protocol](./ietf/specs/draft-kavian-offering-discovery-protocol-00.md) | The ODP protocol. |
+| [The Offering Discovery Protocol](./ietf/specs/draft-kavian-offering-discovery-protocol-01.md) | The ODP protocol. |
 
 ## Repository Map
 

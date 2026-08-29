@@ -3,7 +3,7 @@
   "title": "ODP protocol version syntax and compatibility",
   "description": "Versions use major.minor syntax and compatibility is determined by the major version.",
   "drafts": [
-    "draft-kavian-offering-discovery-protocol-00"
+    "draft-kavian-offering-discovery-protocol-01"
   ],
   "category": "versioning",
   "applies_to": [

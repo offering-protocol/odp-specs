@@ -1,8 +1,8 @@
 ---
 title: The Offering Discovery Protocol
 abbrev: ODP
-docname: draft-kavian-offering-discovery-protocol-00
-date: 2026-08-24
+docname: draft-kavian-offering-discovery-protocol-01
+date: 2026-08-29
 category: std
 ipr: trust200902
 submissiontype: IETF
@@ -379,23 +379,12 @@ inherit the version of their containing Top-Level Document.
 
 ## Compatibility Rules
 
-The major version identifies the compatibility family. An implementation MUST reject a Top-Level
-Document whose major version it does not support. Minor versions within one major version are
-backward compatible.
-
-A minor-version revision MAY add optional fields, optional enum values, optional capabilities, or
-clarifications that preserve existing wire behavior. It MUST NOT remove or redefine an existing
-field, value, operation, error, or requirement. It MUST NOT make a new field or capability mandatory
-for implementations of an earlier minor version in the same major-version family.
-
-An implementation supporting a major version MUST process Top-Level Documents carrying any minor
-version in that major-version family according to the unknown-field and unknown-value rules in this
-document. Implementations MUST NOT infer support for an optional capability from a higher minor
-version.
+An implementation MUST reject a Top-Level Document whose `odp_version` it does not support. The
+version defined by this document is exactly `1.0`; support for another version is defined by the
+document that specifies that version.
 
 Each request and response Top-Level Document declares the version governing that document. The
-version is not inherited across HTTP exchanges. A Service receiving a supported major version MUST
-apply same-major compatibility rules even when its preferred minor version differs.
+version is not inherited across HTTP exchanges.
 
 # HTTP Media Types and Negotiation
 
@@ -560,6 +549,14 @@ protocol {{X402}}. Names MUST NOT be duplicated. When both descriptors are prese
 order expresses Service preference. `authentication` is `not-required` or `required` and states
 whether the Agent must authenticate to the Service before using that payment protocol. A `required`
 value requires the Service Document to advertise an enrollment protocol.
+
+A Service MUST advertise only enrollment, payment, and trust protocol names defined by the ODP
+version declared by its Service Document. An Agent MUST filter descriptors whose `name` it does not
+recognize before applying the known category's item limit, uniqueness rules, and descriptor
+validation. A category containing no recognized descriptors after filtering is treated as absent. An
+unknown protocol name MUST NOT make an otherwise usable Service Document invalid. A descriptor
+bearing a recognized name remains subject to every requirement for that descriptor and is not made
+valid by filtering.
 
 `options`, when present, is a non-empty array of no more than 16 unique payment-option names drawn
 from `algorand`, `aptos`, `arbitrum`, `avalanche`, `base`, `card`, `ethereum`, `hedera`, `inflow`,
@@ -1252,6 +1249,29 @@ Security-sensitive behavior fails closed. An Agent MUST NOT execute an operation
 field or value prevents it from determining the operation's identity, authorization, payment,
 request semantics, or security consequences.
 
+An Agent filters an unknown Operation Descriptor `name`, payment `option`, protocol descriptor
+`name`, MCP endpoint `type`, Resource Image `type`, or Service Branding Image `type` from the
+containing list. A list containing no recognized values after filtering is treated as absent. A
+recognized list item remains subject to every requirement for that item.
+
+An Agent treats an Operation Descriptor, payment protocol descriptor, or Action whose
+`authentication` value is a syntactically valid but unrecognized string as unsupported at that
+descriptor or Action boundary. A missing, non-string, or otherwise malformed required
+`authentication` member remains invalid.
+
+An Agent encountering an unknown Price Preview `type` omits the `price` object. An Action with an
+unknown `rel` remains available for explicit selection by `id`. An Action with an unknown HTTP
+`method` is unusable and is omitted from the containing Offering. An MCP endpoint with an unknown
+`type` is omitted without making the Service Document unusable.
+
+An Agent encountering an unknown Filter Definition type, operator, unit system, Sort Definition
+direction, or missing-value placement treats only that definition as unsupported. A Resource
+Identity with an unknown `type` is invalid.
+
+An unknown Problem Details member does not make the problem response invalid. An unrecognized
+problem `code` is interpreted using the HTTP status and standard Problem Details members. An Agent
+ignores an invalid-parameter entry whose `in` value it does not recognize.
+
 ## Service-Defined Offering Data
 
 ODP defines stable envelope fields needed for discovery and link traversal. Domain-specific Offering
@@ -1655,8 +1675,8 @@ authentication, authorization, validation, or other non-transient failure.
 The core evolution rules apply to successful and unsuccessful documents. Unknown additive members
 are ignored. Unknown Problem Details codes fall back to HTTP status semantics. Unknown
 discriminators disable only the smallest dependent capability, and security-sensitive ambiguity
-fails closed. A major-version mismatch rejects an ODP document; same-major minor versions use the
-compatibility rules defined in Protocol Versioning.
+fails closed. An unsupported `odp_version` rejects an ODP document as defined in Protocol
+Versioning.
 
 # Conformance
 
@@ -1717,24 +1737,24 @@ implementation and testing; they do not override normative Internet-Draft prose.
 This document requests registration of the following media type in the Media Types registry
 according to {{RFC6838}}:
 
-| Field                                            | Value                                                                  |
-| ------------------------------------------------ | ---------------------------------------------------------------------- |
-| Type name                                        | `application`                                                          |
-| Subtype name                                     | `odp+json`                                                             |
-| Required parameters                              | None                                                                   |
-| Optional parameters                              | None                                                                   |
-| Encoding considerations                          | Binary; the representation is a JSON document encoded in UTF-8.        |
-| Security considerations                          | See the Security Considerations section of this document.              |
-| Interoperability considerations                  | The `odp_version` member identifies the protocol compatibility family. |
-| Published specification                          | This document.                                                         |
-| Applications that use this media type            | Agents and Services implementing ODP.                                  |
-| Fragment identifier considerations               | None; ODP Resource References prohibit fragments.                      |
-| Additional information                           | None.                                                                  |
-| Person and email address for further information | IETF, `iesg@ietf.org`.                                                 |
-| Intended usage                                   | COMMON                                                                 |
-| Restrictions on usage                            | None.                                                                  |
-| Author                                           | IETF                                                                   |
-| Change controller                                | IETF                                                                   |
+| Field                                            | Value                                                           |
+| ------------------------------------------------ | --------------------------------------------------------------- |
+| Type name                                        | `application`                                                   |
+| Subtype name                                     | `odp+json`                                                      |
+| Required parameters                              | None                                                            |
+| Optional parameters                              | None                                                            |
+| Encoding considerations                          | Binary; the representation is a JSON document encoded in UTF-8. |
+| Security considerations                          | See the Security Considerations section of this document.       |
+| Interoperability considerations                  | The `odp_version` member identifies the exact protocol version. |
+| Published specification                          | This document.                                                  |
+| Applications that use this media type            | Agents and Services implementing ODP.                           |
+| Fragment identifier considerations               | None; ODP Resource References prohibit fragments.               |
+| Additional information                           | None.                                                           |
+| Person and email address for further information | IETF, `iesg@ietf.org`.                                          |
+| Intended usage                                   | COMMON                                                          |
+| Restrictions on usage                            | None.                                                           |
+| Author                                           | IETF                                                            |
+| Change controller                                | IETF                                                            |
 
 ## Well-Known URI Registration
 
