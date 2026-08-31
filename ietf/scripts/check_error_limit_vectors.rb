@@ -41,6 +41,8 @@ def problem_valid?(problem, http_status)
   return false unless problem["title"].is_a?(String) && !problem["title"].empty?
   return false unless problem["status"] == http_status && http_status.between?(400, 599)
   return false unless problem["code"].is_a?(String) && problem["code"].match?(PROBLEM_CODE)
+  expected_type = "https://offeringprotocol.org/problems/#{problem["code"].downcase.tr('_', '-')}"
+  return false unless problem["type"] == expected_type
   return false if CORE_STATUSES.key?(problem["code"]) && CORE_STATUSES.fetch(problem["code"]) != http_status
   return false if problem.key?("invalid_params") &&
     (problem["code"] != "INVALID_REQUEST" || !problem["invalid_params"].is_a?(Array) ||

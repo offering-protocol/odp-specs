@@ -1566,7 +1566,9 @@ and `detail` contains no more than 2048 Unicode code points.
 `type` is an absolute HTTPS URL under `https://offeringprotocol.org/problems/` identifying the
 problem class. `code` is the stable machine-readable identifier used by Agent implementations. A
 code contains 1 through 64 uppercase ASCII letters, digits, or underscores and begins with a letter.
-An Agent MUST ignore unknown additive Problem Details members.
+`type` MUST equal `https://offeringprotocol.org/problems/<code>`, where `<code>` is the value of
+`code` converted to lowercase ASCII and each underscore is replaced by a hyphen. An Agent MUST
+ignore unknown additive Problem Details members.
 
 The initial core problem codes are:
 
