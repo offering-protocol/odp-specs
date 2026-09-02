@@ -1,0 +1,822 @@
+{
+  "id": "composition-contract",
+  "title": "Service-wide protocol support and authoritative live challenges",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "composition",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "composition-contract",
+  "cases": [
+    {
+      "name": "enrollment-and-payment-support",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "mpp",
+            "options": [
+              "card",
+              "inflow",
+              "solana"
+            ]
+          },
+          {
+            "authentication": "not-required",
+            "name": "x402",
+            "options": [
+              "base",
+              "solana"
+            ]
+          }
+        ],
+        "enrollment": [
+          {
+            "name": "aep"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "name": "tap-trust-support",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "trust": [
+          {
+            "name": "tap"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "name": "unknown-trust-protocol",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "trust": [
+          {
+            "name": "future-trust"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "unknown-payment-option",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "mpp",
+            "options": [
+              "future-option"
+            ]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "agent-filters-unknown-protocol-descriptors",
+      "operation": "filter-advertisement",
+      "protocols": {
+        "enrollment": [
+          {
+            "name": "future-enrollment"
+          },
+          {
+            "name": "aep"
+          }
+        ],
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "future-payment"
+          },
+          {
+            "authentication": "not-required",
+            "name": "mpp"
+          },
+          {
+            "authentication": "not-required",
+            "name": "x402"
+          }
+        ],
+        "trust": [
+          {
+            "name": "future-trust"
+          },
+          {
+            "name": "tap"
+          }
+        ]
+      },
+      "expected": {
+        "enrollment": [
+          {
+            "name": "aep"
+          }
+        ],
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "mpp"
+          },
+          {
+            "authentication": "not-required",
+            "name": "x402"
+          }
+        ],
+        "trust": [
+          {
+            "name": "tap"
+          }
+        ]
+      }
+    },
+    {
+      "name": "agent-omits-categories-with-only-unknown-protocols",
+      "operation": "filter-advertisement",
+      "protocols": {
+        "enrollment": [
+          {
+            "name": "future-enrollment"
+          }
+        ],
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "future-payment"
+          }
+        ],
+        "trust": [
+          {
+            "name": "future-trust"
+          }
+        ]
+      },
+      "expected": {}
+    },
+    {
+      "name": "agent-isolates-unknown-service-capabilities",
+      "operation": "normalize-agent-response",
+      "kind": "service-document",
+      "document": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "en",
+        "localizations": [
+          "en"
+        ],
+        "operations": [
+          {
+            "authentication": "not-required",
+            "name": "list-offerings"
+          },
+          {
+            "authentication": "not-required",
+            "name": "future-operation"
+          },
+          {
+            "authentication": "not-required",
+            "name": "get-offering"
+          },
+          {
+            "authentication": "not-required",
+            "name": "search-offerings"
+          },
+          {
+            "authentication": "not-required",
+            "name": "search-collections",
+            "future": true
+          },
+          {
+            "authentication": "future-authentication",
+            "name": "list-collections"
+          }
+        ],
+        "mcp": [
+          {
+            "type": "streamable-http",
+            "url": "/mcp"
+          },
+          {
+            "type": "future-transport",
+            "url": "/future"
+          },
+          {
+            "type": "streamable-http",
+            "url": "/future-member",
+            "future": true
+          }
+        ],
+        "branding": {
+          "icon": {
+            "src": "/icon.png",
+            "type": "image/png"
+          },
+          "logo": {
+            "src": "/logo.png",
+            "type": "image/png",
+            "future": true
+          },
+          "future": {
+            "src": "/future.png"
+          }
+        },
+        "protocols": {
+          "payments": [
+            {
+              "authentication": "not-required",
+              "name": "mpp",
+              "options": [
+                "inflow",
+                "future-rail"
+              ]
+            },
+            {
+              "authentication": "future-authentication",
+              "name": "x402"
+            }
+          ]
+        },
+        "search_capabilities": {
+          "filters": {
+            "inline": [
+              {
+                "id": "color",
+                "title": "Color",
+                "description": "Color",
+                "type": "string",
+                "operators": [
+                  "eq"
+                ]
+              },
+              {
+                "id": "future",
+                "title": "Future",
+                "description": "Future",
+                "type": "future-type",
+                "operators": [
+                  "eq"
+                ]
+              }
+            ]
+          }
+        },
+        "http": {
+          "endpoint_base": "/odp/"
+        }
+      },
+      "expected": {
+        "odp_version": "1.0",
+        "name": "Example",
+        "description": "An example Service.",
+        "language": "en",
+        "localizations": [
+          "en"
+        ],
+        "operations": [
+          {
+            "authentication": "not-required",
+            "name": "list-offerings"
+          },
+          {
+            "authentication": "not-required",
+            "name": "get-offering"
+          },
+          {
+            "authentication": "not-required",
+            "name": "search-offerings"
+          }
+        ],
+        "mcp": [
+          {
+            "type": "streamable-http",
+            "url": "/mcp"
+          }
+        ],
+        "branding": {
+          "icon": {
+            "src": "/icon.png",
+            "type": "image/png"
+          },
+          "logo": {
+            "src": "/logo.png",
+            "type": "image/png"
+          }
+        },
+        "protocols": {
+          "payments": [
+            {
+              "authentication": "not-required",
+              "name": "mpp",
+              "options": [
+                "inflow"
+              ]
+            }
+          ]
+        },
+        "search_capabilities": {
+          "filters": {
+            "inline": [
+              {
+                "id": "color",
+                "title": "Color",
+                "description": "Color",
+                "type": "string",
+                "operators": [
+                  "eq"
+                ]
+              }
+            ]
+          }
+        },
+        "http": {
+          "endpoint_base": "/odp/"
+        }
+      }
+    },
+    {
+      "name": "agent-isolates-unknown-offering-capabilities",
+      "operation": "normalize-agent-response",
+      "kind": "offering",
+      "document": {
+        "odp_version": "1.0",
+        "id": "plant",
+        "name": "Plant",
+        "images": [
+          {
+            "src": "/plant.png",
+            "type": "image/png",
+            "future": true
+          },
+          {
+            "src": "/plant.future",
+            "type": "image/future"
+          }
+        ],
+        "price": {
+          "type": "future-price",
+          "estimate": "1"
+        },
+        "schema": {
+          "url": "/schema",
+          "future": true
+        },
+        "actions": [
+          {
+            "authentication": "future-authentication",
+            "http": {
+              "href": "/future-authentication",
+              "method": "POST"
+            },
+            "id": "future-authentication",
+            "rel": "invoke"
+          },
+          {
+            "authentication": "not-required",
+            "http": {
+              "href": "/buy",
+              "method": "POST"
+            },
+            "id": "buy",
+            "rel": "future-relation"
+          },
+          {
+            "authentication": "not-required",
+            "http": {
+              "href": "/future",
+              "method": "PATCH"
+            },
+            "id": "future",
+            "rel": "invoke"
+          },
+          {
+            "authentication": "not-required",
+            "http": {
+              "href": "/future-member",
+              "method": "POST",
+              "future": true
+            },
+            "id": "future-member",
+            "rel": "invoke"
+          }
+        ]
+      },
+      "expected": {
+        "odp_version": "1.0",
+        "id": "plant",
+        "name": "Plant",
+        "images": [
+          {
+            "src": "/plant.png",
+            "type": "image/png"
+          }
+        ],
+        "actions": [
+          {
+            "authentication": "not-required",
+            "http": {
+              "href": "/buy",
+              "method": "POST"
+            },
+            "id": "buy",
+            "rel": "future-relation"
+          }
+        ]
+      }
+    },
+    {
+      "name": "agent-isolates-unknown-filter-definition",
+      "operation": "normalize-agent-response",
+      "kind": "filter-page",
+      "document": {
+        "odp_version": "1.0",
+        "items": [
+          {
+            "id": "color",
+            "title": "Color",
+            "description": "Color",
+            "type": "string",
+            "operators": [
+              "eq"
+            ]
+          },
+          {
+            "id": "future",
+            "title": "Future",
+            "description": "Future",
+            "type": "future-type",
+            "operators": [
+              "eq"
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "odp_version": "1.0",
+        "items": [
+          {
+            "id": "color",
+            "title": "Color",
+            "description": "Color",
+            "type": "string",
+            "operators": [
+              "eq"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "agent-isolates-unknown-sort-definition",
+      "operation": "normalize-agent-response",
+      "kind": "sort-page",
+      "document": {
+        "odp_version": "1.0",
+        "items": [
+          {
+            "id": "name",
+            "title": "Name",
+            "description": "Name",
+            "keys": [
+              {
+                "filter_id": "name",
+                "direction": "ascending",
+                "missing": "last"
+              }
+            ]
+          },
+          {
+            "id": "future",
+            "title": "Future",
+            "description": "Future",
+            "keys": [
+              {
+                "filter_id": "name",
+                "direction": "future",
+                "missing": "last"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "odp_version": "1.0",
+        "items": [
+          {
+            "id": "name",
+            "title": "Name",
+            "description": "Name",
+            "keys": [
+              {
+                "filter_id": "name",
+                "direction": "ascending",
+                "missing": "last"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "agent-isolates-unknown-invalid-parameter-location",
+      "operation": "normalize-agent-response",
+      "kind": "problem",
+      "document": {
+        "type": "https://offeringprotocol.org/problems/invalid-request",
+        "title": "Invalid request",
+        "status": 400,
+        "code": "INVALID_REQUEST",
+        "invalid_params": [
+          {
+            "in": "query",
+            "name": "limit",
+            "reason": "invalid"
+          },
+          {
+            "in": "future-location",
+            "name": "future",
+            "reason": "invalid"
+          }
+        ]
+      },
+      "expected": {
+        "type": "https://offeringprotocol.org/problems/invalid-request",
+        "title": "Invalid request",
+        "status": 400,
+        "code": "INVALID_REQUEST",
+        "invalid_params": [
+          {
+            "in": "query",
+            "name": "limit",
+            "reason": "invalid"
+          }
+        ]
+      }
+    },
+    {
+      "name": "duplicate-payment-option",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "mpp",
+            "options": [
+              "solana",
+              "solana"
+            ]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "empty-payment-options",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "x402",
+            "options": []
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "payment-authentication-requires-enrollment",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "payments": [
+          {
+            "authentication": "required",
+            "name": "mpp"
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "successful-request-does-not-trigger-advertised-protocols",
+      "operation": "classify-live-response",
+      "advertised": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "mpp"
+          },
+          {
+            "authentication": "not-required",
+            "name": "x402"
+          }
+        ],
+        "enrollment": [
+          {
+            "name": "aep"
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "headers": {}
+      },
+      "expected": []
+    },
+    {
+      "name": "aep-live-challenge",
+      "operation": "classify-live-response",
+      "advertised": {
+        "enrollment": [
+          {
+            "name": "aep"
+          }
+        ]
+      },
+      "response": {
+        "status": 401,
+        "headers": {
+          "WWW-Authenticate": "AEP service_did=\"did:web:catalog.example\", inspect=\"https://catalog.example/.well-known/aep\""
+        }
+      },
+      "expected": [
+        "aep"
+      ]
+    },
+    {
+      "name": "mpp-live-challenge",
+      "operation": "classify-live-response",
+      "advertised": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "mpp"
+          }
+        ]
+      },
+      "response": {
+        "status": 402,
+        "headers": {
+          "WWW-Authenticate": "Payment realm=\"catalog.example\", id=\"challenge-1\", method=\"inflow\""
+        }
+      },
+      "expected": [
+        "mpp"
+      ]
+    },
+    {
+      "name": "x402-live-challenge",
+      "operation": "classify-live-response",
+      "advertised": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "x402"
+          }
+        ]
+      },
+      "response": {
+        "status": 402,
+        "headers": {
+          "PAYMENT-REQUIRED": "encoded-x402-requirements"
+        }
+      },
+      "expected": [
+        "x402"
+      ]
+    },
+    {
+      "name": "both-payment-challenges",
+      "operation": "classify-live-response",
+      "advertised": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "mpp"
+          },
+          {
+            "authentication": "not-required",
+            "name": "x402"
+          }
+        ]
+      },
+      "response": {
+        "status": 402,
+        "headers": {
+          "WWW-Authenticate": "Payment realm=\"catalog.example\", id=\"challenge-1\", method=\"inflow\"",
+          "PAYMENT-REQUIRED": "encoded-x402-requirements"
+        }
+      },
+      "expected": [
+        "mpp",
+        "x402"
+      ]
+    },
+    {
+      "name": "unadvertised-live-protocol-remains-authoritative",
+      "operation": "classify-live-response",
+      "advertised": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "mpp"
+          }
+        ]
+      },
+      "response": {
+        "status": 402,
+        "headers": {
+          "PAYMENT-REQUIRED": "encoded-x402-requirements"
+        }
+      },
+      "expected": [
+        "x402"
+      ]
+    },
+    {
+      "name": "public-operation-succeeds-without-challenge",
+      "operation": "validate-sequence",
+      "requires": [],
+      "responses": [
+        200
+      ],
+      "valid": true
+    },
+    {
+      "name": "payment-only-operation-challenges-directly",
+      "operation": "validate-sequence",
+      "requires": [
+        "mpp"
+      ],
+      "responses": [
+        402,
+        200
+      ],
+      "valid": true
+    },
+    {
+      "name": "aep-only-operation-authenticates-directly",
+      "operation": "validate-sequence",
+      "requires": [
+        "aep"
+      ],
+      "responses": [
+        401,
+        200
+      ],
+      "valid": true
+    },
+    {
+      "name": "aep-precedes-mpp",
+      "operation": "validate-sequence",
+      "requires": [
+        "aep",
+        "mpp"
+      ],
+      "responses": [
+        401,
+        402,
+        200
+      ],
+      "valid": true
+    },
+    {
+      "name": "aep-precedes-x402",
+      "operation": "validate-sequence",
+      "requires": [
+        "aep",
+        "x402"
+      ],
+      "responses": [
+        401,
+        402,
+        200
+      ],
+      "valid": true
+    },
+    {
+      "name": "payment-must-not-precede-required-aep",
+      "operation": "validate-sequence",
+      "requires": [
+        "aep",
+        "mpp"
+      ],
+      "responses": [
+        402,
+        401,
+        200
+      ],
+      "valid": false
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+{
+  "id": "detail-fields",
+  "title": "Exhaustive detail fields",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "representation",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "detail-fields",
+  "cases": [
+    {
+      "name": "exhaustive-omitted-subtrees",
+      "valid": true,
+      "terse": {
+        "id": "gpu-1",
+        "name": "GPU",
+        "attributes": {
+          "region": "us-west"
+        },
+        "detail_fields": [
+          "/actions",
+          "/attributes/cpu",
+          "/attributes/storage"
+        ]
+      },
+      "full": {
+        "odp_version": "1.0",
+        "id": "gpu-1",
+        "name": "GPU",
+        "attributes": {
+          "region": "us-west",
+          "cpu": {
+            "cores": 16
+          },
+          "storage": {
+            "capacity_gib": 500
+          }
+        },
+        "actions": []
+      }
+    },
+    {
+      "name": "detail-fields-may-be-omitted",
+      "valid": true,
+      "terse": {
+        "id": "gpu-1",
+        "name": "GPU"
+      },
+      "full": {
+        "odp_version": "1.0",
+        "id": "gpu-1",
+        "name": "GPU",
+        "attributes": {
+          "region": "us-west"
+        }
+      }
+    },
+    {
+      "name": "present-volatile-values-do-not-become-detail-fields",
+      "valid": true,
+      "terse": {
+        "id": "gpu-1",
+        "name": "GPU",
+        "attributes": {
+          "available_units": 3
+        },
+        "detail_fields": [
+          "/actions"
+        ]
+      },
+      "full": {
+        "odp_version": "1.0",
+        "id": "gpu-1",
+        "name": "GPU",
+        "attributes": {
+          "available_units": 2
+        },
+        "actions": []
+      }
+    },
+    {
+      "name": "escaped-json-pointer-tokens",
+      "valid": true,
+      "terse": {
+        "id": "gpu-1",
+        "name": "GPU",
+        "attributes": {
+          "included": true
+        },
+        "detail_fields": [
+          "/attributes/a~1b~0c"
+        ]
+      },
+      "full": {
+        "odp_version": "1.0",
+        "id": "gpu-1",
+        "name": "GPU",
+        "attributes": {
+          "included": true,
+          "a/b~c": 1
+        }
+      }
+    },
+    {
+      "name": "partial-list-is-invalid",
+      "valid": false,
+      "terse": {
+        "id": "gpu-1",
+        "name": "GPU",
+        "detail_fields": [
+          "/attributes"
+        ]
+      },
+      "full": {
+        "odp_version": "1.0",
+        "id": "gpu-1",
+        "name": "GPU",
+        "attributes": {
+          "region": "us-west"
+        },
+        "actions": []
+      }
+    },
+    {
+      "name": "present-field-is-not-a-detail-field",
+      "valid": false,
+      "terse": {
+        "id": "gpu-1",
+        "name": "GPU",
+        "detail_fields": [
+          "/name"
+        ]
+      },
+      "full": {
+        "odp_version": "1.0",
+        "id": "gpu-1",
+        "name": "GPU"
+      }
+    },
+    {
+      "name": "fragment-json-pointer-is-invalid",
+      "valid": false,
+      "terse": {
+        "id": "gpu-1",
+        "name": "GPU",
+        "attributes": {
+          "included": true
+        },
+        "detail_fields": [
+          "#/attributes/region"
+        ]
+      },
+      "full": {
+        "odp_version": "1.0",
+        "id": "gpu-1",
+        "name": "GPU",
+        "attributes": {
+          "included": true,
+          "region": "us-west"
+        }
+      }
+    },
+    {
+      "name": "empty-detail-fields-is-invalid",
+      "valid": false,
+      "terse": {
+        "id": "gpu-1",
+        "name": "GPU",
+        "detail_fields": []
+      },
+      "full": {
+        "odp_version": "1.0",
+        "id": "gpu-1",
+        "name": "GPU"
+      }
+    },
+    {
+      "name": "common-field-type-change-is-invalid",
+      "valid": false,
+      "terse": {
+        "id": "gpu-1",
+        "name": "GPU",
+        "attributes": {
+          "region": [
+            "us-west"
+          ]
+        }
+      },
+      "full": {
+        "odp_version": "1.0",
+        "id": "gpu-1",
+        "name": "GPU",
+        "attributes": {
+          "region": "us-west"
+        }
+      }
+    },
+    {
+      "name": "detail-fields-prohibited-in-full",
+      "valid": false,
+      "terse": {
+        "id": "gpu-1",
+        "name": "GPU"
+      },
+      "full": {
+        "odp_version": "1.0",
+        "id": "gpu-1",
+        "name": "GPU",
+        "detail_fields": [
+          "/attributes"
+        ]
+      }
+    }
+  ]
+}

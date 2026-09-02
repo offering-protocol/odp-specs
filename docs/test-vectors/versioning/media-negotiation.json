@@ -1,0 +1,72 @@
+{
+  "id": "media-negotiation",
+  "title": "ODP media type and HTTP negotiation",
+  "description": "The ODP media-type essence selects ODP while the document body declares the protocol version.",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "versioning",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "media-negotiation",
+  "cases": [
+    {
+      "name": "explicit-accept",
+      "accepts_odp": true,
+      "response": "serve-odp"
+    },
+    {
+      "name": "wildcard-accept",
+      "accepts_wildcard": true,
+      "response": "serve-odp"
+    },
+    {
+      "name": "missing-accept",
+      "accept_missing": true,
+      "response": "serve-odp"
+    },
+    {
+      "name": "odp-excluded",
+      "accepts_odp": false,
+      "accepts_wildcard": false,
+      "response": "406"
+    },
+    {
+      "name": "valid-request-content-type",
+      "request_content_type_essence": "application/odp+json",
+      "response": "process"
+    },
+    {
+      "name": "generic-json-request",
+      "request_content_type_essence": "application/json",
+      "response": "415"
+    },
+    {
+      "name": "missing-request-content-type",
+      "request_content_type_missing": true,
+      "response": "415"
+    },
+    {
+      "name": "valid-response-content-type",
+      "response_content_type_essence": "application/odp+json",
+      "agent": "process"
+    },
+    {
+      "name": "wrong-response-content-type",
+      "response_content_type_essence": "application/json",
+      "agent": "reject"
+    },
+    {
+      "name": "media-version-parameter-has-no-semantics",
+      "response_content_type_essence": "application/odp+json",
+      "parameters": {
+        "version": "2.0"
+      },
+      "body_odp_version": "1.0",
+      "effective_odp_version": "1.0",
+      "agent": "process"
+    }
+  ]
+}

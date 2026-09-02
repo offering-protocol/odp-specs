@@ -1,0 +1,66 @@
+{
+  "id": "resource-reference",
+  "title": "ODP resource references",
+  "description": "References use origin-relative absolute paths or explicit secure absolute URLs.",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "identity",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "resource-reference",
+  "cases": [
+    {
+      "name": "origin-relative-absolute-path",
+      "value": "/odp/offerings/123",
+      "valid": true
+    },
+    {
+      "name": "origin-relative-path-with-query",
+      "value": "/odp/offerings?cursor=abc",
+      "valid": true
+    },
+    {
+      "name": "cross-origin-https",
+      "value": "https://catalog.example.net/odp/offerings/123",
+      "valid": true
+    },
+    {
+      "name": "loopback-http",
+      "value": "http://127.0.0.1:8080/odp/offerings/123",
+      "valid": true
+    },
+    {
+      "name": "path-relative",
+      "value": "offerings/123",
+      "valid": false
+    },
+    {
+      "name": "parent-relative",
+      "value": "../offerings/123",
+      "valid": false
+    },
+    {
+      "name": "scheme-relative",
+      "value": "//catalog.example.net/offerings/123",
+      "valid": false
+    },
+    {
+      "name": "public-http",
+      "value": "http://catalog.example.net/offerings/123",
+      "valid": false
+    },
+    {
+      "name": "fragment",
+      "value": "/odp/offerings/123#details",
+      "valid": false
+    },
+    {
+      "name": "userinfo",
+      "value": "https://user@catalog.example.net/offerings/123",
+      "valid": false
+    }
+  ]
+}

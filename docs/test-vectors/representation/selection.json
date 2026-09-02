@@ -1,0 +1,92 @@
+{
+  "id": "representation-selection",
+  "title": "Terse and Full Representation selection",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "representation",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "representation-selection",
+  "cases": [
+    {
+      "name": "search-defaults-to-terse",
+      "operation": "search-offerings",
+      "expected": "terse"
+    },
+    {
+      "name": "collection-search-defaults-to-terse",
+      "operation": "search-collections",
+      "expected": "terse"
+    },
+    {
+      "name": "collection-list-defaults-to-terse",
+      "operation": "list-collections",
+      "expected": "terse"
+    },
+    {
+      "name": "collection-offerings-defaults-to-terse",
+      "operation": "list-collection-offerings",
+      "expected": "terse"
+    },
+    {
+      "name": "offering-list-defaults-to-terse",
+      "operation": "list-offerings",
+      "expected": "terse"
+    },
+    {
+      "name": "get-defaults-to-full",
+      "operation": "get-offering",
+      "expected": "full"
+    },
+    {
+      "name": "collection-get-defaults-to-full",
+      "operation": "get-collection",
+      "expected": "full"
+    },
+    {
+      "name": "list-full-override",
+      "operation": "list-collections",
+      "representation": [
+        "full"
+      ],
+      "expected": "full"
+    },
+    {
+      "name": "get-terse-override",
+      "operation": "get-collection",
+      "representation": [
+        "terse"
+      ],
+      "expected": "terse"
+    },
+    {
+      "name": "unknown-representation",
+      "operation": "get-offering",
+      "representation": [
+        "summary"
+      ],
+      "expected": "400"
+    },
+    {
+      "name": "repeated-representation",
+      "operation": "get-offering",
+      "representation": [
+        "terse",
+        "full"
+      ],
+      "expected": "400"
+    },
+    {
+      "name": "repeated-identical-representation",
+      "operation": "get-offering",
+      "representation": [
+        "full",
+        "full"
+      ],
+      "expected": "400"
+    }
+  ]
+}

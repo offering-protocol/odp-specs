@@ -1,0 +1,74 @@
+{
+  "id": "collection-membership",
+  "title": "Direct Offering membership",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "collections",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "collection-membership",
+  "cases": [
+    {
+      "name": "inverse-direct-membership-query",
+      "collections": [
+        "gpus",
+        "hourly-rentals"
+      ],
+      "offerings": [
+        {
+          "id": "a100",
+          "collection_ids": [
+            "gpus",
+            "hourly-rentals"
+          ]
+        },
+        {
+          "id": "cpu",
+          "collection_ids": [
+            "hourly-rentals"
+          ]
+        }
+      ],
+      "query_collection_id": "gpus",
+      "offering_ids": [
+        "a100"
+      ]
+    },
+    {
+      "name": "child-membership-is-not-inherited",
+      "collections": [
+        "compute",
+        "gpus"
+      ],
+      "offerings": [
+        {
+          "id": "a100",
+          "collection_ids": [
+            "gpus"
+          ]
+        }
+      ],
+      "query_collection_id": "compute",
+      "offering_ids": []
+    },
+    {
+      "name": "missing-collection",
+      "collections": [
+        "gpus"
+      ],
+      "offerings": [
+        {
+          "id": "a100",
+          "collection_ids": [
+            "missing"
+          ]
+        }
+      ],
+      "query_collection_id": "gpus",
+      "valid": false
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "id": "attribute-schema-retrieval",
+  "title": "Attribute Schema reference and processing",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "attribute-schemas",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "attribute-schema-retrieval",
+  "cases": [
+    {
+      "name": "url-only-reference",
+      "operation": "validate-reference",
+      "reference": {
+        "url": "/schemas/gpu-rental.json"
+      },
+      "valid": true
+    },
+    {
+      "name": "reference-rejects-duplicated-http-metadata",
+      "operation": "validate-reference",
+      "reference": {
+        "url": "/schemas/gpu-rental.json",
+        "media_type": "application/schema+json"
+      },
+      "valid": false
+    },
+    {
+      "name": "schema-response",
+      "operation": "validate-response",
+      "status": 200,
+      "content_type": "application/schema+json; charset=utf-8",
+      "document": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object"
+      },
+      "valid": true
+    },
+    {
+      "name": "wrong-response-media-type",
+      "operation": "validate-response",
+      "status": 200,
+      "content_type": "application/json",
+      "document": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object"
+      },
+      "valid": false
+    },
+    {
+      "name": "wrong-json-schema-dialect",
+      "operation": "validate-response",
+      "status": 200,
+      "content_type": "application/schema+json",
+      "document": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object"
+      },
+      "valid": false
+    },
+    {
+      "name": "external-ref-to-recursive-schema",
+      "operation": "validate-schema-reference-profile",
+      "documents": [
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://schemas.example/offering.json",
+          "$ref": "https://schemas.example/common.json"
+        },
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://schemas.example/common.json",
+          "$dynamicAnchor": "node",
+          "type": "object",
+          "properties": {
+            "children": {
+              "type": "array",
+              "items": {
+                "$dynamicRef": "#node"
+              }
+            }
+          }
+        }
+      ],
+      "valid": true
+    },
+    {
+      "name": "external-dynamic-ref-is-unsupported",
+      "operation": "validate-schema-reference-profile",
+      "documents": [
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$dynamicRef": "https://schemas.example/common.json#node"
+        }
+      ],
+      "valid": false
+    },
+    {
+      "name": "relative-cross-document-dynamic-ref-is-unsupported",
+      "operation": "validate-schema-reference-profile",
+      "documents": [
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$dynamicRef": "common.json#node"
+        }
+      ],
+      "valid": false
+    },
+    {
+      "name": "non-string-dynamic-ref-is-unsupported",
+      "operation": "validate-schema-reference-profile",
+      "documents": [
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$dynamicRef": null
+        }
+      ],
+      "valid": false
+    },
+    {
+      "name": "full-attributes-validate",
+      "operation": "validation-scope",
+      "representation": "full",
+      "complete_instance_validation": true
+    },
+    {
+      "name": "terse-attributes-are-partial",
+      "operation": "validation-scope",
+      "representation": "terse",
+      "complete_instance_validation": false
+    },
+    {
+      "name": "schema-failure-is-narrow",
+      "operation": "failure-scope",
+      "schema_status": "unavailable",
+      "expected": {
+        "offering_usable": true,
+        "attributes_usable": false,
+        "report_issue": true
+      }
+    }
+  ]
+}

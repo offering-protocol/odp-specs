@@ -1,0 +1,262 @@
+{
+  "id": "filter-sort-contract",
+  "title": "Filter types, operators, units, expressions, and sort recipes",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "filters-sorting",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "filter-sort-contract",
+  "cases": [
+    {
+      "name": "numeric-definition-with-ucum-unit",
+      "operation": "validate-definition",
+      "definition": {
+        "id": "processing_days",
+        "title": "Processing time",
+        "description": "Days before the item is ready to ship or collect.",
+        "type": "integer",
+        "operators": [
+          "gte",
+          "lte",
+          "exists"
+        ],
+        "unit": {
+          "system": "ucum",
+          "code": "d"
+        }
+      },
+      "valid": true
+    },
+    {
+      "name": "custom-commercial-unit",
+      "operation": "validate-definition",
+      "definition": {
+        "id": "rental_quantity",
+        "title": "Rental quantity",
+        "description": "Requested quantity measured in GPU hours.",
+        "type": "decimal",
+        "operators": [
+          "gte",
+          "lte"
+        ],
+        "unit": {
+          "system": "service",
+          "code": "gpu-hour",
+          "title": "GPU hour"
+        }
+      },
+      "valid": true
+    },
+    {
+      "name": "string-comparison-operator",
+      "operation": "validate-definition",
+      "definition": {
+        "id": "material",
+        "title": "Material",
+        "description": "Primary materials declared for the Offering.",
+        "type": "string",
+        "operators": [
+          "gte"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "unit-on-boolean",
+      "operation": "validate-definition",
+      "definition": {
+        "id": "available",
+        "title": "Available",
+        "description": "Whether the Offering is available.",
+        "type": "boolean",
+        "operators": [
+          "eq"
+        ],
+        "unit": {
+          "system": "ucum",
+          "code": "1"
+        }
+      },
+      "valid": false
+    },
+    {
+      "name": "refinable-equality-filter",
+      "operation": "validate-definition",
+      "definition": {
+        "id": "material",
+        "title": "Material",
+        "description": "Primary materials declared for the Offering.",
+        "type": "string",
+        "operators": [
+          "eq",
+          "in"
+        ],
+        "refinable": true
+      },
+      "valid": true
+    },
+    {
+      "name": "refinable-filter-without-equality-operator",
+      "operation": "validate-definition",
+      "definition": {
+        "id": "processing_days",
+        "title": "Processing time",
+        "description": "Days before the item is ready.",
+        "type": "integer",
+        "operators": [
+          "lte"
+        ],
+        "refinable": true
+      },
+      "valid": false
+    },
+    {
+      "name": "in-expression",
+      "operation": "validate-expression",
+      "definition": {
+        "id": "material",
+        "title": "Material",
+        "description": "Primary materials declared for the Offering.",
+        "type": "string",
+        "operators": [
+          "eq",
+          "in"
+        ]
+      },
+      "expression": {
+        "id": "material",
+        "operator": "in",
+        "value": [
+          "walnut",
+          "oak"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "name": "in-intersects-multi-valued-filter",
+      "operation": "evaluate-expression",
+      "definition": {
+        "id": "material",
+        "title": "Material",
+        "description": "Primary materials declared for the Offering.",
+        "type": "string",
+        "operators": [
+          "eq",
+          "in"
+        ]
+      },
+      "expression": {
+        "id": "material",
+        "operator": "in",
+        "value": [
+          "walnut",
+          "oak"
+        ]
+      },
+      "values": [
+        "steel",
+        "walnut"
+      ],
+      "valid": true
+    },
+    {
+      "name": "exists-false-matches-empty-set",
+      "operation": "evaluate-expression",
+      "definition": {
+        "id": "material",
+        "title": "Material",
+        "description": "Primary materials declared for the Offering.",
+        "type": "string",
+        "operators": [
+          "exists"
+        ]
+      },
+      "expression": {
+        "id": "material",
+        "operator": "exists",
+        "value": false
+      },
+      "values": [],
+      "valid": true
+    },
+    {
+      "name": "decimal-equality-is-numeric",
+      "operation": "evaluate-expression",
+      "definition": {
+        "id": "price",
+        "title": "Price",
+        "description": "Comparable advertised price.",
+        "type": "decimal",
+        "operators": [
+          "eq"
+        ]
+      },
+      "expression": {
+        "id": "price",
+        "operator": "eq",
+        "value": "1.00"
+      },
+      "values": [
+        "1.0"
+      ],
+      "valid": true
+    },
+    {
+      "name": "indexed-composite-sort",
+      "operation": "validate-sort",
+      "definitions": [
+        {
+          "id": "processing_days"
+        },
+        {
+          "id": "price"
+        }
+      ],
+      "sort": {
+        "id": "fastest-then-price",
+        "title": "Fastest processing, then lowest price",
+        "description": "Orders available Offerings by processing time and then advertised price.",
+        "keys": [
+          {
+            "filter_id": "processing_days",
+            "direction": "ascending",
+            "missing": "last"
+          },
+          {
+            "filter_id": "price",
+            "direction": "ascending",
+            "missing": "last"
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "name": "sort-references-unknown-filter",
+      "operation": "validate-sort",
+      "definitions": [
+        {
+          "id": "processing_days"
+        }
+      ],
+      "sort": {
+        "id": "lowest-price",
+        "title": "Lowest price",
+        "description": "Orders available Offerings by advertised price.",
+        "keys": [
+          {
+            "filter_id": "price",
+            "direction": "ascending",
+            "missing": "last"
+          }
+        ]
+      },
+      "valid": false
+    }
+  ]
+}
