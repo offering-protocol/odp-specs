@@ -1,0 +1,223 @@
+{
+  "id": "security-contract",
+  "title": "Destination, credential, Action, payment, and cache protections",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "security",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "security-contract",
+  "cases": [
+    {
+      "name": "explicit-cross-origin-public-https",
+      "operation": "validate-destination",
+      "url": "https://schemas.example/schema.json",
+      "resolved_addresses": [
+        "93.184.216.34"
+      ],
+      "connected_address": "93.184.216.34",
+      "local_development": false,
+      "valid": true
+    },
+    {
+      "name": "private-ipv4-is-rejected",
+      "operation": "validate-destination",
+      "url": "https://internal.example/schema.json",
+      "resolved_addresses": [
+        "10.10.0.5"
+      ],
+      "connected_address": "10.10.0.5",
+      "local_development": false,
+      "valid": false
+    },
+    {
+      "name": "link-local-ipv4-is-rejected",
+      "operation": "validate-destination",
+      "url": "https://metadata.example/latest",
+      "resolved_addresses": [
+        "169.254.169.254"
+      ],
+      "connected_address": "169.254.169.254",
+      "local_development": false,
+      "valid": false
+    },
+    {
+      "name": "unique-local-ipv6-is-rejected",
+      "operation": "validate-destination",
+      "url": "https://internal.example/schema.json",
+      "resolved_addresses": [
+        "fd00::1"
+      ],
+      "connected_address": "fd00::1",
+      "local_development": false,
+      "valid": false
+    },
+    {
+      "name": "mixed-public-private-resolution-is-rejected",
+      "operation": "validate-destination",
+      "url": "https://mixed.example/schema.json",
+      "resolved_addresses": [
+        "93.184.216.34",
+        "127.0.0.1"
+      ],
+      "connected_address": "93.184.216.34",
+      "local_development": false,
+      "valid": false
+    },
+    {
+      "name": "dns-rebinding-peer-is-rejected",
+      "operation": "validate-destination",
+      "url": "https://schemas.example/schema.json",
+      "resolved_addresses": [
+        "93.184.216.34"
+      ],
+      "connected_address": "10.0.0.7",
+      "local_development": false,
+      "valid": false
+    },
+    {
+      "name": "localhost-requires-development-mode",
+      "operation": "validate-destination",
+      "url": "http://localhost:8080/schema.json",
+      "resolved_addresses": [
+        "127.0.0.1"
+      ],
+      "connected_address": "127.0.0.1",
+      "local_development": false,
+      "valid": false
+    },
+    {
+      "name": "literal-localhost-development-exception",
+      "operation": "validate-destination",
+      "url": "http://localhost:8080/schema.json",
+      "resolved_addresses": [
+        "127.0.0.1"
+      ],
+      "connected_address": "127.0.0.1",
+      "local_development": true,
+      "valid": true
+    },
+    {
+      "name": "localhost-alias-does-not-qualify",
+      "operation": "validate-destination",
+      "url": "http://dev.example:8080/schema.json",
+      "resolved_addresses": [
+        "127.0.0.1"
+      ],
+      "connected_address": "127.0.0.1",
+      "local_development": true,
+      "valid": false
+    },
+    {
+      "name": "same-origin-redirect",
+      "operation": "validate-redirect",
+      "from": "https://schemas.example/schema.json",
+      "to": "https://schemas.example/v2/schema.json",
+      "valid": true
+    },
+    {
+      "name": "cross-origin-redirect-is-rejected",
+      "operation": "validate-redirect",
+      "from": "https://schemas.example/schema.json",
+      "to": "https://cdn.example/schema.json",
+      "valid": false
+    },
+    {
+      "name": "supporting-document-retrieval-is-anonymous",
+      "operation": "forwarded-sensitive-fields",
+      "request_kind": "supporting-document",
+      "same_origin": true,
+      "input_fields": [
+        "Accept",
+        "Authorization",
+        "AEP-Authorization",
+        "Cookie",
+        "PAYMENT-SIGNATURE"
+      ],
+      "expected": []
+    },
+    {
+      "name": "cross-origin-action-does-not-copy-service-credentials",
+      "operation": "forwarded-sensitive-fields",
+      "request_kind": "action",
+      "same_origin": false,
+      "input_fields": [
+        "Authorization",
+        "AEP-Authorization",
+        "Cookie",
+        "PAYMENT-SIGNATURE"
+      ],
+      "expected": []
+    },
+    {
+      "name": "same-origin-action-can-use-scoped-credentials",
+      "operation": "forwarded-sensitive-fields",
+      "request_kind": "action",
+      "same_origin": true,
+      "input_fields": [
+        "Authorization",
+        "AEP-Authorization"
+      ],
+      "expected": [
+        "Authorization",
+        "AEP-Authorization"
+      ]
+    },
+    {
+      "name": "advertised-action-is-not-automatically-invoked",
+      "operation": "action-invocable",
+      "explicitly_selected": false,
+      "relation_known": true,
+      "valid": false
+    },
+    {
+      "name": "unknown-action-needs-explicit-selection",
+      "operation": "action-invocable",
+      "explicitly_selected": true,
+      "relation_known": false,
+      "valid": true
+    },
+    {
+      "name": "price-preview-does-not-authorize-payment",
+      "operation": "payment-authorized",
+      "live_challenge": false,
+      "caller_policy_approved": true,
+      "valid": false
+    },
+    {
+      "name": "live-challenge-still-needs-caller-policy",
+      "operation": "payment-authorized",
+      "live_challenge": true,
+      "caller_policy_approved": false,
+      "valid": false
+    },
+    {
+      "name": "live-challenge-and-policy-authorize-payment",
+      "operation": "payment-authorized",
+      "live_challenge": true,
+      "caller_policy_approved": true,
+      "valid": true
+    },
+    {
+      "name": "private-response-is-not-publicly-reusable",
+      "operation": "cache-reusable",
+      "same_url": true,
+      "same_method": true,
+      "same_representation_inputs": true,
+      "same_authentication_context": false,
+      "valid": false
+    },
+    {
+      "name": "fully-scoped-cache-entry-is-reusable",
+      "operation": "cache-reusable",
+      "same_url": true,
+      "same_method": true,
+      "same_representation_inputs": true,
+      "same_authentication_context": true,
+      "valid": true
+    }
+  ]
+}

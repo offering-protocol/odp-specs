@@ -1,7 +1,6 @@
 RUBY ?= ruby
 OUTPUT ?= /tmp/odp-marketplace-scale
 ARTIFACTS := ../artifacts
-INDEX_ARTIFACT := ../docs/index.html
 KRAMDOWN_RFC := bundle exec kramdown-rfc
 XML2RFC := .venv/bin/xml2rfc
 XML2RFC_CACHE := .cache/xml2rfc
@@ -15,9 +14,9 @@ MARKDOWN_FILES := $(shell find .. -type f -name '*.md' \
 	-not -path '../ietf/.venv/*' | sort)
 DRAFTS := $(shell find specs -type f -name 'draft-*.md' | sort)
 
-.PHONY: check check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-drafts check-error-limits check-external-section-refs check-filters-sorting check-formatter check-format check-harness check-index check-interoperability check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning clean format generate-marketplace-scale idnits interoperability prepare-references render render-drafts render-examples render-index render-problems render-schemas render-support
+.PHONY: check check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-drafts check-error-limits check-external-section-refs check-filters-sorting check-formatter check-format check-harness check-interoperability check-json check-examples check-identity check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning clean format generate-marketplace-scale idnits interoperability prepare-references render render-drafts render-examples render-problems render-schemas render-support render-test-vectors
 
-check: check-drafts check-external-section-refs check-formatter check-format check-json check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-error-limits check-examples check-filters-sorting check-harness check-identity check-index check-interoperability check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning
+check: check-drafts check-external-section-refs check-formatter check-format check-json check-actions check-attribute-schemas check-collection-search check-collections check-composition check-conformance check-error-limits check-examples check-filters-sorting check-harness check-identity check-interoperability check-marketplace-scale check-offering-search check-offerings check-pagination check-published-support check-refinements check-representations check-search-capabilities check-security check-service-document check-versioning
 
 check-actions:
 	$(RUBY) scripts/check_action_vectors.rb
@@ -67,9 +66,6 @@ check-filters-sorting:
 check-identity:
 	$(RUBY) scripts/check_identity_vectors.rb
 
-check-index:
-	$(RUBY) scripts/render_index.rb --check $(DRAFTS) "$(INDEX_ARTIFACT)"
-
 check-interoperability:
 	$(RUBY) -c scripts/run_interoperability_matrix.rb
 
@@ -112,7 +108,7 @@ generate-marketplace-scale:
 format:
 	$(RUBY) scripts/format_markdown.rb $(MARKDOWN_FILES)
 
-render: render-drafts render-support render-index
+render: render-drafts render-support
 
 prepare-references:
 	$(RUBY) scripts/prepare_references.rb $(DRAFTS)
@@ -130,9 +126,6 @@ render-drafts: prepare-references
 render-examples:
 	$(RUBY) scripts/publish_support_artifacts.rb examples
 
-render-index:
-	$(RUBY) scripts/render_index.rb $(DRAFTS) "$(INDEX_ARTIFACT)"
-
 render-problems:
 	$(RUBY) scripts/publish_support_artifacts.rb problems
 
@@ -142,6 +135,9 @@ render-schemas:
 
 render-support:
 	$(RUBY) scripts/publish_support_artifacts.rb
+
+render-test-vectors:
+	$(RUBY) scripts/publish_support_artifacts.rb test-vectors
 
 idnits: render-drafts
 	@command -v "$(IDNITS)" >/dev/null || { echo "idnits is required"; exit 1; }

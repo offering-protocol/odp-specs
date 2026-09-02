@@ -1,0 +1,274 @@
+{
+  "id": "refinement-contract",
+  "title": "Opt-in refinement references, contextual counts, and response bounds",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "refinements",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "refinement-contract",
+  "cases": [
+    {
+      "name": "advertised-refinable-filter",
+      "operation": "validate-request",
+      "definitions": [
+        {
+          "id": "material",
+          "type": "string",
+          "operators": [
+            "eq",
+            "in"
+          ],
+          "refinable": true
+        }
+      ],
+      "request": {
+        "refinements": [
+          "material"
+        ]
+      },
+      "valid": true
+    },
+    {
+      "name": "filter-is-not-refinable",
+      "operation": "validate-request",
+      "definitions": [
+        {
+          "id": "material",
+          "type": "string",
+          "operators": [
+            "eq"
+          ]
+        }
+      ],
+      "request": {
+        "refinements": [
+          "material"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "unknown-refinement-filter",
+      "operation": "validate-request",
+      "definitions": [],
+      "request": {
+        "refinements": [
+          "unknown"
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "valid-exact-and-lower-bound-counts",
+      "operation": "validate-response",
+      "definitions": [
+        {
+          "id": "material",
+          "type": "string",
+          "operators": [
+            "eq"
+          ],
+          "refinable": true
+        }
+      ],
+      "request": {
+        "refinements": [
+          "material"
+        ]
+      },
+      "response": {
+        "refinements": [
+          {
+            "filter_id": "material",
+            "values": [
+              {
+                "value": "wood",
+                "count": 18420
+              },
+              {
+                "value": "metal",
+                "count": 12681,
+                "count_relation": "lower_bound"
+              }
+            ]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "name": "response-cannot-add-unrequested-group",
+      "operation": "validate-response",
+      "definitions": [
+        {
+          "id": "material",
+          "type": "string",
+          "operators": [
+            "eq"
+          ],
+          "refinable": true
+        },
+        {
+          "id": "category",
+          "type": "string",
+          "operators": [
+            "eq"
+          ],
+          "refinable": true
+        }
+      ],
+      "request": {
+        "refinements": [
+          "material"
+        ]
+      },
+      "response": {
+        "refinements": [
+          {
+            "filter_id": "category",
+            "values": [
+              {
+                "value": "desk",
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "bucket-value-must-match-filter-type",
+      "operation": "validate-response",
+      "definitions": [
+        {
+          "id": "made_to_order",
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "refinable": true
+        }
+      ],
+      "request": {
+        "refinements": [
+          "made_to_order"
+        ]
+      },
+      "response": {
+        "refinements": [
+          {
+            "filter_id": "made_to_order",
+            "values": [
+              {
+                "value": "yes",
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "continuation-omits-refinements",
+      "operation": "validate-response",
+      "definitions": [
+        {
+          "id": "material",
+          "type": "string",
+          "operators": [
+            "eq"
+          ],
+          "refinable": true
+        }
+      ],
+      "request": {
+        "refinements": [
+          "material"
+        ]
+      },
+      "continuation": true,
+      "response": {
+        "refinements": [
+          {
+            "filter_id": "material",
+            "values": [
+              {
+                "value": "wood",
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
+      "name": "same-filter-expressions-are-removed-before-counting",
+      "operation": "compute-counts",
+      "filter_id": "material",
+      "request": {
+        "filters": [
+          {
+            "id": "material",
+            "operator": "eq",
+            "value": "wood"
+          },
+          {
+            "id": "made_to_order",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "values": [
+        "wood",
+        "metal"
+      ],
+      "service_matches": [
+        {
+          "id": "desk-1",
+          "mapped_values": {
+            "material": [
+              "wood"
+            ],
+            "made_to_order": [
+              true
+            ]
+          }
+        },
+        {
+          "id": "desk-2",
+          "mapped_values": {
+            "material": [
+              "metal"
+            ],
+            "made_to_order": [
+              true
+            ]
+          }
+        },
+        {
+          "id": "desk-3",
+          "mapped_values": {
+            "material": [
+              "metal"
+            ],
+            "made_to_order": [
+              false
+            ]
+          }
+        }
+      ],
+      "expected": {
+        "wood": 1,
+        "metal": 1
+      }
+    }
+  ]
+}

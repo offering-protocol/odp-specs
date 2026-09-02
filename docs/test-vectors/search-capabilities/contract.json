@@ -1,0 +1,295 @@
+{
+  "id": "search-capability-contract",
+  "title": "Inline and linked search capabilities, effective scope, and conflicts",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "search-capabilities",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "search-capability-contract",
+  "cases": [
+    {
+      "name": "small-service-inline-capabilities",
+      "operation": "validate-advertisement",
+      "service_origin": "https://small.example",
+      "operations": [
+        "search-offerings"
+      ],
+      "advertisement": {
+        "filters": {
+          "inline": [
+            {
+              "id": "region"
+            }
+          ]
+        },
+        "sorts": {
+          "inline": [
+            {
+              "id": "price-low-to-high"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "name": "marketplace-independent-linked-and-inline-sources",
+      "operation": "validate-advertisement",
+      "service_origin": "https://market.example",
+      "operations": [
+        "search-offerings"
+      ],
+      "advertisement": {
+        "filters": {
+          "linked": {
+            "href": "/odp/collections/home-office/filters"
+          }
+        },
+        "sorts": {
+          "inline": [
+            {
+              "id": "processing-fastest"
+            }
+          ]
+        }
+      },
+      "valid": true
+    },
+    {
+      "name": "inline-and-linked-conflict",
+      "operation": "validate-advertisement",
+      "service_origin": "https://market.example",
+      "operations": [
+        "search-offerings"
+      ],
+      "advertisement": {
+        "filters": {
+          "inline": [
+            {
+              "id": "material"
+            }
+          ],
+          "linked": {
+            "href": "/odp/filters"
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "name": "capabilities-without-search-operation",
+      "operation": "validate-advertisement",
+      "service_origin": "https://market.example",
+      "operations": [
+        "list-offerings"
+      ],
+      "advertisement": {
+        "filters": {
+          "inline": [
+            {
+              "id": "material"
+            }
+          ]
+        }
+      },
+      "valid": false
+    },
+    {
+      "name": "cross-origin-linked-source",
+      "operation": "validate-advertisement",
+      "service_origin": "https://market.example",
+      "operations": [
+        "search-offerings"
+      ],
+      "advertisement": {
+        "filters": {
+          "linked": {
+            "href": "https://other.example/filters"
+          }
+        }
+      },
+      "valid": false
+    },
+    {
+      "name": "atomic-page-sequence",
+      "operation": "validate-linked-source",
+      "service_origin": "https://market.example",
+      "href": "/odp/filters",
+      "method": "GET",
+      "pages": [
+        {
+          "odp_version": "1.0",
+          "items": [
+            {
+              "id": "material"
+            }
+          ],
+          "next": "/odp/filter-pages/2"
+        },
+        {
+          "odp_version": "1.0",
+          "items": [
+            {
+              "id": "processing_days"
+            }
+          ]
+        }
+      ],
+      "valid": true
+    },
+    {
+      "name": "later-page-duplicate-invalidates-source",
+      "operation": "validate-linked-source",
+      "service_origin": "https://market.example",
+      "href": "/odp/filters",
+      "method": "GET",
+      "pages": [
+        {
+          "odp_version": "1.0",
+          "items": [
+            {
+              "id": "material"
+            }
+          ],
+          "next": "/odp/filter-pages/2"
+        },
+        {
+          "odp_version": "1.0",
+          "items": [
+            {
+              "id": "material"
+            }
+          ]
+        }
+      ],
+      "valid": false
+    },
+    {
+      "name": "linked-source-page-limit-boundary",
+      "operation": "validate-linked-page-count",
+      "page_count": 16,
+      "valid": true
+    },
+    {
+      "name": "linked-source-page-limit-exceeded",
+      "operation": "validate-linked-page-count",
+      "page_count": 17,
+      "valid": false
+    },
+    {
+      "name": "selected-collection-only-inheritance",
+      "operation": "merge-capabilities",
+      "collection_id": "home-office",
+      "service": {
+        "filters": [
+          {
+            "id": "price"
+          }
+        ],
+        "sorts": []
+      },
+      "selected_collection": {
+        "filters": [
+          {
+            "id": "material"
+          }
+        ],
+        "sorts": []
+      },
+      "descendant_collection": {
+        "filters": [
+          {
+            "id": "desk_height"
+          }
+        ],
+        "sorts": []
+      },
+      "expected": {
+        "filter_ids": [
+          "price",
+          "material"
+        ],
+        "sort_ids": [],
+        "issues": []
+      }
+    },
+    {
+      "name": "cross-scope-filter-conflict-and-dependent-sort-are-quarantined",
+      "operation": "merge-capabilities",
+      "collection_id": "home-office",
+      "service": {
+        "filters": [
+          {
+            "id": "price"
+          },
+          {
+            "id": "available"
+          }
+        ],
+        "sorts": [
+          {
+            "id": "price-low-to-high",
+            "keys": [
+              {
+                "filter_id": "price"
+              }
+            ]
+          }
+        ]
+      },
+      "selected_collection": {
+        "filters": [
+          {
+            "id": "price"
+          },
+          {
+            "id": "material"
+          }
+        ],
+        "sorts": []
+      },
+      "expected": {
+        "filter_ids": [
+          "available",
+          "material"
+        ],
+        "sort_ids": [],
+        "issues": [
+          "filters-conflict:price",
+          "sort-reference:price-low-to-high"
+        ]
+      }
+    },
+    {
+      "name": "unscoped-search-uses-service-capabilities-only",
+      "operation": "merge-capabilities",
+      "service": {
+        "filters": [
+          {
+            "id": "price"
+          }
+        ],
+        "sorts": []
+      },
+      "selected_collection": {
+        "filters": [
+          {
+            "id": "material"
+          }
+        ],
+        "sorts": []
+      },
+      "expected": {
+        "filter_ids": [
+          "price"
+        ],
+        "sort_ids": [],
+        "issues": []
+      }
+    }
+  ]
+}

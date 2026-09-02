@@ -1,0 +1,46 @@
+{
+  "id": "top-level-version",
+  "title": "Top-level version placement",
+  "description": "Each top-level document carries one version and nested result items inherit it.",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "versioning",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "version-placement",
+  "cases": [
+    {
+      "name": "full-offering",
+      "top_level": true,
+      "odp_version_present": true,
+      "valid": true
+    },
+    {
+      "name": "search-response",
+      "top_level": true,
+      "odp_version_present": true,
+      "valid": true
+    },
+    {
+      "name": "terse-search-item-inherits",
+      "top_level": false,
+      "odp_version_present": false,
+      "valid": true
+    },
+    {
+      "name": "missing-top-level-version",
+      "top_level": true,
+      "odp_version_present": false,
+      "valid": false
+    },
+    {
+      "name": "nested-version-repetition",
+      "top_level": false,
+      "odp_version_present": true,
+      "valid": false
+    }
+  ]
+}

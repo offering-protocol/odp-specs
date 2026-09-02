@@ -1,0 +1,86 @@
+{
+  "id": "collection-hierarchy",
+  "title": "Collection directed acyclic hierarchy",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "collections",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "collection-hierarchy",
+  "cases": [
+    {
+      "name": "multiple-roots-and-parents",
+      "valid": true,
+      "collections": [
+        {
+          "id": "compute"
+        },
+        {
+          "id": "machine-learning"
+        },
+        {
+          "id": "gpus",
+          "parent_ids": [
+            "compute",
+            "machine-learning"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "self-parent",
+      "valid": false,
+      "collections": [
+        {
+          "id": "compute",
+          "parent_ids": [
+            "compute"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "missing-parent",
+      "valid": false,
+      "collections": [
+        {
+          "id": "gpus",
+          "parent_ids": [
+            "compute"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cycle",
+      "valid": false,
+      "collections": [
+        {
+          "id": "compute",
+          "parent_ids": [
+            "gpus"
+          ]
+        },
+        {
+          "id": "gpus",
+          "parent_ids": [
+            "compute"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "maximum-depth",
+      "chain_length": 32,
+      "valid": true
+    },
+    {
+      "name": "excessive-depth",
+      "chain_length": 33,
+      "valid": false
+    }
+  ]
+}

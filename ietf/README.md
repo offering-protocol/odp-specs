@@ -20,9 +20,10 @@ check` to validate formatting, JSON, and example invariants. Rendering and publi
 `artifacts/` for generated drafts and `docs/` for the published website. Generated outputs must be
 reproducible from this source tree.
 
-Run `make -C ietf render-support` to publish schemas, descriptive examples, and Problem Type pages
-into `docs/`. The full check rejects missing, unexpected, or stale published support artifacts and
-rejects disagreement between Problem Details vectors and the normative problem-code table.
+Run `make -C ietf render-support` to publish schemas, descriptive examples, Problem Type pages, and
+test vectors into `docs/`. The full check rejects missing, unexpected, or stale published support
+artifacts and rejects disagreement between Problem Details vectors and the normative problem-code
+table.
 
 Install the pinned Internet-Draft toolchain:
 

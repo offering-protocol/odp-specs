@@ -11,53 +11,50 @@ require "rdoc/markup/to_html"
 
 check_only = ARGV.delete("--check")
 section = ARGV.shift || "all"
-abort "usage: publish_support_artifacts.rb [--check] [all|conformance|schemas|examples|problems]" unless
-  %w[all conformance schemas examples problems].include?(section) && ARGV.empty?
+abort "usage: publish_support_artifacts.rb [--check] [all|conformance|examples|problems|schemas|test-vectors]" unless
+  %w[all conformance examples problems schemas test-vectors].include?(section) && ARGV.empty?
 
 IETF_ROOT = Pathname.new(__dir__).join("..").expand_path
 DOCS_ROOT = IETF_ROOT.join("..", "docs").expand_path
 ORIGIN = "https://offeringprotocol.org"
+SUPPORT_TEMPLATE = IETF_ROOT.join("templates", "offering-support.html")
 
 def h(value)
   CGI.escapeHTML(value.to_s)
 end
 
 def page(title, introduction, body)
-  <<~HTML
-    <!doctype html>
-    <html lang="en">
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>#{h(title)} - Offering Discovery Protocol</title>
-        <style>
-          :root { color-scheme: light dark; --bg: #f8fafc; --fg: #172033; --muted: #5b6475; --panel: #fff; --border: #d7dce5; --link: #0b5cad; --code: #f1f5f9; }
-          @media (prefers-color-scheme: dark) { :root { --bg: #10141c; --fg: #eef2f8; --muted: #aeb7c8; --panel: #171d28; --border: #2d3545; --link: #8ab8ff; --code: #202735; } }
-          body { margin: 0; background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
-          main { width: min(960px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 64px; }
-          h1 { margin: 0 0 8px; font-size: clamp(2rem, 6vw, 3.2rem); line-height: 1.05; }
-          h2 { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
-          p { max-width: 780px; }
-          .intro, .back { color: var(--muted); }
-          .back { display: inline-block; margin-bottom: 24px; text-decoration: none; }
-          a { color: var(--link); }
-          table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); }
-          th, td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
-          tbody tr:last-child td { border-bottom: none; }
-          th { color: var(--muted); font-size: 0.9rem; }
-          code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-          pre { padding: 14px; overflow-x: auto; background: var(--code); border: 1px solid var(--border); }
-        </style>
-      </head>
-      <body>
-        <main id="top">
-          <h1>#{h(title)}</h1>
-          <p class="intro">#{h(introduction)}</p>
-          #{body}
-        </main>
-      </body>
-    </html>
-  HTML
+  abort "#{SUPPORT_TEMPLATE}: generated support template is required" unless SUPPORT_TEMPLATE.file?
+
+  replacements = {
+    "__ODP_PAGE_CONTENT__" => body,
+    "__ODP_PAGE_DESCRIPTION__" => h(introduction),
+    "__ODP_PAGE_HEADING__" => h(title),
+    "__ODP_PAGE_TITLE__" => h("#{title} | Offering Protocol")
+  }
+  rendered = SUPPORT_TEMPLATE.read
+  replacements.each do |marker, replacement|
+    abort "#{SUPPORT_TEMPLATE}: missing #{marker}" unless rendered.include?(marker)
+
+    rendered = rendered.gsub(marker, replacement)
+  end
+  rendered
+end
+
+def page_paths(artifacts, section)
+  artifacts.to_h do |relative, content|
+    next [relative, content] unless relative.end_with?(".html")
+
+    directory = Pathname.new(relative).dirname.to_s
+    suffix = directory == "." ? "" : "#{directory}/"
+    path = "/#{section}/#{suffix}"
+    abort "#{SUPPORT_TEMPLATE}: missing __ODP_PAGE_PATH__" unless content.include?("__ODP_PAGE_PATH__")
+
+    rendered = content.gsub("__ODP_PAGE_PATH__", path)
+    abort "#{relative}: unreplaced ODP page marker" if rendered.match?(/__ODP_PAGE_[A-Z]+__/)
+
+    [relative, rendered]
+  end
 end
 
 def table(headers, rows)
@@ -146,6 +143,34 @@ def example_artifacts
     "Descriptive, non-normative scenarios and their directly downloadable JSON artifacts.",
     table(%w[Example Contents], rows)
   )
+  artifacts
+end
+
+def file_tree_artifacts(source, title, introduction, render_readme: true)
+  artifacts = {}
+  directories = [source] + source.glob("**/*").select(&:directory?).sort
+
+  source.glob("**/*").select(&:file?).sort.each do |path|
+    relative = path.relative_path_from(source).to_s
+    artifacts[relative] = path.read unless path.basename.to_s == "README.md"
+  end
+
+  directories.each do |directory|
+    relative = directory.relative_path_from(source)
+    readme = directory.join("README.md")
+    contents = render_readme && readme.file? ? markdown_html(readme.read.sub(/\A# .+\n/, "")) : ""
+    entries = directory.children.reject { |path| path.basename.to_s == "README.md" }.sort.map do |path|
+      name = path.basename.to_s
+      href = path.directory? ? "#{name}/" : name
+      ["<a href=\"#{h(href)}\"><code>#{h(name)}</code></a>", path.directory? ? "Directory" : "Artifact"]
+    end
+    contents += table(%w[Name Type], entries) unless entries.empty?
+
+    page_title = directory == source ? title : directory.basename.to_s.tr("-", " ").split.map(&:capitalize).join(" ")
+    index = relative.to_s == "." ? "index.html" : relative.join("index.html").to_s
+    artifacts[index] = page(page_title, directory == source ? introduction : "Browsable artifacts from #{title}.", contents)
+  end
+
   artifacts
 end
 
@@ -263,6 +288,8 @@ def link_errors(expected, section)
 
       path = href.split(/[?#]/, 2).first
       target = Pathname.new(relative).dirname.join(path).cleanpath
+      next if target.to_s == ".." || target.to_s.start_with?("../")
+
       target = target.join("index.html") if path.end_with?("/")
       "docs/#{section}/#{relative}: unresolved link #{href}" unless expected.key?(target.to_s)
     end
@@ -287,11 +314,19 @@ sections = {
     )
   },
   "examples" => -> { example_artifacts },
-  "problems" => -> { problem_artifacts }
+  "problems" => -> { problem_artifacts },
+  "test-vectors" => lambda {
+    file_tree_artifacts(
+      IETF_ROOT.join("test-vectors"),
+      "ODP Test Vectors",
+      "Language-neutral positive and negative Offering Discovery Protocol conformance cases.",
+      render_readme: false
+    )
+  }
 }
 selected = section == "all" ? sections : sections.slice(section)
 errors = selected.flat_map do |name, generator|
-  expected = generator.call
+  expected = page_paths(generator.call, name)
   link_errors(expected, name) + synchronize(DOCS_ROOT.join(name), expected, check_only)
 end
 

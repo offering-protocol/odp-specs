@@ -1,0 +1,85 @@
+{
+  "id": "collection-envelope",
+  "title": "Full Collection envelope",
+  "drafts": [
+    "draft-kavian-offering-discovery-protocol-01"
+  ],
+  "category": "collections",
+  "applies_to": [
+    "agent",
+    "service"
+  ],
+  "subject": "collection-envelope",
+  "cases": [
+    {
+      "name": "localized-root-collection",
+      "valid": true,
+      "document": {
+        "odp_version": "1.0",
+        "id": "gpus",
+        "name": "GPUs",
+        "description": "Accelerated computing resources.",
+        "images": [
+          {
+            "alt": "GPU compute hardware",
+            "src": "/images/collections/gpus.jpg"
+          }
+        ],
+        "language": "en",
+        "localizations": [
+          "en",
+          "ja"
+        ]
+      }
+    },
+    {
+      "name": "empty-images",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "id": "gpus",
+        "name": "GPUs",
+        "images": []
+      }
+    },
+    {
+      "name": "language-missing-from-localizations",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "id": "gpus",
+        "name": "GPUs",
+        "description": "Accelerated computing resources.",
+        "language": "ja",
+        "localizations": [
+          "en"
+        ]
+      }
+    },
+    {
+      "name": "inherited-language-root",
+      "valid": true,
+      "document": {
+        "odp_version": "1.0",
+        "id": "gpus",
+        "name": "GPUs",
+        "description": "Accelerated computing resources."
+      }
+    },
+    {
+      "name": "duplicate-localizations-ignore-case",
+      "valid": false,
+      "document": {
+        "odp_version": "1.0",
+        "id": "gpus",
+        "name": "GPUs",
+        "description": "Accelerated computing resources.",
+        "language": "en",
+        "localizations": [
+          "en",
+          "EN"
+        ]
+      }
+    }
+  ]
+}
