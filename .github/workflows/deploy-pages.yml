@@ -58,12 +58,32 @@ jobs:
       - name: Render release artifacts
         run: make -C ietf render
 
+      - name: Prepare latest release artifacts
+        run: |
+          mapfile -t drafts < <(find ietf/specs -maxdepth 1 -type f -name 'draft-*.md')
+          if (( ${#drafts[@]} != 1 )); then
+            echo "Expected exactly one specification draft, found ${#drafts[@]}." >&2
+            exit 1
+          fi
+
+          draft="artifacts/$(basename "${drafts[0]}" .md)"
+          mkdir release-artifacts
+          for extension in html pdf txt xml; do
+            cp "${draft}.${extension}" release-artifacts/
+            cp "${draft}.${extension}" "release-artifacts/offering-discovery-protocol.${extension}"
+          done
+
       - name: Publish latest release artifacts
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if gh release view latest >/dev/null 2>&1; then
-            gh release upload latest artifacts/draft-* --clobber
+            gh release view latest --json assets --jq '.assets[].name' |
+              while read -r asset; do
+                gh release delete-asset latest "$asset" --yes
+              done
+
+            gh release upload latest release-artifacts/*
             gh release edit latest \
               --draft=false \
               --target "${GITHUB_SHA}" \
@@ -71,7 +91,7 @@ jobs:
               --notes "Generated from commit ${{ github.sha }}." \
               --latest
           else
-            gh release create latest artifacts/draft-* \
+            gh release create latest release-artifacts/* \
               --target "${GITHUB_SHA}" \
               --title "Latest ODP specification artifacts" \
               --notes "Generated from commit ${{ github.sha }}." \
