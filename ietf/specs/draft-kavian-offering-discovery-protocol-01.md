@@ -2,7 +2,7 @@
 title: The Offering Discovery Protocol
 abbrev: ODP
 docname: draft-kavian-offering-discovery-protocol-01
-date: 2026-08-29
+date: 2026-09-04
 category: std
 ipr: trust200902
 submissiontype: IETF
@@ -56,9 +56,9 @@ informative:
   AEP:
     title: "The Agent Enrollment Protocol"
     target: https://datatracker.ietf.org/doc/draft-kavian-agent-enrollment-protocol/
-    date: 2026-08-24
+    date: 2026-08-27
     seriesinfo:
-      Internet-Draft: draft-kavian-agent-enrollment-protocol-03
+      Internet-Draft: draft-kavian-agent-enrollment-protocol-04
     author:
       - ins: N. Kavian
         name: Nas Kavian

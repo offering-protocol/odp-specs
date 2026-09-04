@@ -52,3 +52,7 @@ ietf interoperability`; `ODP_NODE_DIR`, `ODP_GO_DIR`, `ODP_JAVA_DIR`, `ODP_PYTHO
 
 Normative Internet-Draft prose is authoritative. Supporting artifacts make the contract testable but
 do not override the drafts.
+
+Use `guides/internet-draft-revision-guide.md` when advancing the ODP Internet-Draft for IETF
+publication. The guide covers revision metadata, repository-wide references, generated artifacts,
+submission ordering, and immutable publication records.

@@ -33,6 +33,9 @@ normative.
 
 ## Publishing an Internet-Draft Revision
 
+Follow `ietf/guides/internet-draft-revision-guide.md` to prepare, validate, review, and submit a new
+revision.
+
 After an Internet-Draft revision is submitted and its repository commit is verified:
 
 1. Render the draft and run idnits with `make -C ietf idnits`.
