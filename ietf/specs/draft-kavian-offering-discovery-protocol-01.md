@@ -1250,9 +1250,13 @@ field or value prevents it from determining the operation's identity, authorizat
 request semantics, or security consequences.
 
 An Agent filters an unknown Operation Descriptor `name`, payment `option`, protocol descriptor
-`name`, MCP endpoint `type`, Resource Image `type`, or Service Branding Image `type` from the
-containing list. A list containing no recognized values after filtering is treated as absent. A
-recognized list item remains subject to every requirement for that item.
+`name`, MCP endpoint `type`, or Resource Image `type` from the containing list. A list containing no
+recognized values after filtering is treated as absent. A recognized list item remains subject to
+every requirement for that item.
+
+An Agent encountering an unknown Service Branding Image `type` on either `icon` or `logo` treats the
+complete `branding` object as absent. A branding object whose image types are recognized remains
+subject to every requirement for that object.
 
 An Agent treats an Operation Descriptor, payment protocol descriptor, or Action whose
 `authentication` value is a syntactically valid but unrecognized string as unsupported at that
