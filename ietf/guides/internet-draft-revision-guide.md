@@ -134,6 +134,10 @@ The deployment workflow separately moves the replaceable `latest` Git tag and Gi
 deployed `main` commit. `latest` is a convenience snapshot; it does not replace the immutable tag
 and release for a submitted revision.
 
+The `latest` release publishes the draft under both its immutable versioned filename and the stable
+`draft-kavian-offering-discovery-protocol.*` filenames without the revision suffix. Public website
+links use the stable filenames so advancing a revision does not require changing those links.
+
 Final verification requires all of the following:
 
 - Datatracker shows the intended revision.
