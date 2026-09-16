@@ -70,7 +70,7 @@ jobs:
           mkdir release-artifacts
           for extension in html pdf txt xml; do
             cp "${draft}.${extension}" release-artifacts/
-            cp "${draft}.${extension}" "release-artifacts/offering-discovery-protocol.${extension}"
+            cp "${draft}.${extension}" "release-artifacts/draft-kavian-offering-discovery-protocol.${extension}"
           done
 
       - name: Publish latest release artifacts

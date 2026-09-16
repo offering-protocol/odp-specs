@@ -40,6 +40,11 @@ under ignored `artifacts/` and regenerate every committed site artifact under `d
 ietf idnits` to render the draft and inspect its text artifact with idnits. The full check also
 rejects hard-coded section numbers into external Internet-Drafts and a stale site index.
 
+The deployment workflow publishes the draft under its immutable versioned filename and a stable
+filename without the revision suffix. Public website links use the stable
+`draft-kavian-offering-discovery-protocol.*` filenames so advancing the draft does not require
+changing those links.
+
 Rendering derives RFC bibliography dependencies from draft frontmatter and seeds the ignored local
 cache from the official `ietf-tools/bibxml-data-archive` before invoking kramdown-rfc. The source
 draft remains the reference manifest; no separate RFC list is maintained.
