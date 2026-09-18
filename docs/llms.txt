@@ -1,0 +1,26 @@
+# Offering Discovery Protocol
+
+> ODP lets agents discover a service's Offerings and find the Actions available for them.
+
+For application integration, begin with the guided integration workflow below.
+It includes an interview, repository assessment, an approved plan, and stepwise
+implementation. Preserve existing authentication and payments; their integration
+workflows are separate. Reassess the current repository when returning to improve
+an existing ODP integration.
+
+## Integration
+
+- [Guided ODP integration](https://www.offeringprotocol.org/integration.md): Start here to integrate ODP or expand an existing integration.
+- [Plan template](https://www.offeringprotocol.org/integration-queue-template.md): Maintain ODP-INTEGRATION-PLAN.md from repository confirmation onward.
+- [Coding agents](https://www.offeringprotocol.org/documentation/quick-start/coding-agents/): Developer instructions and a copyable starting prompt.
+
+## Reference
+
+- [Documentation](https://www.offeringprotocol.org/documentation/): Concepts, implementation guides, and SDK guidance.
+- [Specification](https://www.offeringprotocol.org/draft/): Protocol requirements.
+- [Official SDK repositories](https://github.com/offering-protocol): Select the SDK matching the application.
+
+## Separate integrations
+
+- [AEP integration](https://www.aep.foundation/integration.md): Enrollment and authentication.
+- [InFlow Payments integration](https://app.inflowpay.ai/integration.md): MPP and x402 payments.
