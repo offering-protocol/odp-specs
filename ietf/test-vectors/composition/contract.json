@@ -43,6 +43,94 @@
       "valid": true
     },
     {
+      "name": "arc-and-monad-payment-support",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "mpp",
+            "options": [
+              "arc",
+              "monad"
+            ]
+          },
+          {
+            "authentication": "not-required",
+            "name": "x402",
+            "options": [
+              "arc",
+              "monad"
+            ]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "name": "sixteen-payment-options",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "x402",
+            "options": [
+              "algorand",
+              "aptos",
+              "arbitrum",
+              "arc",
+              "avalanche",
+              "base",
+              "card",
+              "ethereum",
+              "hedera",
+              "inflow",
+              "lightning",
+              "monad",
+              "polygon",
+              "solana",
+              "stellar",
+              "stripe"
+            ]
+          }
+        ]
+      },
+      "valid": true
+    },
+    {
+      "name": "seventeen-payment-options",
+      "operation": "validate-advertisement",
+      "protocols": {
+        "payments": [
+          {
+            "authentication": "not-required",
+            "name": "x402",
+            "options": [
+              "algorand",
+              "aptos",
+              "arbitrum",
+              "arc",
+              "avalanche",
+              "base",
+              "card",
+              "ethereum",
+              "hedera",
+              "inflow",
+              "lightning",
+              "monad",
+              "polygon",
+              "solana",
+              "stellar",
+              "stripe",
+              "tempo"
+            ]
+          }
+        ]
+      },
+      "valid": false
+    },
+    {
       "name": "tap-trust-support",
       "operation": "validate-advertisement",
       "protocols": {
@@ -237,7 +325,9 @@
               "authentication": "not-required",
               "name": "mpp",
               "options": [
+                "arc",
                 "inflow",
+                "monad",
                 "future-rail"
               ]
             },
@@ -319,7 +409,9 @@
               "authentication": "not-required",
               "name": "mpp",
               "options": [
-                "inflow"
+                "arc",
+                "inflow",
+                "monad"
               ]
             }
           ]

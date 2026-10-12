@@ -5,8 +5,8 @@ require "json"
 require "pathname"
 
 PAYMENT_OPTIONS = %w[
-  algorand aptos arbitrum avalanche base card ethereum hedera inflow lightning polygon solana
-  stellar stripe tempo ton
+  algorand aptos arbitrum arc avalanche base card ethereum hedera inflow lightning monad polygon
+  solana stellar stripe tempo ton
 ].freeze
 
 def advertisement_valid?(protocols)

@@ -13,8 +13,8 @@ OPERATIONS = %w[
 AUTHENTICATION_REQUIREMENTS = %w[not-required optional required].freeze
 BRANDING_TYPES = %w[image/png image/svg+xml image/webp].freeze
 PAYMENT_OPTIONS = %w[
-  algorand aptos arbitrum avalanche base card ethereum hedera inflow lightning polygon solana
-  stellar stripe tempo ton
+  algorand aptos arbitrum arc avalanche base card ethereum hedera inflow lightning monad polygon
+  solana stellar stripe tempo ton
 ].freeze
 ENDPOINT_BASE = %r{\A/(?!/)[A-Za-z0-9._~!$&'()*+,;=:@%/-]*\z}
 

@@ -559,12 +559,12 @@ bearing a recognized name remains subject to every requirement for that descript
 valid by filtering.
 
 `options`, when present, is a non-empty array of no more than 16 unique payment-option names drawn
-from `algorand`, `aptos`, `arbitrum`, `avalanche`, `base`, `card`, `ethereum`, `hedera`, `inflow`,
-`lightning`, `polygon`, `solana`, `stellar`, `stripe`, `tempo`, and `ton`. Each name is a compact,
-human-consumable compatibility label. It does not replace protocol-specific method, scheme, network,
-chain, asset, or settlement terms. A Service MUST advertise an option only under a payment protocol
-through which it accepts that option. Omitting `options` means that the Service advertises the
-payment protocol without advertising detailed option compatibility.
+from `algorand`, `aptos`, `arbitrum`, `arc`, `avalanche`, `base`, `card`, `ethereum`, `hedera`,
+`inflow`, `lightning`, `monad`, `polygon`, `solana`, `stellar`, `stripe`, `tempo`, and `ton`. Each
+name is a compact, human-consumable compatibility label. It does not replace protocol-specific
+method, scheme, network, chain, asset, or settlement terms. A Service MUST advertise an option only
+under a payment protocol through which it accepts that option. Omitting `options` means that the
+Service advertises the payment protocol without advertising detailed option compatibility.
 
 Protocol advertisement describes support and the authentication prerequisite for each payment rail;
 it does not guarantee that a payment or trust protocol is accepted by every ODP operation, catalog

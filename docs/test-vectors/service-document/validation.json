@@ -540,8 +540,10 @@
               "authentication": "not-required",
               "name": "mpp",
               "options": [
+                "arc",
                 "card",
                 "inflow",
+                "monad",
                 "solana"
               ]
             },
@@ -549,7 +551,9 @@
               "authentication": "not-required",
               "name": "x402",
               "options": [
+                "arc",
                 "base",
+                "monad",
                 "solana"
               ]
             }
