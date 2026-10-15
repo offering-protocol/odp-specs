@@ -88,4 +88,4 @@ Trust terms, and applicable IETF policies take precedence for the affected docum
 Repository ownership is declared in [CODEOWNERS](./CODEOWNERS). Technical proposals use GitHub
 issues or discussions. Standards and specification questions may be sent to `nas@inflowpay.ai`;
 security and conduct reports use the private contacts in [SECURITY.md](./SECURITY.md) and
-[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
+[CODE_OF_CONDUCT.md](https://github.com/offering-protocol/.github/blob/main/CODE_OF_CONDUCT.md).

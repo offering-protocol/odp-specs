@@ -156,7 +156,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for the contribution workflow and
 issues or discussions. Standards and specification questions may be sent to `nas@inflowpay.ai`.
 
 Report vulnerabilities through [SECURITY.md](./SECURITY.md) and conduct concerns through
-[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
+[CODE_OF_CONDUCT.md](https://github.com/offering-protocol/.github/blob/main/CODE_OF_CONDUCT.md).
 
 ## License and Copyright
 
