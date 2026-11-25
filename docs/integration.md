@@ -243,6 +243,31 @@ to review the assessment.
 
 ## 4. Resolve application-specific choices
 
+### Check payment origins when payments already exist
+
+Compare the deployed canonical ODP origin with the origins issuing MPP or x402
+payment challenges. Inspect deployment configuration and the actual payment resource
+URLs; do not infer a production origin from a local development URL. If they match,
+no additional payment-origin work is needed. Ask about deployment origins only when
+the repository does not establish them.
+
+If they differ, explain the concrete finding, for example: "Your ODP Service uses
+api.example.com, but payment challenges come from x402.example.com." Include
+`payment_origins` in the Service Document and add directory refresh, Service ownership
+verification, and payment-origin verification to the plan. Follow the
+[InFlow payment-origin guide](https://app.inflowpay.ai/documentation/accept-payments/payment-origins/)
+for the exact dashboard procedure. An external receiving wallet does not prevent
+Service identification. Declaration alone is not verification or permission to
+forward credentials.
+
+Add conditional exit criteria: the deployed declaration is indexed, the additional
+origin is verified, and a separately authorized new test approval identifies the
+intended Service. Do not create an approval or spend funds without authorization;
+record an unperformed test as pending rather than claiming it passed. Administrator
+associations are an administrative alternative, not something to assume or create
+as part of this integration. Carry these findings back to a coordinating Directory
+guide when one is in use.
+
 Confirm the developer's selection from the assessment's candidate capabilities.
 Reuse any selection already provided rather than asking again. Then resolve
 only unanswered design questions for the selected capabilities:
